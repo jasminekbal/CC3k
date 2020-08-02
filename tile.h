@@ -14,9 +14,15 @@ class Tile{
     //Enemy * e = nullptr;
     //Potion * p = nullptr;   // later
     //Gold * g = nullptr;
-
+  
+  protected:
+  //protected so that the ground tiles can access.
+  int row;
+  int col;
+  
   public:
     Tile(int roomNum);
+    Tile(int row, int col);
 }
 
 #endif
