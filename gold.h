@@ -11,6 +11,7 @@ class Gold{
   public:
     Gold(int val);
     int getVal();
+    void collectGold(Player & p);
 }
 
 #endif
