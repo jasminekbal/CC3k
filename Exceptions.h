@@ -12,7 +12,7 @@ class Exceptions{
     std::string getMessage();
 };
 
-class badCommand: public Exceptions{
+class badCommand: public Exceptions{ // in case the player tries to move to a wall, or use a potion that doesn't exist or something
     public:
     badCommand( std::string message );
 };
