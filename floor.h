@@ -7,17 +7,16 @@
 #include <stdio>
 #include <iostream>
 
-using namespace std;
 
 class Floor{
   private:
-    vector<shared_ptr<Tile>> tiles;
+    std::vector<std::shared_ptr<Tile>> tiles;
     private void spawnEnemies();
     private void spawnItems();
 
   public:
     Floor();
-    Floor(istream in);
+    Floor(std::istream in);
     void print();
     int movePlayer(); // return 0 for failed
     void moveEnemy();
