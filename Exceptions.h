@@ -17,12 +17,12 @@ class badCommand: public Exceptions{ // in case the player tries to move to a wa
     badCommand( std::string message );
 };
 
-class noFile: public Exceptions{
+class noFile: public Exceptions{ //if the input file for the floor doesn't exist
     public:
     noFile( std::string message );
 };
 
-class dragonStillAlive: public Exceptions{
+class dragonStillAlive: public Exceptions{ //if you step on a dragon gold
     public:
     dragonStillAlive( std::string message );
 };
