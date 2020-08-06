@@ -8,7 +8,7 @@ enum class State { Whitespace, Ground, Wall, Stairs, Enemy, Player, Potion, Gold
 // Information for the cell to return i.e. its state (Alive/Dead) and position in grid.
 struct Info {
     State state;
-    size_t row, col;
+    int row, col;
 };
 
 #endif
