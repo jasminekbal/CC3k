@@ -17,19 +17,19 @@ std::shared_ptr<Potion> RandomPotion::getPotion(){
     if( type < rh){
         return make_shared<RestoreHP>();
     }
-    if( type <= rh + ba ){
+    if( type < rh + ba ){
         return make_shared<BoostAtk>();
     } 
-    if( type <= rh + ba + bd ){
+    if( type < rh + ba + bd ){
         return make_shared<BoostDef>();
     }
-    if( type <= rh + ba + bd + ph ){
+    if( type < rh + ba + bd + ph ){
         return make_shared<PoisonHP>();
     }
-    if( type <= rh + ba + bd + ph + wa ){
+    if( type < rh + ba + bd + ph + wa ){
         return make_shared<WoundAtk>();
     }
-    if( type <= rh + ba + bd + ph + wa + wd ){
+    if( type < rh + ba + bd + ph + wa + wd ){
         return make_shared<WoundDef>();
     }
 }
