@@ -53,9 +53,8 @@ class Floor{
     void print();
     void clear(); //clears the enemies and potions and gold and stairs
     
-    void generate (); // randomly generates the enemies and gold and potions. 
-    void floorPlan(std::istream &in);
-    void defaultPlan();
+    void generate( std::shared_ptr<Player> ); // randomly generates the enemies and gold and potions. 
+    
     void moveChar(int dir);
     void moveEnemies();
     void attack(int row, int col, int dir);
