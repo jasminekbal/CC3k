@@ -7,7 +7,7 @@
 
 using namespace std;
 
-Ground::Ground(int r, int c, State t, int room, std::shared_ptr<Player> pl, std::shared_ptr<Enemy> e, std::shared_ptr<Potion> po, std::shared_ptr<Gold> g): Tile(r,c,t){
+Ground::Ground(int r, int c, State t, int room, std::shared_ptr<Enemy> e, std::shared_ptr<Potion> po, std::shared_ptr<Gold> g, std::shared_ptr<Player> pl): Tile(r,c,t){
     chamber = room;
     td = make_shared<TextDisplay>();
 
