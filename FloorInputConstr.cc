@@ -46,7 +46,7 @@ std::shared_ptr<Ground> Floor::getGround( int row, int col, char c, State & t );
 
 and 
 void Floor::checkDragonGold();
-
+std::shared_ptr<Dragon> Floor::getDragon( int row, int col );
 */
 //beginning of code
 
