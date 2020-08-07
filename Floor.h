@@ -1,5 +1,6 @@
 #ifndef FLOOR_H
 #define FLOOR_H
+#include "Info.h"
 #include <memory>
 #include <vector>
 #include <string>
@@ -33,9 +34,12 @@ class Floor{
     int getRow(int index);
     int getCol(int index);
 
-    std::shared_ptr<Enemy> getEnemy();
-    std::shared_ptr<Potion> getPotion();
-    std::shared_ptr<Gold> getGold();
+    std::shared_ptr<Enemy> getEnemy( char c );
+    std::shared_ptr<Potion> getPotion( char c );
+    std::shared_ptr<Gold> getGold( char c );
+
+    std::shared_ptr<Ground> getGround( int row, int col, char c, State & t );
+    std::shared_ptr<Ground> getDefaultGround( int row, int col, char c );
 
   public:
 
@@ -60,11 +64,6 @@ class Floor{
 };
 
 
-std::shared_ptr<Potion> getPotion( char c );
-std::shared_ptr<Gold> getGold( char c );
-std::shared_ptr<Enemy> getEnemy( char c );
 
-std::shared_ptr<Ground> getGround( int row, int col, char c );
-std::shared_ptr<Ground> getDefaultGround( int row, int col, char c );
 
 #endif

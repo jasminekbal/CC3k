@@ -4,6 +4,28 @@
 #include "Subject.h"
 #include "Observer.h"
 #include "TextDisplay.h"
+#include "Info.h"
+#include "Exceptions.h"
+#include "Characters/Drow.h"
+#include "Characters/Goblin.h"
+#include "Characters/Shade.h"
+#include "Characters/Troll.h"
+#include "Characters/Vampire.h"
+#include "Enemies/Dragon.h"
+#include "Enemies/Dwarf.h"
+#include "Enemies/Elf.h"
+#include "Enemies/Halfling.h"
+#include "Enemies/Human.h"
+#include "Enemies/Merchant.h"
+#include "Enemies/Orc.h"
+#include "Items/Gold.h"
+#include "Items/DragonGold.h"
+#include "Items/BoostAttack.h"
+#include "Items/BoostDefence.h"
+#include "Items/PoisonHealth.h"
+#include "Items/RestoreHealth.h"
+#include "Items/WoundAttack.h"
+#include "Items/WoundDefence.h"
 #include <vector>
 #include <memory>
 #include <iostream>
@@ -40,9 +62,8 @@ Still needs to check dragon gold. When reading in, the dragon gold and the drago
 */
 //beginning of code
 
-
-std::shared_ptr<Potion> getPotion( char c ){
-    std::shared_ptr<Potion> potion;
+shared_ptr<Potion> Floor::getPotion( char c ){
+    shared_ptr<Potion> potion;
     switch( c ){
         case '0':
             potion = make_shared<RestoreHP>();
@@ -66,7 +87,7 @@ std::shared_ptr<Potion> getPotion( char c ){
     return potion;
 }
 
-std::shared_ptr<Gold> getGold( char c ){
+std::shared_ptr<Gold> Floor::getGold( char c ){
     std::shared_ptr<Gold> gold;
     int value;
     switch( c ){
@@ -84,7 +105,7 @@ std::shared_ptr<Gold> getGold( char c ){
     return gold;
 }
 
-std::shared_ptr<Enemy> getEnemy( char c ){
+std::shared_ptr<Enemy> Floor::getEnemy( char c ){
     std::shared_ptr<Enemy> enemy;
     switch( c ){
         case 'H':
@@ -105,21 +126,17 @@ std::shared_ptr<Enemy> getEnemy( char c ){
     return enemy;
 }
 
-std::shared_ptr<Ground> getGround(int row, int col, char c ){
-    std::shared_ptr<Ground> retGround;
-    std::shared_ptr<Potion> potion;
-    std::shared_ptr<Gold> gold;
-    std::shared_ptr<Enemy> enemy;
+std::shared_ptr<Ground> Floor::getGround(int row, int col, char c, State & t){
+    std::shared_ptr<Potion> potion = nullptr;
+    std::shared_ptr<Gold> gold = nullptr;
+    std::shared_ptr<Enemy> enemy = nullptr;
+    int chamber = -1;
     switch( c ){
-        int chamber;
-        case '.':
-        case '+':
-        case '#':
-            retGround = make_shared<Ground>(row, col, c);
-            break;
         case '\\':
-            retGround = make_shared<Ground>(row, col, c);
-            retGround->setIsStair( true );
+            t = State::Stairs;
+            break;
+        case '.':
+            t = State::Ground;
             break;
         case '0':
         case '1':
@@ -127,23 +144,19 @@ std::shared_ptr<Ground> getGround(int row, int col, char c ){
         case '3':
         case '4':
         case '5':
+            t = State::Potion;
             potion = getPotion( c );
-            c = 'P';
-            retGround = make_shared<Ground>(row, col, c);
             break;
         case '6':
         case '7':
         case '8':
+            t = State::Gold;
             gold = getGold( c );
-            c = 'G';
-            retGround->setGold( gold );
             break;
         case '9': {
-            c = 'G';
+            t = State::Gold;
             int value = 6;
             gold = make_shared<DragonGold>( value );
-            retGround = make_shared<Ground>(row, col, c);
-            retGround->setGold( gold );
             break;
         }
         case 'H':
@@ -153,40 +166,60 @@ std::shared_ptr<Ground> getGround(int row, int col, char c ){
         case 'M':
         case 'D': 
         case 'L': 
+            t = State::Enemy;
             enemy = getEnemy( c );
-            retGround = make_shared<Ground>(row, col, c);
-            retGround->setEnemy( enemy );
             break;
         default:
             throw noFile( "not a permitted character");
     }
-    return retGround;
+    return make_shared<Ground>( row, col, t, chamber, enemy, potion, gold );
 }
 
 
-std::shared_ptr<Ground> getDefaultGround(int row, int col, char c ){
+std::shared_ptr<Ground> Floor::getDefaultGround(int row, int col, char c ){
+    State t = State::Ground;
     int chamber = c - 'a';
-    c = '.';
-    auto retGround = make_shared<Ground>(row, col, c, chamber);
-    return retGround;
+    c = '.'; 
+    return make_shared<Ground>(row, col, t, chamber );
 }
 
 void Floor::addTile( int row, int col, char c, std::shared_ptr<Player> p ){
     std::shared_ptr<Tile> tile = nullptr;
     std::shared_ptr<Ground> ground = nullptr;
+    State t;
+    int chamber = -1;
     switch( c ){
         case '|':
+            t = State::VerticalWall;
+            tile = make_shared<Tile>(row, col, t);
+            break;
         case '-':
+            t = State::HorizontalWall;
+            tile = make_shared<Tile>(row, col, t);
+            break;
         case ' ':
-            tile = make_shared<Tile>(row, col, c);
+            t = State::Whitespace;
+            tile = make_shared<Tile>(row, col, t);
             break;
         case '@':
-            ground = make_shared<Ground>(row, col, c);
-            ground->setPlayer( p );
-            p->setLocation( ground );
+            t = State::Player;
+            ground = make_shared<Ground>(row, col, t, -1, nullptr, nullptr, nullptr, p);
+            p->setLocation( ground ); //players need a way to set location
+            break;
+        case '+':
+            t = State::Door;
+            ground = make_shared<Ground>( row, col, t, chamber );
+            break;
+        case '#':
+            t = State::Passageway;
+            ground = make_shared<Ground>( row, col, t, chamber );
             break;
         default:
-            ground = getGround( row, col, c);
+            if( p == nullptr){
+                ground = getDefaultGround(row, col, c );
+            } else {
+                ground = getGround( row, col, c, t );
+            }
             break;
     }
     if( tile != nullptr ){
@@ -197,26 +230,6 @@ void Floor::addTile( int row, int col, char c, std::shared_ptr<Player> p ){
     }
 }
 
-void Floor::addDefaultTile( int row, int col, char c ){
-    std::shared_ptr<Tile> tile = nullptr;
-    std::shared_ptr<Ground> ground = nullptr;
-    switch( c ){
-        case '|':
-        case '-':
-        case ' ':
-            tile = make_shared<Tile>(row, col, c);
-            break;
-        default:
-            ground = getDefaultGround( row, col, c);
-            break;
-    }
-    if( tile != nullptr ){
-        tiles[row].push_back( tile );
-    }
-    else{
-        tiles[row].push_back( ground );
-    }
-}
 
 void Floor::addNeighbours( Subject & currentSubject, int row, int col ) {
     int i, j;
@@ -246,32 +259,7 @@ void Floor::attachObservers( std::shared_ptr<TextDisplay> td ){
     }
 }
 
-Floor::Floor( std::shared_ptr<TextDisplay> td  ) {
-    
-    ifstream infile{ "default.txt" };
-    string line;
-    char c;
-    int row;
-    int col;
-
-    for( int i = 0; i < 25; i++ ){
-        row = i;
-        col = 0;
-        vector<shared_ptr<Tile> > t;
-        tiles.push_back(t);
-        getline( infile, line );
-        istringstream input{ line };
-
-        while( input >> c ){
-            addDefaultTile( row, col, c );
-            col++;
-        }
-    }
-
-    this->attachObservers( td );
-}
-
-Floor::Floor( std::shared_ptr<TextDisplay> td, std::istream & in, std::shared_ptr<Player> p ) {
+Floor::Floor( std::shared_ptr<TextDisplay> td, std::istream & in, std::shared_ptr<Player> p = nullptr ) {
 
     string line;
     char c;
