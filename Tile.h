@@ -16,6 +16,7 @@ class Tile{
   
   public:
   Tile(int r, int c, State t);
+  virtual ~Tile();
   char getChar();
   Info getInfo();
 
