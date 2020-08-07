@@ -7,11 +7,12 @@ class Tile;
 class Enemy;
 class Gold;
 class Potion;
+class Ground;
 
 class Player {
     private:
     char c = '@';
-    std::shared_ptr<Tile> location;
+    std::shared_ptr<Ground> location;
     int baseAtk, baseDef;
 
     protected:
@@ -28,8 +29,8 @@ class Player {
     int getDef() const;
     int getBaseAtk();
     int getBaseDef();
-    std::shared_ptr<Tile> getLocation(); //called by game so the game knows where the player is
-    void setLocation( std::shared_ptr<Tile> tile ); //called whenever the player moves to a new tile
+    std::shared_ptr<Ground> getLocation(); //called by game so the game knows where the player is
+    void setLocation( std::shared_ptr<Ground> tile ); //called whenever the player moves to a new tile
 
     virtual bool attack(Enemy &e) = 0;  //might return a string if we want to go that route
     virtual bool onAttacked(Enemy &e)= 0;

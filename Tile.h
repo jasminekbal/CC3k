@@ -8,13 +8,16 @@
 class Tile{
 
   protected:
+  char c;
   State type;
   //protected so that the ground tiles can access.
   int row;
   int col;
   
   public:
-  Tile(int row, int col);
+  Tile(int r, int c, State t);
+  char getChar();
+  Info getInfo();
 
 };
 

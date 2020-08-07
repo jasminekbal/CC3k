@@ -1,7 +1,10 @@
-#include "subject.h"
-#include "observer.h"
+#include <vector>
+#include <memory>
+#include "Subject.h"
+#include "Observer.h"
+using namespace std;
 
-void Subject::attach(Observer *o) { observers.emplace_back(o); }
+void Subject::attach(shared_ptr<Observer> o) { observers.emplace_back(o); }
 
 void Subject::notifyObservers() {
     for (auto &ob : observers) ob->notify( *this );

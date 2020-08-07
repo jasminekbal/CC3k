@@ -12,19 +12,24 @@ class Exceptions{
     std::string getMessage();
 };
 
-class badCommand: public Exceptions{ // in case the player tries to move to a wall, or use a potion that doesn't exist or something
+class BadCommand: public Exceptions{ // in case the player tries to move to a wall, or use a potion that doesn't exist or something
     public:
-    badCommand( std::string message );
+    BadCommand( std::string message );
 };
 
-class noFile: public Exceptions{ //if the input file for the floor doesn't exist
+class InvalidMove: public Exceptions{ // in case the player tries to move to a wall, or use a potion that doesn't exist or something
     public:
-    noFile( std::string message );
+    InvalidMove( std::string message ): Exceptions(message){}
 };
 
-class dragonStillAlive: public Exceptions{ //if you step on a dragon gold
+class NoFile: public Exceptions{ //if the input file for the floor doesn't exist
     public:
-    dragonStillAlive( std::string message );
+    NoFile( std::string message );
+};
+
+class DragonStillAlive: public Exceptions{ //if you step on a dragon gold
+    public:
+    DragonStillAlive( std::string message );
 };
 
 #endif

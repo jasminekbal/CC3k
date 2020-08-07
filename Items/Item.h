@@ -7,10 +7,9 @@ class Item{
     char c;
 
     public: 
-    Item(int change, char c);
+    Item(int change): change(change){}
     virtual ~Item() = 0;
-    int getChange();
-    char getChar();
+    int getChange(){ return change; }
 };
 
 #endif

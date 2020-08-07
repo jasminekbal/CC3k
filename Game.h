@@ -28,6 +28,6 @@ class Game{
     
     std::string interact( int dir );
 
-}
+};
 
 #endif

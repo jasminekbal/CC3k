@@ -22,7 +22,7 @@ class Enemy{
     public:
         Enemy(int hp, int atk, int def, char c);
         virtual ~Enemy();
-        virtual bool attack(Player &p) = 0;  //might return a string if we want to go that route
+        virtual bool attack(Player &p) = 0;  // 0 is did not die, 1 is died // might return a string if we want to go that route
         virtual bool onAttacked(Player &p)= 0;
         virtual std::shared_ptr<Gold> onDeath();
 

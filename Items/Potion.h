@@ -1,5 +1,6 @@
 #ifndef POTION_H
 #define POTION_H
+#include "Item.h"
 #include <string>
 #include <memory>
 
@@ -11,7 +12,7 @@ class Potion: public Item{
     std::string message;
 
     public:
-    Potion(int change, std::string message);
+    Potion(int change, std::string m): Item(change){ message = m; }
     virtual void usePotion( std::shared_ptr<Player> p) = 0; 
     virtual void usePotion( std::shared_ptr<Drow> d) = 0;
 };
