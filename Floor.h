@@ -53,4 +53,12 @@ class Floor{
 
 };
 
+
+std::shared_ptr<Potion> getPotion( char c );
+std::shared_ptr<Gold> getGold( char c );
+std::shared_ptr<Enemy> getEnemy( char c );
+
+std::shared_ptr<Ground> getGround( int row, int col, char c );
+std::shared_ptr<Ground> getDefaultGround( int row, int col, char c );
+
 #endif
