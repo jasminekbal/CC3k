@@ -8,20 +8,26 @@
 class Subject;
 class Observer;
 class Tile;
+class Ground;
 class TextDisplay;
 class Enemy;
 class Potion;
 class Gold;
+class Player;
 
 class Floor{
   private:
-    std::vector<std::shared_ptr<Tile>> tiles;
+    std::vector<std::vector<std::shared_ptr<Tile> > > tiles;
     void spawnEnemies();
     void spawnItems();
     void spawnStairs();
 
-    void addNeighbours( Subject & s );
-    void addTextDisplay( Subject & s );
+    void addTile( int row, int col, char c, std::shared_ptr<Player> p );
+    void addDefaultTile( int row, int col, char c );
+
+    void attachObservers(std::shared_ptr<TextDisplay> td );
+    void addNeighbours( Subject & s, int row, int col );
+    void addTextDisplay( Subject & s, std::shared_ptr<TextDisplay> td );
 
     int randomInt(int low, int high);
     int getRow(int index);
@@ -34,7 +40,7 @@ class Floor{
   public:
 
     Floor( std::shared_ptr<TextDisplay> td );
-    Floor( std::shared_ptr<TextDisplay> td, std::istream in );
+    Floor( std::shared_ptr<TextDisplay> td, std::istream & in, std::shared_ptr<Player> );
 
     //functions for tick 
     void calculate(); // this makes the tiles calculate their booleans according to what pointer is on them
