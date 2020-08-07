@@ -23,6 +23,11 @@ std::shared_ptr<Ground> getDefaultGround( int row, int col, char c );
 
 and 
 
+void Floor::addTile( int row, int col, char c, std::shared_ptr<Player> p );
+void Floor::addDefaultTile( int row, int col, char c );
+
+void Floor::attachObservers(std::shared_ptr<TextDisplay> td );
+
 Floor::Floor( std::shared_ptr<TextDisplay> td );
 
 Floor::Floor( std::shared_ptr<TextDisplay> td, std::istream in );
