@@ -1,6 +1,8 @@
 #include "Floor.h"
 #include "Tile.h"
 #include "Ground.h"
+#include "Subject.h"
+#include "Observer.h"
 #include "TextDisplay.h"
 #include <vector>
 #include <memory>
@@ -32,10 +34,9 @@ Floor::Floor( std::shared_ptr<TextDisplay> td );
 
 Floor::Floor( std::shared_ptr<TextDisplay> td, std::istream in );
 
-This still needs 
-
 Floor::addNeighbours( Subject & s );
-to work 
+
+Still needs to check dragon gold. When reading in, the dragon gold and the dragon are not attached
 */
 //beginning of code
 
@@ -214,6 +215,16 @@ void Floor::addDefaultTile( int row, int col, char c ){
     }
     else{
         tiles[row].push_back( ground );
+    }
+}
+
+void Floor::addNeighbours( Subject & currentSubject, int row, int col ) {
+    int i, j;
+    for( i = row - 1 ; i < row + 2; i ++ ){
+        for( j = col - 1 ; j < col + 2; j++ ){
+            shared_ptr<Observer> neighbour = dynamic_pointer_cast< Ground > ( tiles[i][j] );
+            currentSubject.attach( neighbour );
+        }
     }
 }
 
