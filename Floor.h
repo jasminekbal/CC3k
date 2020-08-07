@@ -15,25 +15,35 @@ class Enemy;
 class Potion;
 class Gold;
 class Player;
+class Dragon;
 
 class Floor{
   private:
+
+    //fields
     std::vector<std::vector<std::shared_ptr<Tile> > > tiles;
+  
+    //random generation helper functions 
     void spawnEnemies();
     void spawnItems();
     void spawnStairs();
 
+    int randomInt(int low, int high);
+    int getRow(int index);
+    int getCol(int index);
+
+   //constructor helper functions 
     void addTile( int row, int col, char c, std::shared_ptr<Player> p );
     void addDefaultTile( int row, int col, char c );
 
     void attachObservers(std::shared_ptr<TextDisplay> td );
     void addNeighbours( Subject & s, int row, int col );
     void addTextDisplay( Subject & s, std::shared_ptr<TextDisplay> td );
+    
+    void checkDragonGold();
+    std::shared_ptr<Dragon> getDragon( int row, int col );
 
-    int randomInt(int low, int high);
-    int getRow(int index);
-    int getCol(int index);
-
+    //typing from input
     std::shared_ptr<Enemy> getEnemy( char c );
     std::shared_ptr<Potion> getPotion( char c );
     std::shared_ptr<Gold> getGold( char c );
