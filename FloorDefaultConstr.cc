@@ -6,6 +6,7 @@
 #include "TextDisplay.h"
 #include "Info.h"
 #include "Exceptions.h"
+#include "Characters/Player.h"
 #include <vector>
 #include <memory>
 #include <iostream>
