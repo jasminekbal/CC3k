@@ -8,9 +8,13 @@ Vampire::~Vampire(){
 
 //will do later
 bool Vampire::attack(Enemy &e){
-
+  return false;
 }
 
-bool Vampire::attack(Dwarf &e);
+bool Vampire::attack(Dwarf &e){
+  return false;
+}
 
-bool Vampire::onAttacked(Enemy &) ;
+bool Vampire::onAttacked(Enemy &){
+  return false;
+}
