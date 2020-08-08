@@ -11,14 +11,14 @@ Troll::~Troll(){
 
 //will do later
 bool Troll::attack(Enemy &e) {
-
+  return false;
 }
 
 bool Troll::onAttacked(Enemy &e){
-
+  return false;
 }
 
 bool Troll::onAttacked(Orc &o){
-
+  return false;
 }
 
