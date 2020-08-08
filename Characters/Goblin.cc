@@ -10,6 +10,10 @@ Goblin::~Goblin(){
 }
 
 // will do later
-bool Goblin::attack(Enemy &e);
+bool Goblin::attack(Enemy &e){
+  return false;
+}
 
-bool Goblin::onAttacked(Enemy &e);
+bool Goblin::onAttacked(Enemy &e){
+  return false;
+}
