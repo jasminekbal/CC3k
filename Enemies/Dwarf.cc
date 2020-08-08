@@ -7,7 +7,11 @@ Dwarf::~Dwarf(){}
 
 
 //will do later
-bool Dwarf::attack(Player &p){}
+bool Dwarf::attack(Player &p){
+return false;
+}
 
-bool Dwarf::onAttacked(Player &p){}
+bool Dwarf::onAttacked(Player &p){
+return false;
+}
 
