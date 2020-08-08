@@ -9,11 +9,11 @@ Shade::~Shade(){
 
 //will do later
 bool Shade::attack(Enemy &e){
-
+    return false;
 }
 
 bool Shade::onAttacked(Enemy &e){
-
+    return false;
 }
 
 int Shade::getScore() const{
