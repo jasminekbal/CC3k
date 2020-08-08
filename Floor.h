@@ -16,6 +16,7 @@ class Potion;
 class Gold;
 class Player;
 class Dragon;
+class RandomGeneration;
 
 class Floor{
   private:
@@ -24,11 +25,13 @@ class Floor{
     std::vector<std::vector<std::shared_ptr<Tile> > > tiles;
   
     //random generation helper functions 
-    void spawnEnemies();
-    void spawnItems();
-    void spawnStairs();
+    void getChamber(int & chamIndex, RandomGeneration & rng, int & NUM_CHAMBERS, const int player );
 
-    int randomInt(int low, int high);
+    std::shared_ptr<Ground> generateLocation( int & chamIndex, int & tileIndex, std::vector<std::vector<std::shared_ptr<Ground> > > & chambers, 
+    RandomGeneration & rng, int & NUM_CHAMBERS, int player = -1 );
+    void removeTile( int & chamIndex, int & tileIndex, std::vector<std::vector<std::shared_ptr<Ground> > > & chambers );
+
+    void randomDragon( std::shared_ptr<DragonGold> dg, std::shared_ptr<Ground> tile );
     int getRow(int index);
     int getCol(int index);
 
@@ -63,7 +66,7 @@ class Floor{
     void print();
     void clear(); //clears the enemies and potions and gold and stairs
     
-    void generate( std::shared_ptr<Player> ); // randomly generates the enemies and gold and potions. 
+    void generate( std::shared_ptr<Player> p ); // randomly generates the enemies and gold and potions. 
     
     void moveChar(int dir);
     void moveEnemies();
