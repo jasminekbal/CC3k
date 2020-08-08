@@ -12,7 +12,7 @@ using namespace std;
 RandomPotion::RandomPotion( int rh, int ba, int bd, int ph, int wa, int wd )
     : rh{rh}, ba{ba}, bd{bd}, ph{ph}, wa{wa}, wd{wd} {}
 
-std::shared_ptr<Potion> RandomPotion::getPotion(){
+std::shared_ptr<Potion> RandomPotion::get(){
     int type = randomInt( rh + ba + bd + ph + wa + wd );
     if( type < rh){
         return make_shared<RestoreHP>();

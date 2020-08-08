@@ -13,7 +13,7 @@ using namespace std;
 RandomEnemy::RandomEnemy( int h, int w, int e, int o, int m, int l )
     : h{h}, w{w}, e{e}, o{o}, m{m}, l{l} {}
 
-std::shared_ptr<Enemy> RandomEnemy::getEnemy(){
+std::shared_ptr<Enemy> RandomEnemy::get(){
     int type = randomInt( l + m + o + e + w + h );
     if( type < h){
         return make_shared<Human>();

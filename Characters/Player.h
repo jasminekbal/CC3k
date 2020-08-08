@@ -1,7 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 #include <memory>
-#include "../info.h"
+#include "../Info.h"
 
 class Tile;
 class Enemy;

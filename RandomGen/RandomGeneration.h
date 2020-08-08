@@ -5,6 +5,7 @@
 class RandomGeneration{
 
     public:
+    virtual ~RandomGeneration();
     int setSeed(); //call once at the beginning. 
 
     //includes low, excludes high

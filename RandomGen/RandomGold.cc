@@ -10,7 +10,7 @@ using namespace std;
 RandomGold::RandomGold( int small, int dragon, int normal )
     : small{small}, dragon{dragon}, normal{normal} {}
 
-std::shared_ptr<Gold> RandomGold::getGold(){
+std::shared_ptr<Gold> RandomGold::get(){
     int type = randomInt( small + dragon + normal );
     if( type < small){
         return make_shared<Gold>( 1, true );
