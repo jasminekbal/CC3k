@@ -12,7 +12,7 @@ class Enemy{
         int hp, atk, def;
 
     protected:
-        void setGold( std::shared_ptr<Gold> goldPile );
+        void setGold( std::shared_ptr<Gold> gP );
 
         //might not need this depending on implementaion 
         void setHP(int hp);
