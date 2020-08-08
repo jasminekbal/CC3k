@@ -16,22 +16,22 @@
 
 using namespace std;
 
-void Floor::getChamber(int & chamIndex, RandomGeneration & rng, int & NUM_CHAMBERS, const int player ) {
+void Floor::getChamber(int & chamIndex, RandomGeneration & rng, int & NUM_CHAMBERS, const int player ) { //gets the chamber number between 0 and 4 
     chamIndex = rng.randomInt( NUM_CHAMBERS );
-    while( chamIndex == player ){
+    while( chamIndex == player ){ //this is to make sure the stairs aren't in the same chamber as the player. Default value is -1.
         chamIndex = rng.randomInt( NUM_CHAMBERS );
     }
 }
 
 std::shared_ptr<Ground> Floor::generateLocation( int & chamIndex, int & tileIndex, vector<vector<shared_ptr<Ground> > > & chambers, 
-    RandomGeneration & rng, int & NUM_CHAMBERS, const int player ){
+    RandomGeneration & rng, int & NUM_CHAMBERS, const int player ){ 
     
     getChamber( chamIndex, rng, NUM_CHAMBERS, player );
 
     int NUM_TILES = chambers[chamIndex].size(); 
-    while( NUM_TILES == 0 ){
+    while( NUM_TILES == 0 ){ //this is to make sure we're not trying to generate in a chamber that is already full ... kinda an edge case, but I digress. 
         if( chamIndex == 0 ){
-            chambers.erase( chambers.begin() );
+            chambers.erase( chambers.begin() ); //for some reason calling erase on chambers.begin() + 0 doesn't work so I just check if it's zero first.
         } else {
             chambers.erase( chambers.begin() + chamIndex );
         }
@@ -45,7 +45,8 @@ std::shared_ptr<Ground> Floor::generateLocation( int & chamIndex, int & tileInde
     return chambers[chamIndex][tileIndex];
 }
 
-void Floor::removeTile( int & chamIndex, int & tileIndex, vector<vector<shared_ptr<Ground> > > & chambers){
+void Floor::removeTile( int & chamIndex, int & tileIndex, vector<vector<shared_ptr<Ground> > > & chambers){ //we remove tiles that already have something on them 
+    //this way we won't generate twice on a tile.
     if( tileIndex == 0 ){
         chambers[chamIndex].erase( chambers[chamIndex].begin() );
     } else{
@@ -54,7 +55,7 @@ void Floor::removeTile( int & chamIndex, int & tileIndex, vector<vector<shared_p
 }
 
 void Floor::generate( std::shared_ptr<Player> p ){
-    int NUM_CHAMBER = 5;
+    int NUM_CHAMBER = 5; //was going to set these to const but if we want we can add a difficulty modifier that'll change these values 
     int NUM_ENEMIES = 20;
     int NUM_POTIONS = 10;
     int NUM_GOLD = 10;
@@ -82,20 +83,20 @@ void Floor::generate( std::shared_ptr<Player> p ){
     RandomGeneration rng = RandomGeneration();
     rng.setSeed();
 
-    auto playerTile = generateLocation( chamIndex, tileIndex, chambers, rng, NUM_CHAMBER );
+    auto playerTile = generateLocation( chamIndex, tileIndex, chambers, rng, NUM_CHAMBER ); //adds the player to the board. 
     playerTile->setPlayer( p );
     p->setLocation( playerTile );
     removeTile( chamIndex, tileIndex, chambers );
     
-    auto stairTile = generateLocation( chamIndex, tileIndex, chambers, rng, NUM_CHAMBER, chamIndex );
+    auto stairTile = generateLocation( chamIndex, tileIndex, chambers, rng, NUM_CHAMBER, chamIndex ); //adds stairs
     stairTile->setStair( true );
     removeTile( chamIndex, tileIndex, chambers );
 
-    int toSpawn = NUM_POTIONS + NUM_GOLD + NUM_ENEMIES;
+    int toSpawn = NUM_POTIONS + NUM_GOLD + NUM_ENEMIES; // for the for-loop. was too lazy to write three for loops so used cases instead
     NUM_GOLD += NUM_POTIONS;
     NUM_ENEMIES += NUM_GOLD;
 
-    int RH = 1; 
+    int RH = 1;  //setting all the probabilities 
     int BA = 1; 
     int BD = 1; 
     int PH = 1; 
@@ -119,19 +120,21 @@ void Floor::generate( std::shared_ptr<Player> p ){
 
     for( int i = 0; i < toSpawn; i++ ){
         auto tile = generateLocation( chamIndex, tileIndex, chambers, rng, NUM_CHAMBER );
+        
         if( i >  NUM_GOLD){
             auto enemy = reg.get();
             tile->setEnemy( enemy );
-        }
-        if( i >  NUM_POTIONS){
+        } else if( i >  NUM_POTIONS){
             auto gold = rgg.get();
             auto dg = dynamic_pointer_cast< DragonGold> (gold);
             if( dg != nullptr ){
-                randomDragon( dg, tile );
+                randomDragon( dg, tile ); //whenever we create a gold we have to create a dragon. 
+                //Technically we should test to see if there's even an available tile for the dragon, in case we spawn a dragon gold
+                //in the middle of a bunch of enemies. If I have time I'll add that, but it's not very likely to happen so I'll just pretend it won't for now
+                //this function remains to be created. Task for tomorrow I think. 
             }
             tile->setGold( gold );
-        }
-        else{
+        } else{
             auto potion = rpg.get();
             tile->setPotion( potion );
         }
