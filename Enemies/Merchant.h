@@ -12,6 +12,8 @@ class Merchant: Enemy{
    virtual ~Merchant();
    virtual bool attack(Player &p) override;
    virtual bool onAttacked(Player &p) override;
+   bool hostile();
+   void makeHostile();
    
 };
 
