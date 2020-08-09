@@ -13,11 +13,13 @@ void Floor::notify(){
   }
 }
 
-// try to move player to tile in dir direction
-// if it doesnt work, return why
-// if it works, change player's location 
-// (dependent on what kind of tile player moved to)
-void movePlayer(int dir){
-
+// try to move enemy to a random tile or attack
+// a player tile if there is one near it
+void Floor::moveEnemies(){
+  for (auto x : tiles){
+    for (auto y : x){
+      y->moveEnemy();
+    }
+  }
 }
 

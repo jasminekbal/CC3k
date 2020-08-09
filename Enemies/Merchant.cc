@@ -1,7 +1,7 @@
 #include   "Merchant.h"
 
 Merchant::Merchant(): Enemy(30, 70, 5, 'M'){
-
+    isHostile = 0;
 }
 
 Merchant::~Merchant(){
@@ -16,10 +16,6 @@ bool Merchant::onAttacked(Player &p){
 
 }
 
-bool Merchant::hostile(){
-    return isHostile;
-}
-
 void Merchant::makeHostile(){
-    isHostile = true;
+    isHostile = 1;
 }
