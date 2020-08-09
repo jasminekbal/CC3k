@@ -16,10 +16,3 @@ bool Merchant::onAttacked(Player &p){
 
 }
 
-bool Merchant::hostile(){
-    return isHostile;
-}
-
-void Merchant::makeHostile(){
-    isHostile = true;
-}
