@@ -7,13 +7,10 @@ Tile::Tile(int r, int c, State t){
     row = r;
     col = c;
     type = t;
-    //  Whitespace = ' ', Passageway = '#', HorizontalWall = '-', 
-    // VerticalWall='|', Door = '+', Stairs = '\'
+    //  Whitespace = ' ', HorizontalWall = '-', 
+    // VerticalWall='|', Door = '+'
     if (type == State::Whitespace){
         c=' ';
-    }
-    else if (type == State::Passageway){
-        c='#';
     }
     else if (type == State::HorizontalWall){
         c='-';
@@ -23,9 +20,6 @@ Tile::Tile(int r, int c, State t){
     }
     else if (type == State::Door){
         c='+';
-    }
-    else if (type == State::Stairs){
-        c='\'';
     }
 }
 

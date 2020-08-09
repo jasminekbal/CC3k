@@ -13,8 +13,6 @@ class TextDisplay;
 class Ground: public Tile, public Subject, public Observer{
   private:
     int chamber;
-    bool isStair;
-    bool hasObject;
     std::shared_ptr<Player> player;
     std::shared_ptr<Enemy> enemy;
     std::shared_ptr<Ground> playerNearEnemy; // holds the tile next to the enemy that holds a player
@@ -42,6 +40,13 @@ class Ground: public Tile, public Subject, public Observer{
     void notify( Subject & whoNotified ) override;
 
     friend class Floor;
+
+    // setters
+    void setPlayer( std::shared_ptr<Player> p){ player = p; }
+    void setEnemy( std::shared_ptr<Enemy> e){ enemy = e; }
+    void setPotion( std::shared_ptr<Potion> p){ potion = p; }
+    void setGold( std::shared_ptr<Gold> g){ gold = g; }
+    void setStair( bool b );
 };
 
 #endif

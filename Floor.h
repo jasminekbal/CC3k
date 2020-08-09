@@ -14,6 +14,7 @@ class TextDisplay;
 class Enemy;
 class Potion;
 class Gold;
+class DragonGold;
 class Player;
 class Dragon;
 class RandomGeneration;
@@ -56,22 +57,20 @@ class Floor{
 
   public:
 
-    Floor( std::shared_ptr<TextDisplay> td );
-    Floor( std::shared_ptr<TextDisplay> td, std::istream & in, std::shared_ptr<Player> );
+    Floor( std::shared_ptr<TextDisplay> t );
+    Floor( std::shared_ptr<TextDisplay> t, std::istream & in, std::shared_ptr<Player> );
 
     //functions for tick 
-    void calculate(); // this makes the tiles calculate their booleans according to what pointer is on them
+    //void calculate(); // this makes the tiles calculate their booleans according to what pointer is on them
     void notify(); // calls notify on all the tiles
 
-    void print();
-    void clear(); //clears the enemies and potions and gold and stairs
+    //void print();
+    //void clear(); //clears the enemies and potions and gold and stairs // I think we're making a new floor each time
     
-    void generate( std::shared_ptr<Player> p ); // randomly generates the enemies and gold and potions. 
+    //void generate( std::shared_ptr<Player> p ); // randomly generates the enemies and gold and potions. 
     
-    void moveChar(int dir);
+    void movePlayer(int dir); 
     void moveEnemies();
-    void attack(int row, int col, int dir);
-    std::string usePotion(int row, int col, int dir);
 
 };
 

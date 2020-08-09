@@ -1,30 +1,23 @@
-#include "floor.h"
+#include "Floor.h"
+#include "Tile.h"
 #include <vector>
 #include <string>
 #include <iostream>
 
-void Floor::print(){
-  for (auto i = tiles.begin(); i != tiles.end(); i+=1){
-    tiles[i]->print();
+// call notify() for each tile
+void Floor::notify(){
+  for (auto x : tiles){
+    for (auto y : x){
+      y->notify();
+    }
   }
 }
 
-int Floor::movePlayer(){ // return 0 for failed
+// try to move player to tile in dir direction
+// if it doesnt work, return why
+// if it works, change player's location 
+// (dependent on what kind of tile player moved to)
+void movePlayer(int dir){
 
 }
 
-void Floor::moveEnemy(){
-
-}
-
-void Floor::spawnEnemies(){
-
-}
-
-void Floor::spawnItems(){
-
-}
-
-int Floor::checkPlayerState(){ // 0 for normal, 1 if player got to stairs, 2 if player died
-
-}
