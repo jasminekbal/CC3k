@@ -30,6 +30,9 @@ class Enemy{
         int getAtk() const; //needed when enemy attacks a player
         int getDef() const;
         char getChar() const; //to see how to display
+
+        bool hostile(){ return 1; }
+        virtual void makeHostile();
 };
 
 #endif

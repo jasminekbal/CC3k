@@ -60,6 +60,13 @@ void Ground::move(Ground & tile){   // throws invalidMove exception if theres an
         type = State::Gold;
         c = 'G'; // '0' + gold->getChange();
       }
+      else{
+        // if player attacks enemy and enemy survives,
+        // enemy will become hostile
+        enemy->makeHostile();
+      }
+      // in this case, the tile remains a player type
+      return;
     }
     else if (tile.type==State::Potion){
       potion->usePotion(tile.player);
@@ -88,6 +95,8 @@ void Ground::move(Ground & tile){   // throws invalidMove exception if theres an
     }
     else if (tile.type==State::Player){
       (tile.enemy)->attack(*player);
+      // tile remains enemy type
+      return;
     }
     else{
       throw InvalidMove{"Enemy tried to move to an occupied tile"};
@@ -120,6 +129,7 @@ void Ground::move(Ground & tile){   // throws invalidMove exception if theres an
     tile.c = '#';
   }
   else{
+    tile.type = State::Ground;
     tile.c = '.';
   }
 } 
@@ -171,4 +181,39 @@ void Ground::notify(Subject & whoNotified){ // check if there's a player near an
 // setters
 void Ground::setStair( bool b ){
   type = State::Stairs;
+}
+
+// moves enemy if there's an enemy on this tile
+void Ground::moveEnemy(){
+  if (type==State::Enemy){
+    // check if there's a player nearby that we need to attack
+    if (playerNearEnemy){
+      // check if enemy type is hostile
+      if (enemy->hostile()){
+        move(*playerNearEnemy);
+      }
+      else{ // otherwise choose random direction for enemy to move in
+        randomMove();
+      }
+    }
+    // otherwise choose random direction for enemy to move in
+    else{
+      randomMove();
+    }
+  }
+}
+
+// chooses a random tile that enemy can move to
+void Ground::randomMove(){
+  while(1){
+    try{
+      int random = rand() % 4;
+      if (random >= neighbours.size()){
+        throw InvalidMove{"Enemy tried to move to an occupied tile"};
+      }
+      (*(neighbours[random])).move(*this);
+      break;
+    }
+    catch(InvalidMove e){}
+  }
 }

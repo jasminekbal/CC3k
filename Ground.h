@@ -24,6 +24,9 @@ class Ground: public Tile, public Subject, public Observer{
     std::vector<std::shared_ptr<Ground> > neighbours;
 
     std::shared_ptr<TextDisplay> td;
+
+    // helper function for moveEnemy()
+    void randomMove();
     
 
   public:
@@ -47,6 +50,10 @@ class Ground: public Tile, public Subject, public Observer{
     void setPotion( std::shared_ptr<Potion> p){ potion = p; }
     void setGold( std::shared_ptr<Gold> g){ gold = g; }
     void setStair( bool b );
+
+    // moves enemy if there's an enemy on this tile
+    // called in Floor
+    void moveEnemy() override;
 };
 
 #endif

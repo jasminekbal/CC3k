@@ -16,7 +16,9 @@ void Enemy::setDef(int def){
     def = def;
 }
 
-Enemy::Enemy(int hp, int atk, int def, char c): hp(hp), atk(atk), def(def), c(c){}
+Enemy::Enemy(int hp, int atk, int def, char c): hp(hp), atk(atk), def(def), c(c){
+    isHostile = 1;
+}
 
 Enemy::~Enemy(){
 

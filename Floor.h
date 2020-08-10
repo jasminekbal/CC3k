@@ -69,7 +69,7 @@ class Floor{
     
     //void generate( std::shared_ptr<Player> p ); // randomly generates the enemies and gold and potions. 
     
-    void movePlayer(int dir); 
+    // void movePlayer(int dir); 
     void moveEnemies();
 
 };
