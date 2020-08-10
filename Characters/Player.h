@@ -3,22 +3,27 @@
 #include <memory>
 #include "../Ground.h"
 
-class Tile;
+class Ground;
 class Enemy;
 class Gold;
 class Potion;
 
+
 //Invariant: hp must be between 0 and maxHealth or if maxHealth is -1 then it has no upper bound
+// atk and def must be greater than or  equal to 0
 class Player {
     private:
     char c = '@';
     std::shared_ptr<Ground> location;
     int baseAtk, baseDef;
     int checkHp(int hp) const;
+    int checkStat(int val);
 
     protected:
     int hp, atk, def, score, maxHealth;
     void changeHp(int newHp);
+    void changeAtk(int newA);
+    void changeDef(int newD);
     
     public:
     Player(int hp, int atk, int def, int maxHealth); //inital constructor

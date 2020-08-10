@@ -4,13 +4,17 @@
 #include <memory>
 
 class Dragon;
+class Player;
 
 class DragonGold: public Gold{
   private:
-    std::shared_ptr<Dragon> d;
+    std::shared_ptr<Dragon> dragon;
 
   public:
     DragonGold();
+    ~DragonGold();
+    void setDragon(std::shared_ptr<Dragon> d);
+    void attack(Player &p);
 };
 
 #endif

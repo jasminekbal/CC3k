@@ -1,9 +1,18 @@
 #include "Gold.h"
-using namespace std;
 
-Gold::Gold(int val, bool can): Item(val){ canCollect = can; }
+Gold::Gold(int val, bool can): Item(val, 'G'){
+  canCollect = can;
+}
 
-void Gold::setCanCollect(bool can){ canCollect = can; }
+Gold::~Gold(){
 
-void Gold::collectGold(Player & p){}
+}
+
+bool Gold::getCanCollect(){
+  return canCollect;
+}
+
+void Gold::setCanCollect(bool can){
+  canCollect = can;
+}
 

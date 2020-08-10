@@ -5,16 +5,15 @@
 #include "Potion.h"
 
 class Player;
-class BoostAtk: public Potion {
-    private:
-    std::string message = "HP increased by 10";
+class Drow;
 
+class RestoreHp: public Potion {
+    
     public:
-    BoostAtk();
-    virtual ~BoostAtk();
+    RestoreHp();
+    virtual ~RestoreHp();
     void usePotion(std::shared_ptr<Player> p); 
     void usePotion(std::shared_ptr<Drow> d); 
-    std::string getMessage();
 };
 
 #endif

@@ -8,10 +8,10 @@ class Player;
 class Enemy{
     private:
         char c; // to be set during construction
-        std::shared_ptr<Gold> goldPile;
         int hp, atk, def;
 
     protected:
+        std::shared_ptr<Gold> goldPile;
         void setGold( std::shared_ptr<Gold> gP );
 
         //might not need this depending on implementaion 

@@ -1,9 +1,9 @@
 #include "Enemy.h"
 #include "../Items/Gold.h"
+using namespace std;
 
-//will do later
 void Enemy::setGold( std::shared_ptr<Gold> gP ){
-
+    goldPile = gP;
 }
 
 void Enemy::setHP(int hp){
@@ -24,10 +24,9 @@ Enemy::~Enemy(){
        
 
 std::shared_ptr<Gold> Enemy::onDeath(){
-    return make_shared<Gold>(1, 1);
+    return goldPile;
 }
 
-//will do later
 int Enemy::getHp() const{
     return hp;
 }

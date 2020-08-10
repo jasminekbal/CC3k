@@ -10,8 +10,9 @@ class Gold: public Item{
   public:
     Gold(int val, bool can);
     virtual ~Gold();
-    void collectGold(Player & p);
     void setCanCollect(bool can);
+    bool getCanCollect();
+    
 };
 
 #endif

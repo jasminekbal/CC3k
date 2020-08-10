@@ -1,4 +1,12 @@
 #include "Player.h"
+class Ground;
+class Enemy;
+class Gold;
+class Potion;
+#include "../Ground.h"
+#include "../Enemies/Enemy.h"
+#include "../Items/Gold.h"
+#include "../Items/Potion.h"
 
 int Player::checkHp(int hp) const {
     if (maxHealth == -1){
@@ -12,8 +20,24 @@ int Player::checkHp(int hp) const {
     }
 }
 
+int Player::checkStat(int val) {
+    if (val >= 0) {
+        return val;
+    } else {
+        return 0;
+    }
+}
+
 void Player::changeHp(int newHp){
     hp = checkHp(newHp);
+}
+
+void Player::changeAtk(int newA){
+    atk = checkStat(newA);
+}
+
+void Player::changeDef(int newD){
+    def = checkStat(newD);
 }
 
 Player::Player(int hp, int atk, int def, int maxHealth)
@@ -66,5 +90,9 @@ void Player::newPlayer(){
     
 //will do later
 void Player::collectGold(std::shared_ptr<Gold> g){
-
+    if (g->getCanCollect()){
+        score += g->getChange();
+    }
 }
+
+
