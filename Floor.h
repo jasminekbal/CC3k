@@ -57,8 +57,8 @@ class Floor{
 
   public:
 
-    Floor( std::shared_ptr<TextDisplay> t );
-    Floor( std::shared_ptr<TextDisplay> t, std::istream & in, std::shared_ptr<Player> );
+    //Floor( std::shared_ptr<TextDisplay> t );
+    Floor( std::shared_ptr<TextDisplay> t, std::istream & in, std::shared_ptr<Player> = nullptr );
 
     //functions for tick 
     //void calculate(); // this makes the tiles calculate their booleans according to what pointer is on them
