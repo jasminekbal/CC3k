@@ -1,14 +1,11 @@
 #include "Player.h"
-class Ground;
-class Enemy;
-class Gold;
-class Potion;
+
 #include "../Ground.h"
 #include "../Enemies/Enemy.h"
 #include "../Items/Gold.h"
 #include "../Items/Potion.h"
 
-int Player::checkHp(int hp) const {
+int Player::checkHp(int hp) {
     if (maxHealth == -1){
         return hp;
     } else if( hp <= maxHealth && hp >=0 ) {
@@ -47,23 +44,23 @@ Player::~Player(){
 
 }
     
-char Player::getChar() const {
+char Player::getChar() {
     return c;
 }
 
-int Player::getScore() const{
+int Player::getScore(){
     return score;
 }
 
-int Player::getHp() const{
+int Player::getHp(){
     return hp;
 }
 
-int Player::getAtk() const {
+int Player::getAtk() {
     return atk;
 }   
 
-int Player::getDef() const{
+int Player::getDef(){
     return def;
 }
 

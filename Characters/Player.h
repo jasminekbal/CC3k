@@ -7,6 +7,13 @@ class Ground;
 class Enemy;
 class Gold;
 class Potion;
+class Dragon;
+class Dwarf;
+class Elf;
+class Halfling;
+class Human;
+class Merchant;
+class Orc;
 
 
 //Invariant: hp must be between 0 and maxHealth or if maxHealth is -1 then it has no upper bound
@@ -16,7 +23,7 @@ class Player {
     char c = '@';
     std::shared_ptr<Ground> location;
     int baseAtk, baseDef;
-    int checkHp(int hp) const;
+    int checkHp(int hp);
     int checkStat(int val);
 
     protected:
@@ -29,18 +36,30 @@ class Player {
     Player(int hp, int atk, int def, int maxHealth); //inital constructor
     virtual ~Player();
     
-    char getChar() const;
-    int getScore() const;
-    int getHp() const;
-    int getAtk() const;
-    int getDef() const;
+    char getChar();
+    int getScore();
+    int getHp();
+    int getAtk();
+    int getDef();
     int getBaseAtk();
     int getBaseDef();
     std::shared_ptr<Ground> getLocation(); //called by game so the game knows where the player is
     void setLocation( std::shared_ptr<Ground> g ); //called whenever the player moves to a new tile
 
-    virtual bool attack(Enemy &e) = 0;  //might return a string if we want to go that route
-    virtual bool onAttacked(Enemy &e)= 0;
+    virtual bool attack(Dragon &e) = 0;  //might return a string if we want to go that route
+    virtual bool onAttacked(Dragon &e)= 0;
+    virtual bool attack(Dwarf &e) = 0;  //might return a string if we want to go that route
+    virtual bool onAttacked(Dwarf &e)= 0;
+    virtual bool attack(Elf &e) = 0;  //might return a string if we want to go that route
+    virtual bool onAttacked(Elf &e)= 0;
+    virtual bool attack(Halfling &e) = 0;  //might return a string if we want to go that route
+    virtual bool onAttacked(Halfling &e)= 0;
+    virtual bool attack(Human &e) = 0;  //might return a string if we want to go that route
+    virtual bool onAttacked(Human &e)= 0;
+    virtual bool attack(Merchant &e) = 0;  //might return a string if we want to go that route
+    virtual bool onAttacked(Merchant &e)= 0;
+    virtual bool attack(Orc &e) = 0;  //might return a string if we want to go that route
+    virtual bool onAttacked(Orc &e)= 0;
     void newPlayer(); //called when there is a new floor
     
     void collectGold(std::shared_ptr<Gold> g);
