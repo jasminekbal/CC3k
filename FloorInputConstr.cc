@@ -91,7 +91,7 @@ std::shared_ptr<Gold> Floor::getGold( char c ){
             value = 4;
             break;
     }
-    gold = make_shared<Gold>(value);
+    gold = make_shared<Gold>(value, true);
     return gold;
 }
 
@@ -143,12 +143,10 @@ std::shared_ptr<Ground> Floor::getGround(int row, int col, char c, State & t){
             t = State::Gold;
             gold = getGold( c );
             break;
-        case '9': {
+        case '9':
             t = State::Gold;
-            int value = 6;
-            gold = make_shared<DragonGold>( value );
+            gold = make_shared<DragonGold>();
             break;
-        }
         case 'H':
         case 'W':
         case 'E':
@@ -160,7 +158,7 @@ std::shared_ptr<Ground> Floor::getGround(int row, int col, char c, State & t){
             enemy = getEnemy( c );
             break;
         default:
-            throw noFile( "not a permitted character");
+            throw NoFile( "not a permitted character");
     }
     return make_shared<Ground>( row, col, t, chamber, enemy, potion, gold );
 }

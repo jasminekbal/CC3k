@@ -1,5 +1,5 @@
-#ifndef BOOSTDEFENSE_H
-#define BOOSTDEFENSE_H
+#ifndef BOOSTATTACK_H
+#define BOOSTATTACK_H
 #include <string>
 #include <memory>
 #include "Potion.h"

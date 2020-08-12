@@ -37,7 +37,7 @@ class Player {
     virtual ~Player();
     
     char getChar();
-    int getScore();
+    virtual int getScore() const;
     int getHp();
     int getAtk();
     int getDef();

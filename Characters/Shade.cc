@@ -86,6 +86,6 @@ bool Shade::onAttacked(Orc &e){
 }
 
 int Shade::getScore() const{
-    return this->getScore() + this->getScore()/2;
+    return this->Player::getScore() + this->Player::getScore()/2;
 }
 

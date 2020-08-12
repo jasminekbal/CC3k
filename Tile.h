@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 
-
+class Floor;
 class Tile{
 
   protected:
@@ -22,6 +22,8 @@ class Tile{
   virtual void moveEnemy(); // overrided for Ground
   char getChar();
   Info getInfo();
+
+  friend class Floor;
 
 };
 

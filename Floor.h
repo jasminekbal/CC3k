@@ -32,7 +32,7 @@ class Floor{
     RandomGeneration & rng, int & NUM_CHAMBERS, int player = -1 );
     void removeTile( int & chamIndex, int & tileIndex, std::vector<std::vector<std::shared_ptr<Ground> > > & chambers );
 
-    void randomDragon( std::shared_ptr<DragonGold> dg, std::shared_ptr<Ground> tile );
+    //void randomDragon( std::shared_ptr<DragonGold> dg, std::shared_ptr<Ground> tile );
     //int getRow(int index);
     //int getCol(int index);
 
@@ -67,13 +67,12 @@ class Floor{
     //void print();
     //void clear(); //clears the enemies and potions and gold and stairs // I think we're making a new floor each time
     
-    //void generate( std::shared_ptr<Player> p ); // randomly generates the enemies and gold and potions. 
+    void generate( std::shared_ptr<Player> p ); // randomly generates the enemies and gold and potions. 
     
     // void movePlayer(int dir); 
     void moveEnemies();
 
 };
-
 
 
 

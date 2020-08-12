@@ -2,6 +2,8 @@
 #include <ctime>
 #include <iostream>
 
+RandomGeneration::~RandomGeneration(){}
+
 int RandomGeneration::setSeed(){
     std::srand( (unsigned) std::time( 0 ) );
 }

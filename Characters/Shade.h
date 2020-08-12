@@ -24,7 +24,7 @@ class Shade: public Player {
     virtual bool onAttacked(Merchant &e) override;
     virtual bool attack(Orc &e) override;  //might return a string if we want to go that route
     virtual bool onAttacked(Orc &e) override;
-    int getScore() const; //50% more
+    int getScore() const override; //50% more
 };
 
 #endif

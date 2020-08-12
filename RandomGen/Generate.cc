@@ -128,7 +128,7 @@ void Floor::generate( std::shared_ptr<Player> p ){
             auto gold = rgg.get();
             auto dg = dynamic_pointer_cast< DragonGold> (gold);
             if( dg != nullptr ){
-                randomDragon( dg, tile ); //whenever we create a gold we have to create a dragon. 
+                //randomDragon( dg, tile ); //whenever we create a gold we have to create a dragon. 
                 //Technically we should test to see if there's even an available tile for the dragon, in case we spawn a dragon gold
                 //in the middle of a bunch of enemies. If I have time I'll add that, but it's not very likely to happen so I'll just pretend it won't for now
                 //this function remains to be created. Task for tomorrow I think. 

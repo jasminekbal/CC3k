@@ -48,7 +48,7 @@ char Player::getChar() {
     return c;
 }
 
-int Player::getScore(){
+int Player::getScore() const{
     return score;
 }
 

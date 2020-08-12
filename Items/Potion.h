@@ -1,6 +1,7 @@
 #ifndef POTION_H
 #define POTION_H
 #include "Item.h"
+#include "../Characters/Player.h"
 #include <string>
 #include <memory>
 

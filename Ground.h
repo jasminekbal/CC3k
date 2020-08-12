@@ -50,7 +50,6 @@ class Ground: public Tile, public Subject, public Observer{
     void setPotion( std::shared_ptr<Potion> p){ potion = p; }
     void setGold( std::shared_ptr<Gold> g){ gold = g; }
     void setStair( bool b );
-
     //getter
     std::vector<std::shared_ptr<Ground> > getNeighbours();
 

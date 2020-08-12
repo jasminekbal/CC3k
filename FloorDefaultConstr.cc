@@ -121,7 +121,7 @@ void Floor::attachObservers( std::shared_ptr<TextDisplay> td ){
     }
 }
 
-Floor::Floor( std::shared_ptr<TextDisplay> td, std::istream & in, std::shared_ptr<Player> p = nullptr ) {
+Floor::Floor( std::shared_ptr<TextDisplay> td, std::istream & in, std::shared_ptr<Player> p ) {
 
     string line;
     char c;
