@@ -7,11 +7,11 @@
 class Player;
 class Drow;
 
-class RestoreHp: public Potion {
+class RestoreHP: public Potion {
     
     public:
-    RestoreHp();
-    virtual ~RestoreHp();
+    RestoreHP();
+    virtual ~RestoreHP();
     void usePotion(std::shared_ptr<Player> p); 
     void usePotion(std::shared_ptr<Drow> d); 
 };

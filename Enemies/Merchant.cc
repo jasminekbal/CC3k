@@ -17,7 +17,7 @@ Merchant::~Merchant(){
 }
 
 bool Merchant:: isHostile(){
-    return isHostile;
+    return hostile;
 }
 
 void Merchant::setGold(std::shared_ptr<Gold> g){

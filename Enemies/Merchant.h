@@ -8,7 +8,7 @@ class Merchant: public Enemy{
     std::shared_ptr<Gold> gold;
 
    public:
-   static bool isHostile;
+   static bool hostile;
    Merchant();
    virtual ~Merchant();
    
@@ -28,7 +28,7 @@ class Merchant: public Enemy{
 
    bool isHostile() override;
    void makeHostile(){
-      isHostile = true;
+      hostile = true;
    }
   
 };
