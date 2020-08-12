@@ -3,7 +3,7 @@
 #include "../Characters/Drow.h"
 
 
-WoundDef::WoundDef(): Potion(-5,"Decrease attack by 5pts") {}
+WoundDef::WoundDef(): Potion(-5) {}
 
 WoundDef::~WoundDef(){
 

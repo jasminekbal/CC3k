@@ -9,10 +9,9 @@ class Drow;
 
 class Potion: public Item{
     protected:
-    std::string message;
 
     public:
-    Potion(int change, std::string m): Item(change, 'P'){ message = m; }
+    Potion(int change): Item(change, 'P'){}
     virtual void usePotion( std::shared_ptr<Player> p) = 0; 
     virtual void usePotion( std::shared_ptr<Drow> d) = 0;
     void changeVal(char c, int val, std::shared_ptr<Player> p ){

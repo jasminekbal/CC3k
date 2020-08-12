@@ -3,10 +3,9 @@
 #include "../Characters/Drow.h"
 
 
-PoisonHP::PoisonHP(): Potion(-10,"Decrease health by upto 10pts") {}
+PoisonHP::PoisonHP(): Potion(-10) {}
 
 PoisonHP::~PoisonHP(){
-
 }
 
 void PoisonHP::usePotion(std::shared_ptr<Player> p){

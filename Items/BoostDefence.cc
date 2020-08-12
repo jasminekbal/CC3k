@@ -3,7 +3,7 @@
 #include "../Characters/Drow.h"
 
 
-BoostDef::BoostDef(): Potion(5,"Increase defence by 5pts") {}
+BoostDef::BoostDef(): Potion(5) {}
 
 BoostDef::~BoostDef(){
 

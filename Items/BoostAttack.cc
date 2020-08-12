@@ -4,7 +4,7 @@
 
 
 
-BoostAtk::BoostAtk(): Potion(5,"Increase attack by 5pts"){}
+BoostAtk::BoostAtk(): Potion(5){}
 BoostAtk::~BoostAtk() {
 
 }

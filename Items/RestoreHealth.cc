@@ -3,7 +3,7 @@
 #include "../Characters/Drow.h"
 
 
-RestoreHp::RestoreHp(): Potion(10,"Increase health by upto 10pts") {}
+RestoreHp::RestoreHp(): Potion(10) {}
 
 RestoreHp::~RestoreHp(){
 

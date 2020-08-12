@@ -8,11 +8,10 @@ class Player;
 class PoisonHP: public Potion {
 
     public:
-    BoostAtk();
-    virtual ~BoostAtk();
+    PoisonHP();
+    virtual ~PoisonHP();
     void usePotion(std::shared_ptr<Player> p); 
     void usePotion(std::shared_ptr<Drow> d); 
-    std::string getMessage();
 };
 
 #endif
