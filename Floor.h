@@ -33,8 +33,8 @@ class Floor{
     void removeTile( int & chamIndex, int & tileIndex, std::vector<std::vector<std::shared_ptr<Ground> > > & chambers );
 
     void randomDragon( std::shared_ptr<DragonGold> dg, std::shared_ptr<Ground> tile );
-    int getRow(int index);
-    int getCol(int index);
+    //int getRow(int index);
+    //int getCol(int index);
 
    //constructor helper functions 
     void addTile( int row, int col, char c, std::shared_ptr<Player> p );
@@ -57,8 +57,8 @@ class Floor{
 
   public:
 
-    Floor( std::shared_ptr<TextDisplay> t );
-    Floor( std::shared_ptr<TextDisplay> t, std::istream & in, std::shared_ptr<Player> );
+    //Floor( std::shared_ptr<TextDisplay> t );
+    Floor( std::shared_ptr<TextDisplay> t, std::istream & in, std::shared_ptr<Player> = nullptr );
 
     //functions for tick 
     //void calculate(); // this makes the tiles calculate their booleans according to what pointer is on them
