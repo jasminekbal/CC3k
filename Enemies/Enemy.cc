@@ -66,3 +66,7 @@ bool Enemy::randAtk( ){
     }
 }
 
+bool Enemy::isHostile(){
+    return true;
+}
+
