@@ -4,6 +4,7 @@ Gold::Gold(int val, bool can): Item(val, 'G'){
   canCollect = can;
 }
 
+
 Gold::~Gold(){
 
 }
@@ -16,3 +17,6 @@ void Gold::setCanCollect(bool can){
   canCollect = can;
 }
 
+void Gold::changeVal(int val){
+  change = val;
+}

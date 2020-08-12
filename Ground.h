@@ -51,6 +51,9 @@ class Ground: public Tile, public Subject, public Observer{
     void setGold( std::shared_ptr<Gold> g){ gold = g; }
     void setStair( bool b );
 
+    //getter
+    std::vector<std::shared_ptr<Ground> > getNeighbours();
+
     // moves enemy if there's an enemy on this tile
     // called in Floor
     void moveEnemy() override;

@@ -1,32 +1,44 @@
 #include "Enemy.h"
 #include "../Items/Gold.h"
+#include <cstdlib>
+#include <ctime>
+#include <iostream>
+#include <cmath>
+#include "../Characters/Player.h"
+
 using namespace std;
 
-void Enemy::setGold( std::shared_ptr<Gold> gP ){
-    goldPile = gP;
+int Enemy::checkHp(int hp) {
+    if (hp >= 0){
+        return hp;
+    } else {
+        return 0;
+    }
+}
+
+int Enemy::checkStat(int val) {
+    if (val >= 0) {
+        return val;
+    } else {
+        return 0;
+    }
 }
 
 void Enemy::setHP(int hp){
-    hp = hp;
+     hp = checkHp(hp);
 }
 void Enemy::setAtk(int atk){
-    atk = atk;
+    atk = checkStat(atk);
 }
 void Enemy::setDef(int def){
-    def = def;
+    def = checkStat(def);
 }
 
 Enemy::Enemy(int hp, int atk, int def, char c): hp(hp), atk(atk), def(def), c(c){
-    isHostile = 1;
 }
 
 Enemy::~Enemy(){
 
-}
-       
-
-std::shared_ptr<Gold> Enemy::onDeath(){
-    return goldPile;
 }
 
 int Enemy::getHp() const{
@@ -43,5 +55,14 @@ int Enemy::getDef() const{
 
 char Enemy::getChar() const{
     return c;
+}
+
+bool Enemy::randAtk( ){
+    int randNum = ( rand() % 2);
+    if (randNum == 1){
+        return true;
+    } else {
+        return false;
+    }
 }
 
