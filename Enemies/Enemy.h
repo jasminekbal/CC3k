@@ -40,6 +40,7 @@ class Enemy{
         virtual bool onAttacked(Troll &t)= 0;
         virtual bool attack(Vampire &v) = 0;  // this returns if the attack was succesful
         virtual bool onAttacked(Vampire &v)= 0;
+        virtual std::shared_ptr<Gold> onDeath() = 0;
 
         int getHp() const; // we need to know if dead
         int getAtk() const; //needed when enemy attacks a player
