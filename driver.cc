@@ -15,7 +15,6 @@
 #include "Characters/Troll.h"
 #include "Characters/Vampire.h"
 #include "Characters/Player.h"
-#include "Enemies/Enemy.h"
 #include "Enemies/Dragon.h"
 #include "Enemies/Dwarf.h"
 #include "Enemies/Elf.h"
@@ -23,6 +22,7 @@
 #include "Enemies/Human.h"
 #include "Enemies/Merchant.h"
 #include "Enemies/Orc.h"
+#include "Enemies/Enemy.h"
 #include <iostream>
 #include <string>
 #include <memory>
@@ -97,31 +97,38 @@ int main(){
                 break;
             case 'H':
                 enemy = make_shared<Human>();
-                p->onAttacked( *enemy );
+                enemy->onAttacked( * p);
+                p->onAttacked(*enemy);
                 break;
             case 'W':
                 enemy = make_shared<Dwarf>();
-                p->onAttacked( *enemy );
+                enemy->onAttacked( * p);
+                p->onAttacked(*enemy);
                 break;
             case 'E':
                 enemy = make_shared<Elf>();
-                p->onAttacked( *enemy );
+                enemy->onAttacked( * p);
+                p->onAttacked(*enemy);
                 break;
             case 'O':
                 enemy = make_shared<Orc>();
-                p->onAttacked( *enemy );
+                enemy->onAttacked( * p);
+                p->onAttacked(*enemy);
                 break;
             case 'M':
                 enemy = make_shared<Merchant>();
-                p->onAttacked( *enemy );
+                enemy->onAttacked( * p);
+                p->onAttacked(*enemy);
                 break;
             case 'D':
                 enemy = make_shared<Dragon>();
-                p->onAttacked( *enemy );
+                enemy->onAttacked( * p);
+                p->onAttacked(*enemy);
                 break;
             case 'L':
                 enemy = make_shared<Halfling>();
-                p->onAttacked( *enemy );
+                enemy->onAttacked( * p);
+                p->onAttacked(*enemy);
                 break;
         }
         cout << "attack : " << p->getAtk() << endl;
