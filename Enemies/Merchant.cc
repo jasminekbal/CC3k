@@ -138,3 +138,7 @@ bool Merchant::onAttacked(Vampire &p){
     return false;
 }
 
+void Merchant::makeHostile(){
+      hostile = true;
+}
+
