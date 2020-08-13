@@ -11,7 +11,6 @@ class Subject;
 class Ground;
 class TextDisplay: public Observer{
     private:
-    std::string message;
     int rows;
     int cols;
     std::vector<std::vector<char>> display;

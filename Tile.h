@@ -19,8 +19,8 @@ class Tile{
   virtual ~Tile();
   virtual void notify(){}   // need to override for Ground
   // need this function since Floor calls notify() on each tile in its vector
-  virtual void moveEnemy() {} // overrided for Ground
-  virtual void movePlayer(int dir){}
+  virtual string moveEnemy() {} // overrided for Ground
+  virtual string movePlayer(int dir){}
   char getChar();
   Info getInfo();
 

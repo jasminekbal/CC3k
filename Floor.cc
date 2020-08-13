@@ -502,10 +502,13 @@ void Floor::notify(){
 
 // try to move enemy to a random tile or attack
 // a player tile if there is one near it
-void Floor::moveEnemies(){
+string Floor::moveEnemies(){
   for (auto x : tiles){
     for (auto y : x){
-      y->moveEnemy();
+      string temp = y->moveEnemy();
+      if (temp != ""){  // only 1 message at a time will be returned idc about edge cases right now
+        message = temp;
+      }
     }
   }
   notify();

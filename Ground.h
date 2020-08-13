@@ -13,7 +13,6 @@ class TextDisplay;
 class Floor;
 class Ground: public Tile, public Observer{
   private:
-
     int chamber;
     std::shared_ptr<Player> player;
     std::shared_ptr<Enemy> enemy;
@@ -26,15 +25,15 @@ class Ground: public Tile, public Observer{
     std::shared_ptr<TextDisplay> td;
 
     // helper function for moveEnemy()
-    void randomMove();
+    std::string randomMove();
 
     // helper functions for move
-    void passageWayHelper(Ground & tile);
-    void doorHelper(Ground & tile);
-    void enemyHelper(Ground & tile);
-    void playerHelper(Ground & tile);
+    std::string passageWayHelper(Ground & tile);
+    std::string doorHelper(Ground & tile);
+    std::string enemyHelper(Ground & tile);
+    std::string playerHelper(Ground & tile);
 
-    void move(Ground & tile); // move contents of tile to this Tile   // make it error if it doesn't work
+    std::string move(Ground & tile); // move contents of tile to this Tile   // make it error if it doesn't work
     
 
   public:
@@ -66,8 +65,8 @@ class Ground: public Tile, public Observer{
 
     // moves enemy if there's an enemy on this tile
     // called in Floor
-    void movePlayer(int dir) override;
-    void moveEnemy() override;
+    std::string movePlayer(int dir) override;
+    std::string moveEnemy() override;
 
     // getters
     std::shared_ptr<Enemy> getEnemy(){

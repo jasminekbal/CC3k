@@ -3,8 +3,15 @@
 #include "TextDisplay.h"
 #include "./Characters/Player.h"
 #include <string>
+#include <memory>
 #include "Ground.h"
+using namespace std;
 
+Game::Game(shared_ptr<Player> py, std::istream &input){
+    p=py;
+    td = make_shared<TextDisplay> ();
+
+}
 
 int Game::checkPlayerState(){
     if (p->getIsStair()){
@@ -21,11 +28,14 @@ void Game::tick(){
     if (p->getType()== 'T'){
         p->changeHp(p->getHp()+5);
     }
+    if (checkPlayerState()==1){
+        newFloor();
+    }
 }
 
 void Game::newFloor(){
     std::ifstream infile{ "default.txt" };
-    
+    f = make_unique<Floor>(infile); 
 }
 
 void Game::newFloor( std::istream & input ){
@@ -41,11 +51,7 @@ std::string Game::endGame( bool showScore ){
     }
 }
 
-void Game::moveCharacter( int dir ){
-    (p->getLocation())->movePlayer(dir);
+std::string Game::moveCharacter( int dir ){
+    return (p->getLocation())->movePlayer(dir);
 }
-    
-std::string Game::interact( int dir ){
-
-    return "interact ";
-}
+ 

@@ -70,7 +70,7 @@ Ground::~Ground(){
   td = nullptr;
 }
 
-void Ground::passageWayHelper(Ground & tile){
+string Ground::passageWayHelper(Ground & tile){
   if (type==State::Ground){
     type = State::Player;
     player = tile.player;
@@ -81,9 +81,10 @@ void Ground::passageWayHelper(Ground & tile){
     c = '@';
   }
   tile.c = '#';
+  return "";
 }
 
-void Ground::doorHelper(Ground & tile){
+string Ground::doorHelper(Ground & tile){
   if (type==State::Ground){
     type = State::Player;
     player = tile.player;
@@ -94,19 +95,25 @@ void Ground::doorHelper(Ground & tile){
     c = '@';
   }
   tile.c = '+';
+  return "";
 }
 
-void Ground::enemyHelper(Ground & tile){
+string Ground::enemyHelper(Ground & tile){
   if (type==State::Ground){
     enemy = tile.enemy;
     c = enemy->getChar();
     tile.type = State::Ground;
     tile.c = '.';
+    return "";
   }
   else if (type==State::Player){
-    player->onAttacked(*(tile.enemy));
-    // tile remains enemy type
-    return;
+    if (player->onAttacked(*(tile.enemy))){  // true if attack landed
+      // tile remains enemy type
+      return "You have been attacked by an enemy!";
+    }
+    else{
+      return "An enemy tried to attack you but they failed!";
+    }
   }
   else{
     throw InvalidMove{"Enemy tried to move to an occupied tile"};
@@ -115,7 +122,14 @@ void Ground::enemyHelper(Ground & tile){
 
 // handles movement of player
 // changes player location for successful move
-void Ground::playerHelper(Ground & tile){
+string Ground::playerHelper(Ground & tile){
+  if (type==State::Stairs){
+    (tile.player)->setIsStair(1);
+    return "Next floor";
+  }
+  else{
+    (tile.player)->setIsStair(0);
+  }
   if (type==State::Ground){
     player = tile.player;
     player->setLocation(make_shared<Ground>(*this));
@@ -125,6 +139,7 @@ void Ground::playerHelper(Ground & tile){
     tile.notify();
     notify(); // notify neighbours of movement
     player->setLocation(make_shared<Ground>(*this));
+    return "";
   }
   else if (type==State::Enemy){ // need to be able to exchange enemy w/ its gold if it dies
     if (enemy->onAttacked(*(tile.player))){ // true if attack went through
@@ -138,14 +153,20 @@ void Ground::playerHelper(Ground & tile){
           gold->setCanCollect(1);
         }
         enemy = nullptr;
+        return "You killed your enemy!";
       }
       else{
         // if player attacks enemy and enemy survives,
         // enemy will become hostile
         enemy->makeHostile();
+        return "You hit your enemy!";
       }
     }
-    else{} // give message
+    else{
+      // enemy will become hostile
+      enemy->makeHostile();
+      return "You attacked but you missed :(";
+    } // give message
   }
   else if (type==State::Potion){
     potion->usePotion(tile.player);
@@ -153,6 +174,7 @@ void Ground::playerHelper(Ground & tile){
     potion = nullptr;
     type = State::Ground;
     c = '.';
+    return "You used a " + potion->getType() +" potion";
   }
   else if (type==State::Gold){
     (player)->collectGold(gold);
@@ -160,6 +182,7 @@ void Ground::playerHelper(Ground & tile){
     gold = nullptr;
     type = State::Gold;
     c = '.';
+    return "You collected " + to_string(gold->getChange()) + " coins";
   }
   else if (type==State::DragonGold){
     try{
@@ -170,33 +193,27 @@ void Ground::playerHelper(Ground & tile){
       c = '.';
     }
     catch (DragonStillAlive e){
-      throw InvalidMove{"Cannot collect gold that belongs to a living dragon"};
+      return "Cannot collect gold that belongs to a living dragon";
     }
-  }
-  if (type==State::Stairs){
-    (tile.player)->setIsStair(1);
-  }
-  else{
-    (tile.player)->setIsStair(0);
   }
 }
 
 // moves players and enemies as well as handling all interactions between objects and characters
 // TODO: move needs a way to update or return the user's message from attack, usepotion, getgold, etc.
 // TODO: errortrap still required!!!
-void Ground::move(Ground & tile){   // throws invalidMove exception if theres an error
+string Ground::move(Ground & tile){   // throws invalidMove exception if theres an error
   if (tile.type == State::Player){
-    playerHelper(tile);
+    return playerHelper(tile);
   }
   else if (tile.type == State::Enemy){
-    enemyHelper(tile);
+    return enemyHelper(tile);
   }
   // second if statement changes the tile that is being moved away from
   if (tile.type == State::Door){
-    doorHelper(tile);
+    return doorHelper(tile);
   }
   else if (tile.type == State::Passageway){
-    passageWayHelper(tile);
+    return passageWayHelper(tile);
   }
 } 
 
@@ -272,40 +289,39 @@ void Ground::setStair( bool b ){
 }
 
 // calls move on correct neighbour
-void Ground::movePlayer(int dir){
-  move(*neighbours[dir]);
+string Ground::movePlayer(int dir){
+  return move(*neighbours[dir]);
 }
 
 // moves enemy if there's an enemy on this tile
-void Ground::moveEnemy(){
+string Ground::moveEnemy(){
   if (type==State::Enemy){
     // check if there's a player nearby that we need to attack
     if (playerNearEnemy){
       // check if enemy type is hostile
       if (enemy->isHostile()){
-        move(*playerNearEnemy);
+        return move(*playerNearEnemy);
       }
       else{ // otherwise choose random direction for enemy to move in
-        randomMove();
+        return randomMove();
       }
     }
     // otherwise choose random direction for enemy to move in
     else{
-      randomMove();
+      return randomMove();
     }
   }
 }
 
 // chooses a random tile that enemy can move to
-void Ground::randomMove(){
+string Ground::randomMove(){
   while(1){
     try{
       int random = rand() % 4;
       if (random >= neighbours.size()){
         throw InvalidMove{"Enemy tried to move to an occupied tile"};
       }
-      (*(neighbours[random])).move(*this);
-      break;
+      return (*(neighbours[random])).move(*this);
     }
     catch(InvalidMove e){}
   }
