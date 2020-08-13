@@ -106,7 +106,7 @@ void Ground::playerHelper(Ground & tile){
       } catch(){  
         type = State::Gold;
         c = 'G';
-        gold->
+        gold->setCanCollect(1);
       }
       enemy = nullptr;
     }
@@ -232,6 +232,11 @@ void Ground::recalculate(){
 // setters
 void Ground::setStair( bool b ){
   type = State::Stairs;
+}
+
+// calls move on correct neighbour
+void Ground::movePlayer(int dir){
+  move(*neighbours[dir]);
 }
 
 // moves enemy if there's an enemy on this tile
