@@ -15,6 +15,14 @@
 #include "Characters/Troll.h"
 #include "Characters/Vampire.h"
 #include "Characters/Player.h"
+#include "Enemies/Dragon.h"
+#include "Enemies/Dwarf.h"
+#include "Enemies/Elf.h"
+#include "Enemies/Halfling.h"
+#include "Enemies/Human.h"
+#include "Enemies/Merchant.h"
+#include "Enemies/Orc.h"
+#include "Enemies/Enemy.h"
 #include <iostream>
 #include <string>
 #include <memory>
@@ -60,51 +68,69 @@ int main(){
             case '0':
                 potion = make_shared<RestoreHP>();
                 cout << "RH" << endl;
+                potion->usePotion( p );
                 break;
             case '1':
                 potion = make_shared<BoostAtk>();
                 cout << "BA" << endl;
+                potion->usePotion( p );
                 break;
             case '2':
                 potion = make_shared<BoostDef>();
                 cout << "BD" << endl;
+                potion->usePotion( p );
                 break;
             case '3':
                 potion = make_shared<PoisonHP>();
                 cout << "PH" << endl;
+                potion->usePotion( p );
                 break;
             case '4':
                 potion = make_shared<WoundAtk>();
                 cout << "WA" << endl;
+                potion->usePotion( p );
                 break;
             case '5':
                 potion = make_shared<WoundDef>();
                 cout << "WD" << endl;
+                potion->usePotion( p );
                 break;
             case 'H':
                 enemy = make_shared<Human>();
+                enemy->onAttacked( * p);
+                p->onAttacked(*enemy);
                 break;
             case 'W':
                 enemy = make_shared<Dwarf>();
+                enemy->onAttacked( * p);
+                p->onAttacked(*enemy);
                 break;
             case 'E':
                 enemy = make_shared<Elf>();
+                enemy->onAttacked( * p);
+                p->onAttacked(*enemy);
                 break;
             case 'O':
                 enemy = make_shared<Orc>();
+                enemy->onAttacked( * p);
+                p->onAttacked(*enemy);
                 break;
             case 'M':
                 enemy = make_shared<Merchant>();
+                enemy->onAttacked( * p);
+                p->onAttacked(*enemy);
                 break;
             case 'D':
                 enemy = make_shared<Dragon>();
+                enemy->onAttacked( * p);
+                p->onAttacked(*enemy);
                 break;
             case 'L':
                 enemy = make_shared<Halfling>();
+                enemy->onAttacked( * p);
+                p->onAttacked(*enemy);
                 break;
         }
-        potion->usePotion( p );
-
         cout << "attack : " << p->getAtk() << endl;
         cout << "defence : " << p->getDef() << endl;
         cout << "health : " << p->getHp() << endl;
