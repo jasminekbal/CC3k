@@ -11,7 +11,7 @@
 #include <cmath>
 
 
-Troll::Troll():Player(120, 25, 15, 120){
+Troll::Troll():Player(120, 25, 15, 120, 'T'){
 
 }
 

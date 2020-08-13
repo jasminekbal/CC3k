@@ -20,6 +20,10 @@ int Player::checkHp(int hp) {
     }
 }
 
+char Player::getType(){
+    return type;
+}
+
 int Player::checkStat(int val) {
     if (val >= 0) {
         return val;
@@ -40,8 +44,8 @@ void Player::changeDef(int newD){
     def = checkStat(newD);
 }
 
-Player::Player(int hp, int atk, int def, int maxHealth)
-: hp(hp), atk(atk), baseAtk(atk), baseDef(def), def(def), maxHealth(maxHealth), score(0) {}
+Player::Player(int hp, int atk, int def, int maxHealth, char type)
+: hp(hp), atk(atk), baseAtk(atk), baseDef(def), def(def), maxHealth(maxHealth), score(0), type(type) {}
 
 Player::~Player(){
 

@@ -10,7 +10,7 @@
 #include "../Items/Gold.h"
 #include <cmath>
 
-Vampire::Vampire(): Player(50, 25, 25, -1){}
+Vampire::Vampire(): Player(50, 25, 25, -1, 'V'){}
 
 Vampire::~Vampire(){
 }

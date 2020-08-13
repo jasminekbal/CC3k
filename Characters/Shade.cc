@@ -10,7 +10,7 @@
 #include "../Items/Gold.h"
 #include <cmath>
 
-Shade::Shade(): Player(125, 25, 25, 125){
+Shade::Shade(): Player(125, 25, 25, 125, 'S'){
 }
 
 Shade::~Shade(){
