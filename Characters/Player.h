@@ -20,6 +20,7 @@ class Orc;
 class Player {
     private:
     char c = '@';
+    char type;
     std::shared_ptr<Ground> location;
     int baseAtk, baseDef;
     int checkHp(int hp);
@@ -32,7 +33,7 @@ class Player {
     void changeDef(int newD);
     
     public:
-    Player(int hp, int atk, int def, int maxHealth); //inital constructor
+    Player(int hp, int atk, int def, int maxHealth, char type); //inital constructor
     virtual ~Player();
     
     char getChar();
@@ -61,6 +62,7 @@ class Player {
     virtual bool attack(Orc &e) = 0;  //might return a string if we want to go that route
     virtual bool onAttacked(Orc &e)= 0;
     void newPlayer(); //called when there is a new floor
+    char getType();
     
     void collectGold(std::shared_ptr<Gold> g);
 

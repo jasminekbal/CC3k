@@ -70,3 +70,7 @@ bool Enemy::isHostile(){
     return true;
 }
 
+void Enemy::makeHostile(){
+    
+}
+

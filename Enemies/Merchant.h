@@ -27,9 +27,7 @@ class Merchant: public Enemy{
     virtual std::shared_ptr<Gold> onDeath() override;
 
    bool isHostile() override;
-   void makeHostile(){
-      hostile = true;
-   }
+   void makeHostile() override;
   
 };
 

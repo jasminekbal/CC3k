@@ -14,7 +14,7 @@
 using namespace std;
 
 
-Goblin::Goblin(): Player( 110, 15, 20, 110 ) {}
+Goblin::Goblin(): Player( 110, 15, 20, 110, 'G') {}
 Goblin::~Goblin(){
 
 }

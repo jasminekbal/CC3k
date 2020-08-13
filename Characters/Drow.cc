@@ -10,7 +10,7 @@
 #include <cmath>
 
 
-Drow::Drow():Player(150, 25, 15, 150){
+Drow::Drow():Player(150, 25, 15, 150, 'D'){
 
 }
 

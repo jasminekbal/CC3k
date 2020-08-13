@@ -14,7 +14,6 @@ class Potion: public Item{
     public:
     Potion(int change): Item(change, 'P'){}
     virtual void usePotion( std::shared_ptr<Player> p) = 0; 
-    virtual void usePotion( std::shared_ptr<Drow> d) = 0;
     void changeVal(char c, int val, std::shared_ptr<Player> p ){
         if (c=='a') {
             p->changeAtk(val);

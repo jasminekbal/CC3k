@@ -48,6 +48,7 @@ class Enemy{
         int getDef() const;
         char getChar() const; //to see how to display
         virtual bool isHostile();
+        virtual void makeHostile();
 };
 
 #endif

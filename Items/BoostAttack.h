@@ -13,8 +13,6 @@ class BoostAtk: public Potion {
     BoostAtk();
     virtual ~BoostAtk();
     virtual void usePotion(std::shared_ptr<Player> p) override; 
-    virtual void usePotion( std::shared_ptr<Drow> d) override;
-
 };
 
 #endif

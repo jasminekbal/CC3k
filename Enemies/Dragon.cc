@@ -11,7 +11,6 @@
 using namespace std;
 
 Dragon::Dragon():Enemy(150, 30, 25, 'D'){
-
 }
 
 Dragon::~Dragon(){

@@ -11,7 +11,8 @@
 
 
 Human::Human() : Enemy(140, 20, 20, 'H'){
-
+    auto newG = std::make_shared<Gold>(4, true);
+    this->setGold(newG);
 }
 
 Human::~Human(){
