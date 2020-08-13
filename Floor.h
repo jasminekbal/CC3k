@@ -41,8 +41,7 @@ class Floor{
     void addDefaultTile( int row, int col, char c );
 
     void attachObservers(std::shared_ptr<TextDisplay> td );
-    void addNeighbours( Subject & s, int row, int col );
-    void addTextDisplay( Subject & s, std::shared_ptr<TextDisplay> td );
+    void addNeighbours( Ground & s, int row, int col );
     
     void checkDragonGold();
     std::shared_ptr<Dragon> getDragon( int row, int col );
@@ -58,10 +57,10 @@ class Floor{
   public:
 
     //Floor( std::shared_ptr<TextDisplay> t );
-    Floor( std::shared_ptr<TextDisplay> t, std::istream & in, std::shared_ptr<Player> = nullptr );
+    Floor( std::shared_ptr<TextDisplay> td, std::istream & in, std::shared_ptr<Player> = nullptr );
 
     //functions for tick 
-    //void calculate(); // this makes the tiles calculate their booleans according to what pointer is on them
+    void recalculate(); // this makes the tiles calculate their booleans according to what pointer is on them
     void notify(); // calls notify on all the tiles
 
     //void print();

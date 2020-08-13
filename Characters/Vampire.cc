@@ -13,9 +13,7 @@
 Vampire::Vampire(): Player(50, 25, 25, -1){}
 
 Vampire::~Vampire(){
-
 }
-
 
 bool Vampire::baseAtk (Enemy & e){
   bool myAtk = true;

@@ -21,5 +21,6 @@ void Floor::moveEnemies(){
       y->moveEnemy();
     }
   }
+  // notify();
 }
 

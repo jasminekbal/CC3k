@@ -16,6 +16,10 @@ Halfling::~Halfling(){
    
 }
 
+bool Halfling::onAttacked( Player & p ){
+    p.attack(*this);
+}
+
 // will do later
 bool Halfling::attack(Shade &p){
     bool toAtk = this->randAtk();

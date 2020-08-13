@@ -90,7 +90,7 @@ void Floor::addTile( int row, int col, char c, std::shared_ptr<Player> p ){
 }
 
 //we can change this implementation if it doesn't work out 
-void Floor::addNeighbours( Subject & currentSubject, int row, int col ) {
+void Floor::addNeighbours( Ground & currentSubject, int row, int col ) {
     int i, j;
     for( i = row - 1 ; i < row + 2; i ++ ){
         for( j = col - 1 ; j < col + 2; j++ ){

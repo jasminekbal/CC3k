@@ -2,7 +2,6 @@
 #define GROUND_H
 #include "Info.h"
 #include "Tile.h"
-#include "Subject.h"
 #include "Observer.h"
 
 class Player;
@@ -10,8 +9,9 @@ class Enemy;
 class Potion;
 class Gold;
 class TextDisplay;
-class Ground: public Tile, public Subject, public Observer{
+class Ground: public Tile, public Observer{
   private:
+
     int chamber;
     std::shared_ptr<Player> player;
     std::shared_ptr<Enemy> enemy;
@@ -22,11 +22,16 @@ class Ground: public Tile, public Subject, public Observer{
 
     // dont know if neighbours being type Ground would work when attaching observers
     std::vector<std::shared_ptr<Ground> > neighbours;
-
     std::shared_ptr<TextDisplay> td;
 
     // helper function for moveEnemy()
     void randomMove();
+
+    // helper functions for move
+    void passageWayHelper(Ground & tile);
+    void doorHelper(Ground & tile);
+    void enemyHelper(Ground & tile);
+    void playerHelper(Ground & tile);
     
 
   public:
@@ -36,13 +41,15 @@ class Ground: public Tile, public Subject, public Observer{
     bool getIsStair();
 
     // Subject overrides
-    virtual Info getInfo() const override; // is this supposed to not be virtual?
+    void attach(std::shared_ptr<Ground> g);
+    void attach(std::shared_ptr<TextDisplay> td);
+    Info getInfo() const;
 
     // Observer overrides
     virtual void notify() override;
-    void notify( Subject & whoNotified ) override;
+    void notify( std::shared_ptr<Ground> whoNotified );
 
-    friend class Floor;
+    void recalculate();
 
     // setters
     void setPlayer( std::shared_ptr<Player> p){ player = p; }
@@ -50,6 +57,7 @@ class Ground: public Tile, public Subject, public Observer{
     void setPotion( std::shared_ptr<Potion> p){ potion = p; }
     void setGold( std::shared_ptr<Gold> g){ gold = g; }
     void setStair( bool b );
+
     //getter
     std::vector<std::shared_ptr<Ground> > getNeighbours();
 

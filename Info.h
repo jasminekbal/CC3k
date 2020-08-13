@@ -3,7 +3,7 @@
 #include <cstddef> // defines size_t i.e. an unsigned int
 
 // State of the cell i.e.
-enum class State { Whitespace, Ground, Passageway, HorizontalWall, VerticalWall, Door, Stairs, Enemy, Player, Potion, Gold };
+enum class State { Whitespace, Ground, Passageway, HorizontalWall, VerticalWall, Door, Stairs, Enemy, Player, Potion, Gold, DragonGold };
 
 // Information for the cell to return
 struct Info {
