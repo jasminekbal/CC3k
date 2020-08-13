@@ -10,6 +10,8 @@
 #include <cmath>
 
 Merchant::Merchant(): Enemy(30, 70, 5, 'M'){
+    auto newG = std::make_shared<Gold>(2, true);
+    this->setGold(newG);
 }
 
 Merchant::~Merchant(){

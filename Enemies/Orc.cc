@@ -11,7 +11,8 @@
 
 
 Orc::Orc(): Enemy(180, 30, 25, 'O') {
-
+    auto newG = std::make_shared<Gold>(2, true);
+    this->setGold(newG);
 }
 
 Orc::~Orc(){

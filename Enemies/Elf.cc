@@ -9,7 +9,10 @@
 #include "../Characters/Troll.h"
 #include <cmath>
 
-Elf::Elf():Enemy(140, 30, 10, 'E'){}
+Elf::Elf():Enemy(140, 30, 10, 'E'){
+    auto newG = std::make_shared<Gold>(2, true);
+    this->setGold(newG);
+}
 
 Elf::~Elf(){}
 

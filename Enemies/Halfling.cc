@@ -10,6 +10,8 @@
 #include <cmath>
 
 Halfling::Halfling():Enemy(100, 15, 20, 'L'){
+    auto newG = std::make_shared<Gold>(2, true);
+    this->setGold(newG);
 }
 
 Halfling::~Halfling(){
