@@ -7,7 +7,9 @@
 #include "../Characters/Vampire.h"
 #include "../Characters/Shade.h"
 #include "../Characters/Troll.h"
+#include <iostream>
 #include <cmath>
+using namespace std;
 
 
 Human::Human() : Enemy(140, 20, 20, 'H'){
@@ -20,7 +22,7 @@ Human::~Human(){
 }
 
 bool Human::onAttacked(Player &p){
-    return p.attack(*this);
+    p.attack(*this);
 }
 
 bool Human::attack(Shade &p){
@@ -42,6 +44,7 @@ bool Human::attack(Vampire &p){
     } else {
         return false;
     }
+    return true;
 }
 
 
@@ -77,55 +80,26 @@ bool Human::attack(Goblin &p){
     }
 }
 
+
 bool Human::onAttacked(Goblin &p){
-    bool goesThrough = this->randAtk();
-    if (goesThrough){
-        int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-        this->setHP(this->getHp()-damage);
-        return true;
-    }
-    return false;
+    return baseOnAtk(p);
 }
 
 bool Human::onAttacked(Drow &p){
-    bool goesThrough = this->randAtk();
-    if (goesThrough){
-        int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-        this->setHP(this->getHp()-damage);
-        return true;
-    }
-    return false;
+    return baseOnAtk(p);
 }
 
 bool Human::onAttacked(Shade &p){
-    bool goesThrough = this->randAtk();
-    if (goesThrough){
-        int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-        this->setHP(this->getHp()-damage);
-        return true;
-    }
-    return false;
+    return baseOnAtk(p);
 }
 
 bool Human::onAttacked(Troll &p){
-    bool goesThrough = this->randAtk();
-    if (goesThrough){
-        int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-        this->setHP(this->getHp()-damage);
-        return true;
-    }
-    return false;
+    return baseOnAtk(p);
 }
 
 bool Human::onAttacked(Vampire &p){
-    bool goesThrough = this->randAtk();
-    if (goesThrough){
-        int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-        this->setHP(this->getHp()-damage);
-        return true;
-    }
-    return false;
-}
+    return baseOnAtk(p);
+} 
 
 
 void Human::setGold(std::shared_ptr<Gold> g){

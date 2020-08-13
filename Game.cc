@@ -4,13 +4,20 @@
 #include "./Characters/Player.h"
 #include <string>
 #include <memory>
+#include <fstream>
 #include "Ground.h"
 using namespace std;
+
+Game::Game(shared_ptr<Player> py){
+    p=py;
+    td = make_shared<TextDisplay> ();
+    newFloor();
+}
 
 Game::Game(shared_ptr<Player> py, std::istream &input){
     p=py;
     td = make_shared<TextDisplay> ();
-
+    newFloor(input);
 }
 
 int Game::checkPlayerState(){
@@ -35,7 +42,7 @@ void Game::tick(){
 
 void Game::newFloor(){
     std::ifstream infile{ "default.txt" };
-    f = make_unique<Floor>(infile); 
+    f = make_unique<Floor>(td, infile, p); 
 }
 
 void Game::newFloor( std::istream & input ){

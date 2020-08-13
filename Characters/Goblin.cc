@@ -25,7 +25,6 @@ bool Goblin::onAttacked(Enemy &e){
 
 bool Goblin::baseAtk (Enemy & e){
   bool goesThrough = e.onAttacked(*this);
-
   if (e.getHp()== 0){
     this->collectGold(std::make_shared<Gold>(5, true));
   }
@@ -33,7 +32,8 @@ bool Goblin::baseAtk (Enemy & e){
 }
 
 bool Goblin::baseOnAtk(Enemy & e){
-  int damage = ceil((100/(100+ this->getDef()))* e.getAtk());
+  double tempDamage = ceil( (100.0/(100.0+(double) getDef()))* (double) e.getAtk());
+  int damage = (int) floor( tempDamage );
   this->changeHp(this->getHp()-damage);
   return true;
 }
@@ -91,7 +91,8 @@ bool Goblin::attack(Orc &e) {
 }
 
 bool Goblin::onAttacked(Orc &e){
-  int damage = ceil((100/(100+ this->getDef()))* e.getAtk());
+  double tempDamage = ceil( (100.0/(100.0+(double) getDef()))* (double) e.getAtk());
+  int damage = (int) floor( tempDamage );
   int altered = damage + damage/2;
   this->changeHp(this->getHp()-altered);
   return true;

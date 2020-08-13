@@ -32,9 +32,7 @@ bool Dwarf::onAttacked(Player &p){
 }
 
 bool Dwarf::onAttacked(Drow &p){
-    int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-    this->setHP(this->getHp()-damage);
-    return true;
+    return baseOnAtk(p);
 }
 
 bool Dwarf::attack(Goblin &p) {
@@ -47,9 +45,7 @@ bool Dwarf::attack(Goblin &p) {
     }
 }
 bool Dwarf::onAttacked(Goblin &p){
-    int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-    this->setHP(this->getHp()-damage);
-    return true;
+    return baseOnAtk(p);
 }
 bool Dwarf::attack(Shade &p) {
     bool toAtk = this->randAtk();
@@ -61,9 +57,7 @@ bool Dwarf::attack(Shade &p) {
     }
 }
 bool Dwarf::onAttacked(Shade &p) {
-    int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-    this->setHP(this->getHp()-damage);
-    return true;
+    return baseOnAtk(p);
 }
 bool Dwarf::attack(Troll &p) {
     bool toAtk = this->randAtk();
@@ -75,9 +69,7 @@ bool Dwarf::attack(Troll &p) {
     }
 }
 bool Dwarf::onAttacked(Troll &p) {
-    int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-    this->setHP(this->getHp()-damage);
-    return true;
+    return baseOnAtk(p);
 }
 bool Dwarf::attack(Vampire &p) {
     bool toAtk = this->randAtk();
@@ -90,9 +82,7 @@ bool Dwarf::attack(Vampire &p) {
 }
 
 bool Dwarf::onAttacked(Vampire &p) {
-    int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-    this->setHP(this->getHp()-damage);
-    return true;
+    return baseOnAtk(p);
 }
 
 void Dwarf::setGold(std::shared_ptr<Gold> g){

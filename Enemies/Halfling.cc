@@ -22,6 +22,7 @@ bool Halfling::onAttacked( Player & p ){
     return p.attack(*this);
 }
 
+
 // will do later
 bool Halfling::attack(Shade &p){
     bool toAtk = this->randAtk();
@@ -80,9 +81,7 @@ bool Halfling::attack(Goblin &p){
 bool Halfling::onAttacked(Goblin &p){
     bool goesThrough = this->randAtk();
     if (goesThrough){
-        int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-        this->setHP(this->getHp()-damage);
-        return true;
+        return baseOnAtk(p);
     }
     return false;
 }
@@ -90,9 +89,7 @@ bool Halfling::onAttacked(Goblin &p){
 bool Halfling::onAttacked(Drow &p){
     bool goesThrough = this->randAtk();
     if (goesThrough){
-        int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-        this->setHP(this->getHp()-damage);
-        return true;
+        return baseOnAtk(p);
     }
     return false;
 }
@@ -100,9 +97,7 @@ bool Halfling::onAttacked(Drow &p){
 bool Halfling::onAttacked(Shade &p){
     bool goesThrough = this->randAtk();
     if (goesThrough){
-        int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-        this->setHP(this->getHp()-damage);
-        return true;
+        return baseOnAtk(p);
     }
     return false;
 }
@@ -110,9 +105,7 @@ bool Halfling::onAttacked(Shade &p){
 bool Halfling::onAttacked(Troll &p){
     bool goesThrough = this->randAtk();
     if (goesThrough){
-        int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-        this->setHP(this->getHp()-damage);
-        return true;
+        return baseOnAtk(p);
     }
     return false;
 }
@@ -120,8 +113,7 @@ bool Halfling::onAttacked(Troll &p){
 bool Halfling::onAttacked(Vampire &p){
     bool goesThrough = this->randAtk();
     if (goesThrough){
-        int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-        this->setHP(this->getHp()-damage);
+        return baseOnAtk(p);
         return true;
     }
     return false;

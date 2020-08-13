@@ -32,9 +32,7 @@ bool Dragon::attack(Drow &p) {
 }  
 
 bool Dragon::onAttacked(Drow &p){
-    int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-    this->setHP(this->getHp()-damage);
-    return true;
+    return baseOnAtk(p);
 }
 
 bool Dragon::attack(Goblin &p) {
@@ -47,10 +45,9 @@ bool Dragon::attack(Goblin &p) {
     }
 }
 bool Dragon::onAttacked(Goblin &p){
-    int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-    this->setHP(this->getHp()-damage);
-    return true;
+   return baseOnAtk(p);
 }
+
 bool Dragon::attack(Shade &p) {
     bool toAtk = this->randAtk();
     if (toAtk){
@@ -61,9 +58,7 @@ bool Dragon::attack(Shade &p) {
     }
 }
 bool Dragon::onAttacked(Shade &p) {
-    int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-    this->setHP(this->getHp()-damage);
-    return true;
+    return baseOnAtk(p);
 }
 bool Dragon::attack(Troll &p) {
     bool toAtk = this->randAtk();
@@ -75,9 +70,7 @@ bool Dragon::attack(Troll &p) {
     }
 }
 bool Dragon::onAttacked(Troll &p) {
-    int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-    this->setHP(this->getHp()-damage);
-    return true;
+    return baseOnAtk(p);
 }
 bool Dragon::attack(Vampire &p) {
     bool toAtk = this->randAtk();
@@ -90,9 +83,7 @@ bool Dragon::attack(Vampire &p) {
 }
 
 bool Dragon::onAttacked(Vampire &p) {
-    int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-    this->setHP(this->getHp()-damage);
-    return true;
+    return baseOnAtk(p);
 }
 
 

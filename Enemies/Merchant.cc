@@ -89,58 +89,27 @@ bool Merchant::attack(Goblin &p){
 }
 
 bool Merchant::onAttacked(Goblin &p){
-    bool goesThrough = this->randAtk();
-    if (goesThrough){
-        int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-        this->setHP(this->getHp()-damage);
-        return true;
-    }
-    return false;
+    return baseOnAtk(p);
 }
 
 bool Merchant::onAttacked(Drow &p){
-    bool goesThrough = this->randAtk();
-    if (goesThrough){
-        int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-        this->setHP(this->getHp()-damage);
-        return true;
-    }
-    return false;
+    return baseOnAtk(p);
 }
 
 bool Merchant::onAttacked(Shade &p){
-    bool goesThrough = this->randAtk();
-    if (goesThrough){
-        int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-        this->setHP(this->getHp()-damage);
-        return true;
-    }
-    return false;
+    return baseOnAtk(p);
 }
 
 bool Merchant::onAttacked(Troll &p){
-    bool goesThrough = this->randAtk();
-    if (goesThrough){
-        int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-        this->setHP(this->getHp()-damage);
-        return true;
-    }
-    return false;
+    return baseOnAtk(p);
 }
 
 bool Merchant::onAttacked(Vampire &p){
-    bool goesThrough = this->randAtk();
-    if (goesThrough){
-        int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-        this->setHP(this->getHp()-damage);
-        return true;
-    }
-    return false;
+    return baseOnAtk(p);
 }
 
 void Merchant::makeHostile(){
       Merchant::hostile = true;
 }
-
 
 bool Merchant::hostile = false;

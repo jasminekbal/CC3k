@@ -3,7 +3,7 @@
 #include "../Characters/Drow.h"
 
 
-PoisonHP::PoisonHP(): Potion(-10) {}
+PoisonHP::PoisonHP(): Potion(-10, "PH") {}
 
 PoisonHP::~PoisonHP(){
 }

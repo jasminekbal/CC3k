@@ -87,53 +87,23 @@ bool Orc::attack(Goblin &p){
 }
 
 bool Orc::onAttacked(Goblin &p){
-    bool goesThrough = this->randAtk();
-    if (goesThrough){
-        int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-        this->setHP(this->getHp()-damage);
-        return true;
-    }
-    return false;
+        return baseOnAtk(p);
 }
 
 bool Orc::onAttacked(Drow &p){
-    bool goesThrough = this->randAtk();
-    if (goesThrough){
-        int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-        this->setHP(this->getHp()-damage);
-        return true;
-    }
-    return false;
+        return baseOnAtk(p);
 }
 
 bool Orc::onAttacked(Shade &p){
-    bool goesThrough = this->randAtk();
-    if (goesThrough){
-        int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-        this->setHP(this->getHp()-damage);
-        return true;
-    }
-    return false;
+        return baseOnAtk(p);
 }
 
 bool Orc::onAttacked(Troll &p){
-    bool goesThrough = this->randAtk();
-    if (goesThrough){
-        int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-        this->setHP(this->getHp()-damage);
-        return true;
-    }
-    return false;
+        return baseOnAtk(p);
 }
 
 bool Orc::onAttacked(Vampire &p){
-    bool goesThrough = this->randAtk();
-    if (goesThrough){
-        int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-        this->setHP(this->getHp()-damage);
-        return true;
-    }
-    return false;
+        return baseOnAtk(p);
 }
 
 

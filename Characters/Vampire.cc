@@ -29,7 +29,8 @@ bool Vampire::baseAtk (Enemy & e){
 }
 
 bool Vampire::baseOnAtk(Enemy & e){
-  int damage = ceil((100/(100+ this->getDef()))* e.getAtk());
+  double tempDamage = ceil( (100.0/(100.0+(double) getDef()))* (double) e.getAtk());
+  int damage = (int) floor( tempDamage );
   this->changeHp(this->getHp()-damage);
   return true;
 }

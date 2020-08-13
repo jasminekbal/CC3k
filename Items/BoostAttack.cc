@@ -4,7 +4,7 @@
 
 
 
-BoostAtk::BoostAtk(): Potion(5){}
+BoostAtk::BoostAtk(): Potion(5, "BA"){}
 BoostAtk::~BoostAtk() {
 
 }

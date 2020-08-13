@@ -32,8 +32,7 @@ bool Elf::onAttacked(Player &p){
 }
 
 bool Elf::onAttacked(Drow &p){
-    int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-    this->setHP(this->getHp()-damage);
+    baseOnAtk(p);
     return true;
 }
 
@@ -52,9 +51,7 @@ bool Elf::attack(Goblin &p) {
 
 
 bool Elf::onAttacked(Goblin &p){
-    int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-    this->setHP(this->getHp()-damage);
-    return true;
+    return baseOnAtk(p);
 }
 bool Elf::attack(Shade &p) {
     bool firstAtk = this->randAtk();
@@ -70,9 +67,7 @@ bool Elf::attack(Shade &p) {
 }
 
 bool Elf::onAttacked(Shade &p) {
-    int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-    this->setHP(this->getHp()-damage);
-    return true;
+    return baseOnAtk(p);
 }
 
 bool Elf::attack(Troll &p) {
@@ -90,9 +85,7 @@ bool Elf::attack(Troll &p) {
 
 
 bool Elf::onAttacked(Troll &p) {
-    int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-    this->setHP(this->getHp()-damage);
-    return true;
+    return baseOnAtk(p);
 }
 
 
@@ -110,9 +103,7 @@ bool Elf::attack(Vampire &p) {
 }
 
 bool Elf::onAttacked(Vampire &p) {
-    int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
-    this->setHP(this->getHp()-damage);
-    return true;
+    return baseOnAtk(p);
 }
 
 

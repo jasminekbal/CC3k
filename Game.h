@@ -19,15 +19,15 @@ class Game{
     int checkPlayerState(); // 0 for normal, 1 if player got to stairs, 2 if player died
 
     public:
-    Game(shared_ptr<Player> py, std::istream &input);
+    Game(std::shared_ptr<Player> py);
+    Game(std::shared_ptr<Player> py, std::istream &input);
     void tick();
     void newFloor();
     void newFloor( std::istream & input );
 
     std::string endGame( bool showScore );
-    void moveCharacter( int dir );
+    std::string moveCharacter( int dir );
     
-    std::string interact( int dir );
 };
 
 #endif

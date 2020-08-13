@@ -3,7 +3,7 @@
 #include "../Characters/Drow.h"
 
 
-WoundAtk::WoundAtk(): Potion(-5) {}
+WoundAtk::WoundAtk(): Potion(-5, "WA") {}
 
 WoundAtk::~WoundAtk(){
 

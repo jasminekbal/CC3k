@@ -30,17 +30,24 @@ class Enemy{
     public:
         Enemy(int hp, int atk, int def, char c);
         virtual ~Enemy();
-        virtual bool onAttacked(Player &p) =0;
+        
+        bool baseOnAtk(Player & p);
+
         virtual bool attack(Drow &d) = 0;  // this returns if the attack was succesful
-        virtual bool onAttacked(Drow &d)= 0;
         virtual bool attack(Goblin &g) = 0;  // this returns if the attack was succesful
-        virtual bool onAttacked(Goblin &g)= 0;
         virtual bool attack(Shade &s) = 0;  // this returns if the attack was succesful
-        virtual bool onAttacked(Shade &s)= 0;
         virtual bool attack(Troll &t) = 0;  // this returns if the attack was succesful
-        virtual bool onAttacked(Troll &t)= 0;
         virtual bool attack(Vampire &v) = 0;  // this returns if the attack was succesful
-        virtual bool onAttacked(Vampire &v)= 0;
+        
+        
+        virtual bool onAttacked(Player &p);
+
+        virtual bool onAttacked(Shade &g)= 0;
+        virtual bool onAttacked(Drow &d)= 0;
+        virtual bool onAttacked(Goblin &g)= 0;        
+        virtual bool onAttacked(Troll &t)= 0;
+        virtual bool onAttacked(Vampire &v)= 0; 
+
         virtual std::shared_ptr<Gold> onDeath() = 0;
 
         int getHp() const; // we need to know if dead

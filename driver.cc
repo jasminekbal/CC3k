@@ -26,114 +26,144 @@
 #include <iostream>
 #include <string>
 #include <memory>
+#include "Tile.h"
 
 using namespace std;
+
+void print(shared_ptr<Player> p, shared_ptr<Enemy> e){
+    cout<<"Player:" << endl;
+    cout << "attack : " << p->getAtk() << endl;
+    cout << "defence : " << p->getDef() << endl;
+    cout << "health : " << p->getHp() << endl;
+    cout << "gold: " << p->getScore() << endl;
+    cout << endl;
+    cout<<"Enemy:" << endl;
+    cout << "attack : " << e->getAtk() << endl;
+    cout << "defence : " << e->getDef() << endl;
+    cout << "health : " << e->getHp() << endl;
+}
+
+void newPlayer( shared_ptr<Player> & p){
+    bool madeCharacter;
+    char c;
+    if( cin>> c){
+        switch(c){
+            case 's':
+                p = make_shared<Shade>();
+                madeCharacter = true;
+                break;
+            case 'd':
+                p = make_shared<Drow>();
+                madeCharacter = true;
+                break;
+            case 'v':
+                p = make_shared<Vampire>();
+                madeCharacter = true;
+                break;
+            case 'g':
+                p = make_shared<Goblin>();
+                madeCharacter = true;
+                break;
+            case 't':
+                p = make_shared<Troll>();
+                madeCharacter = true;
+                break;
+        }
+    }
+    if( madeCharacter ){
+        cout << "created: " << c << endl;
+    }
+}
 
 int main(){
     shared_ptr<Player> p;
     char c = ' ';
-    bool madeCharacter = false;
-    while( !madeCharacter ){
-        if( cin>> c){
-            switch(c){
-                case 's':
-                    p = make_shared<Shade>();
-                    madeCharacter = true;
-                    break;
-                case 'd':
-                    p = make_shared<Drow>();
-                    madeCharacter = true;
-                    break;
-                case 'v':
-                    p = make_shared<Vampire>();
-                    madeCharacter = true;
-                    break;
-                case 'g':
-                    p = make_shared<Goblin>();
-                    madeCharacter = true;
-                    break;
-                case 't':
-                    p = make_shared<Troll>();
-                    madeCharacter = true;
-                    break;
-            }
-        }
-        break;
-    }
-    cout << "created: " << c << endl;
+    newPlayer(p);
     shared_ptr<Potion> potion;
+    shared_ptr<Gold> gold;
     shared_ptr<Enemy> enemy;
+    shared_ptr<Tile> tile;
+    shared_ptr<Ground> ground;
+    int value = 2;
+    bool canCollect = true;
     while( cin >> c ){
         switch( c ){
             case '0':
                 potion = make_shared<RestoreHP>();
                 cout << "RH" << endl;
-                potion->usePotion( p );
-                break;
             case '1':
                 potion = make_shared<BoostAtk>();
                 cout << "BA" << endl;
-                potion->usePotion( p );
                 break;
             case '2':
                 potion = make_shared<BoostDef>();
                 cout << "BD" << endl;
-                potion->usePotion( p );
                 break;
             case '3':
                 potion = make_shared<PoisonHP>();
                 cout << "PH" << endl;
-                potion->usePotion( p );
                 break;
             case '4':
                 potion = make_shared<WoundAtk>();
                 cout << "WA" << endl;
-                potion->usePotion( p );
                 break;
             case '5':
                 potion = make_shared<WoundDef>();
                 cout << "WD" << endl;
-                potion->usePotion( p );
+                break;
+            case '6':
+                gold = make_shared<Gold>(value, canCollect);
+                p->collectGold( gold );
                 break;
             case 'H':
                 enemy = make_shared<Human>();
-                enemy->onAttacked( * p);
-                p->onAttacked(*enemy);
                 break;
             case 'W':
                 enemy = make_shared<Dwarf>();
-                enemy->onAttacked( * p);
-                p->onAttacked(*enemy);
                 break;
             case 'E':
                 enemy = make_shared<Elf>();
-                enemy->onAttacked( * p);
-                p->onAttacked(*enemy);
                 break;
             case 'O':
-                enemy = make_shared<Orc>();
-                enemy->onAttacked( * p);
-                p->onAttacked(*enemy);
+                enemy = make_shared<Orc>(); 
                 break;
             case 'M':
                 enemy = make_shared<Merchant>();
-                enemy->onAttacked( * p);
-                p->onAttacked(*enemy);
                 break;
             case 'D':
                 enemy = make_shared<Dragon>();
-                enemy->onAttacked( * p);
-                p->onAttacked(*enemy);
                 break;
             case 'L':
                 enemy = make_shared<Halfling>();
-                enemy->onAttacked( * p);
-                p->onAttacked(*enemy);
                 break;
+            case 'p':
+                print(p, enemy);
+                break;
+            case 'a':
+                if( enemy->onAttacked( * p ) ){
+                    if( enemy->getHp() <= 0 ){
+                        gold = enemy->onDeath();
+                        p->collectGold( gold );
+                    }
+                }
+                break;
+            case 'o':
+                p->onAttacked( *enemy );
+                break;
+            case 'u':
+                potion->usePotion( p );
+                break;
+            case 'q':
+                break;
+            case 'r':
+                cout << rand() << endl;
+            case 'n':
+                newPlayer(p);
+            case 't':
+                tile = make_shared
+            case 'g':
+
         }
-        cout << "attack : " << p->getAtk() << endl;
-        cout << "defence : " << p->getDef() << endl;
-        cout << "health : " << p->getHp() << endl;
     }
 }
 

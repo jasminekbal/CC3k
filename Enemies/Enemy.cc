@@ -8,9 +8,9 @@
 
 using namespace std;
 
-int Enemy::checkHp(int hp) {
-    if (hp >= 0){
-        return hp;
+int Enemy::checkHp(int h) {
+    if (h >= 0){
+        return h;
     } else {
         return 0;
     }
@@ -25,8 +25,9 @@ int Enemy::checkStat(int val) {
 }
 
 void Enemy::setHP(int hp){
-     hp = checkHp(hp);
+    this->hp = checkHp(hp);
 }
+
 void Enemy::setAtk(int atk){
     atk = checkStat(atk);
 }
@@ -64,6 +65,17 @@ bool Enemy::randAtk( ){
     } else {
         return false;
     }
+}
+
+bool Enemy::onAttacked(Player &p){
+    return this->baseOnAtk(p);
+}
+
+bool Enemy::baseOnAtk(Player & p){
+    double tempDamage = ceil( (100.0/(100.0+(double) getDef()))* (double) p.getAtk());
+    int damage = (int) floor( tempDamage );
+    hp = checkHp(hp - damage);
+    return true;
 }
 
 bool Enemy::isHostile(){

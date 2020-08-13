@@ -8,12 +8,12 @@
 
 using namespace std;
 
-int Player::checkHp(int hp) {
+int Player::checkHp(int h) {
     if (maxHealth == -1){
-        return hp;
-    } else if( hp <= maxHealth && hp >=0 ) {
-        return hp;
-    } else if (hp> maxHealth) {
+        return h;
+    } else if( h <= maxHealth && h >=0 ) {
+        return h;
+    } else if (h> maxHealth) {
         return maxHealth;
     } else {
         return 0;

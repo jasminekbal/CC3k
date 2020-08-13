@@ -174,7 +174,7 @@ string Ground::playerHelper(Ground & tile){
     potion = nullptr;
     type = State::Ground;
     c = '.';
-    return "You used a " + potion->getType() +" potion";
+    return "You used a " + potion->getType() + " potion";
   }
   else if (type==State::Gold){
     (player)->collectGold(gold);

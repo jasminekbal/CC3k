@@ -10,9 +10,12 @@ class Drow;
 
 class Potion: public Item{
     protected:
+    std::string type;
 
     public:
-    Potion(int change): Item(change, 'P'){}
+    Potion(int change, std::string type): Item(change, 'P'){
+        type = type;
+    }
     virtual void usePotion( std::shared_ptr<Player> p) = 0; 
     void changeVal(char c, int val, std::shared_ptr<Player> p ){
         if (c=='a') {
@@ -23,6 +26,10 @@ class Potion: public Item{
             p->changeHp(val);
         }
     }
+    std::string getType(){
+        return type;
+    }
+
 };
 
 #endif

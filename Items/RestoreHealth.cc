@@ -3,7 +3,7 @@
 #include "../Characters/Drow.h"
 
 
-RestoreHP::RestoreHP(): Potion(10) {}
+RestoreHP::RestoreHP(): Potion(10, "RH") {}
 
 RestoreHP::~RestoreHP(){
 
