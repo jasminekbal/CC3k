@@ -13,7 +13,6 @@ class RestoreHP: public Potion {
     RestoreHP();
     virtual ~RestoreHP();
     void usePotion(std::shared_ptr<Player> p); 
-    void usePotion(std::shared_ptr<Drow> d); 
 };
 
 #endif

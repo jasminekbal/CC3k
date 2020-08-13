@@ -11,7 +11,6 @@ class WoundAtk: public Potion {
     WoundAtk();
     virtual ~WoundAtk();
     void usePotion(std::shared_ptr<Player> p) override; 
-    void usePotion(std::shared_ptr<Drow> d) override; 
 
 };
 
