@@ -76,7 +76,7 @@ void Ground::enemyHelper(Ground & tile){
     tile.c = '.';
   }
   else if (type==State::Player){
-    (tile.enemy)->attack(*player);
+    player->onAttacked(*(tile.enemy));
     // tile remains enemy type
     return;
   }
@@ -99,22 +99,25 @@ void Ground::playerHelper(Ground & tile){
     player->setLocation(make_shared<Ground>(*this));
   }
   else if (type==State::Enemy){ // need to be able to exchange enemy w/ its gold if it dies
-    if ((tile.player)->attack(*enemy)){ // true if enemy died 
-      gold = enemy->onDeath();
-      try{
-        tile.player->collectGold( gold );
-      } catch(){  
-        type = State::Gold;
-        c = 'G';
-        gold->setCanCollect(1);
+    if (enemy->onAttacked(*(tile.player))){ // true if attack went through
+      if (!(enemy->getHp())){ // true if enemy died
+        gold = enemy->onDeath();
+        try{
+          tile.player->collectGold( gold );
+        } catch(){  
+          type = State::Gold;
+          c = 'G';
+          gold->setCanCollect(1);
+        }
+        enemy = nullptr;
       }
-      enemy = nullptr;
+      else{
+        // if player attacks enemy and enemy survives,
+        // enemy will become hostile
+        enemy->makeHostile();
+      }
     }
-    else{
-      // if player attacks enemy and enemy survives,
-      // enemy will become hostile
-      enemy->makeHostile();
-    }
+    else{} // give message
   }
   else if (type==State::Potion){
     potion->usePotion(tile.player);
