@@ -20,7 +20,6 @@ class Ground: public Tile, public Observer{
     std::shared_ptr<Potion> potion;
     std::shared_ptr<Gold> gold;
 
-    // dont know if neighbours being type Ground would work when attaching observers
     std::vector<std::shared_ptr<Ground> > neighbours;
     std::shared_ptr<TextDisplay> td;
 
@@ -32,11 +31,12 @@ class Ground: public Tile, public Observer{
     void doorHelper(Ground & tile);
     void enemyHelper(Ground & tile);
     void playerHelper(Ground & tile);
+
+    void move(Ground & tile); // move contents of tile to this Tile   // make it error if it doesn't work
     
 
   public:
     Ground(int r, int c, State t, int room = -1, std::shared_ptr<Enemy> e = nullptr , std::shared_ptr<Potion> po = nullptr, std::shared_ptr<Gold> g = nullptr, std::shared_ptr<Player> pl = nullptr);
-    void move(Ground & tile); // move contents of tile to this Tile   // make it error if it doesn't work
     void empty(); // empty this tile of contents, set type to 1
     bool getIsStair();
 
@@ -63,6 +63,7 @@ class Ground: public Tile, public Observer{
 
     // moves enemy if there's an enemy on this tile
     // called in Floor
+    void movePlayer(int dir) override;
     void moveEnemy() override;
 };
 
