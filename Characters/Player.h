@@ -1,7 +1,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 #include <memory>
-#include "../Ground.h"
 
 class Ground;
 class Enemy;

@@ -11,6 +11,7 @@
 #include "../Items/Gold.h"
 #include "../Items/Potion.h"
 #include "../Items/DragonGold.h"
+#include "../Exceptions.h"
 #include <vector>
 #include <memory>
 
@@ -51,6 +52,47 @@ void Floor::removeTile( int & chamIndex, int & tileIndex, vector<vector<shared_p
         chambers[chamIndex].erase( chambers[chamIndex].begin() );
     } else{
         chambers[chamIndex].erase( chambers[chamIndex].begin() + tileIndex );
+    }
+}
+
+std::shared_ptr<Ground> Floor::randomDragon( std::shared_ptr<DragonGold> dg, std::shared_ptr<Ground> tile, RandomGeneration & rng  ){
+    auto neighbours = tile->getNeighbours();
+    vector<shared_ptr<Ground> > ground;
+    int upper;
+    int location;
+    for( auto tile : neighbours ){
+        if( tile != nullptr ){ 
+            if(tile->type == State::Ground){
+                ground.push_back(tile);
+            }
+         }
+    }
+    upper = ground.size();
+    if( upper != 0 ){
+        location = rng.randomInt( upper );
+    } else {
+        throw NoSpace( "No ground available" );
+    }
+    auto d = make_shared<Dragon>();
+    d->setGold( dg );
+    dg->setDragon( d );
+    auto dragonTile = ground[location];
+    dragonTile->setEnemy(d);
+    return dragonTile;
+}
+
+void Floor::removeDragonTile(int & chamIndex, vector<vector<shared_ptr<Ground> > > & chambers, shared_ptr<Ground> DragonTile ){
+    int index = 0;
+    for( auto tile : chambers[chamIndex]){
+        if( tile == DragonTile){
+            if( index == 0){
+                chambers[chamIndex].erase( chambers[chamIndex].begin() );
+            } else {
+                chambers[chamIndex].erase( chambers[chamIndex].begin() + index );
+            } 
+        } else {
+            index++;
+        }
     }
 }
 
@@ -121,22 +163,28 @@ void Floor::generate( std::shared_ptr<Player> p ){
     for( int i = 0; i < toSpawn; i++ ){
         auto tile = generateLocation( chamIndex, tileIndex, chambers, rng, NUM_CHAMBER );
         
-        if( i >  NUM_GOLD){
-            auto enemy = reg.get();
-            tile->setEnemy( enemy );
-        } else if( i >  NUM_POTIONS){
+        if( i < NUM_POTIONS ){
+            auto potion = rpg.get();
+            tile->setPotion( potion );
+        } else if( i <  NUM_GOLD){
             auto gold = rgg.get();
             auto dg = dynamic_pointer_cast< DragonGold> (gold);
             if( dg != nullptr ){
-                //randomDragon( dg, tile ); //whenever we create a gold we have to create a dragon. 
+                try{
+                auto dragonTile = randomDragon( dg, tile, rgg ); //whenever we create a gold we have to create a dragon. 
                 //Technically we should test to see if there's even an available tile for the dragon, in case we spawn a dragon gold
                 //in the middle of a bunch of enemies. If I have time I'll add that, but it's not very likely to happen so I'll just pretend it won't for now
                 //this function remains to be created. Task for tomorrow I think. 
+                } catch( NoSpace ) {
+                    i--;
+                    break;
+                }
+                removeDragonTile( chamIndex, chambers, tile );
             }
             tile->setGold( gold );
         } else{
-            auto potion = rpg.get();
-            tile->setPotion( potion );
+            auto enemy = reg.get();
+            tile->setEnemy( enemy );
         }
         removeTile( chamIndex, tileIndex, chambers );
     }

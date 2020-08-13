@@ -32,4 +32,9 @@ class DragonStillAlive: public Exceptions{ //if you step on a dragon gold
     DragonStillAlive( std::string message );
 };
 
+class NoSpace: public Exceptions{
+    public:
+    NoSpace( std::string message );
+};
+
 #endif

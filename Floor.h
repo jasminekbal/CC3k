@@ -32,7 +32,8 @@ class Floor{
     RandomGeneration & rng, int & NUM_CHAMBERS, int player = -1 );
     void removeTile( int & chamIndex, int & tileIndex, std::vector<std::vector<std::shared_ptr<Ground> > > & chambers );
 
-    //void randomDragon( std::shared_ptr<DragonGold> dg, std::shared_ptr<Ground> tile );
+    std::shared_ptr<Ground> randomDragon( std::shared_ptr<DragonGold> dg, std::shared_ptr<Ground> tile, RandomGeneration & rng );
+    void removeDragonTile(int & chamIndex, std::vector<std::vector<std::shared_ptr<Ground> > > & chambers, std::shared_ptr<Ground> DragonTile );
     //int getRow(int index);
     //int getCol(int index);
 

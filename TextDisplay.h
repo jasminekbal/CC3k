@@ -17,7 +17,7 @@ class TextDisplay: public Observer{
 
     public:
     TextDisplay(int numRows = 15, int numCols = 79);
-    void notify( Tile & whoNotified );  // overload
+    void notify( Tile & whoNotified ) override;  // overload
     void notify() override;
     friend std::ostream &operator<<(std::ostream &out, const TextDisplay &td);
 };
