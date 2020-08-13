@@ -96,8 +96,9 @@ void Dragon::setGold(std::shared_ptr<DragonGold> g){
     dG = g;
 }
 
-std::shared_ptr<DragonGold> Dragon::onDeath(){
+std::shared_ptr<Gold> Dragon::onDeath(){
     dG->setCanCollect(true);
-    return dG;
+    dG->setDragon(nullptr);
+    return nullptr;
 }
 

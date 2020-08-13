@@ -27,7 +27,6 @@ class Game{
     void moveCharacter( int dir );
     
     std::string interact( int dir );
-
 };
 
 #endif

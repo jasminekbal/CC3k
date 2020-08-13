@@ -47,7 +47,7 @@ class Ground: public Tile, public Observer{
 
     // Observer overrides
     virtual void notify() override;
-    void notify( std::shared_ptr<Ground> whoNotified );
+    void notify( std::shared_ptr<Ground> whoNotified ) override;
 
     void recalculate();
 

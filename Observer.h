@@ -6,7 +6,8 @@ class Tile;
 class Observer {
   public:
     // Pass the Subject that called the notify method.
-    virtual void notify( Tile & whoNotified ) = 0;
+    void notify( Tile & whoNotified );
+    virtual void notify( shared_ptr<Ground> whoNotified );
     virtual void notify() = 0;
     virtual ~Observer() = default;
 };
