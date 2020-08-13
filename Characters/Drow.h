@@ -10,6 +10,8 @@ class Drow: public Player{
     public:
     Drow();
     virtual ~Drow();
+
+    virtual bool onAttacked(Enemy &e) override;
     virtual bool attack(Dragon &e) override;  //might return a string if we want to go that route
     virtual bool onAttacked(Dragon &e) override;
     virtual bool attack(Dwarf &e) override;  //might return a string if we want to go that route

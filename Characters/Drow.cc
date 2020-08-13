@@ -18,10 +18,12 @@ Drow::~Drow(){
 
 }
 
+bool Drow::onAttacked(Enemy &e) {
+  return e.attack(*this);
+}
+
 bool Drow::baseAtk (Enemy & e){
-  bool myAtk = true;
-  bool goesThrough = e.onAttacked(*this);
-  return myAtk and goesThrough;
+  return e.onAttacked(*this);
 }
 
 bool Drow::baseOnAtk(Enemy & e){

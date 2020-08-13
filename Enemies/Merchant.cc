@@ -28,6 +28,9 @@ std::shared_ptr<Gold> Merchant::onDeath(){
     return gold;
 }
 
+bool Merchant::onAttacked(Player &p) {
+    return p.attack(*this);
+}
 
 bool Merchant::attack(Shade &p){
     bool toAtk = this->randAtk();

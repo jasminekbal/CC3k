@@ -18,6 +18,10 @@ Human::~Human(){
 
 }
 
+bool Human::onAttacked(Player &p){
+    return p.attack(*this);
+}
+
 bool Human::attack(Shade &p){
     bool toAtk = this->randAtk();
     if (toAtk){

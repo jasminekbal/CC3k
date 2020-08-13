@@ -24,6 +24,10 @@ bool Dwarf::attack(Drow &p) {
     }
 }  
 
+bool Dwarf::onAttacked(Player &p){
+    return p.attack(*this);
+}
+
 bool Dwarf::onAttacked(Drow &p){
     int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
     this->setHP(this->getHp()-damage);

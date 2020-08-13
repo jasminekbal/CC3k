@@ -19,14 +19,17 @@ Goblin::~Goblin(){
 
 }
 
+bool Goblin::onAttacked(Enemy &e){
+  return e.attack(*this);
+}
+
 bool Goblin::baseAtk (Enemy & e){
-  bool myAtk = true;
   bool goesThrough = e.onAttacked(*this);
 
   if (e.getHp()== 0){
     this->collectGold(std::make_shared<Gold>(5, true));
   }
-  return myAtk and goesThrough;
+  return goesThrough;
 }
 
 bool Goblin::baseOnAtk(Enemy & e){

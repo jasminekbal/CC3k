@@ -23,7 +23,11 @@ bool Elf::attack(Drow &d){
         return false;
     }
 }
- 
+
+bool Elf::onAttacked(Player &p){
+    return p.attack(*this);
+}
+
 bool Elf::onAttacked(Drow &p){
     int damage = ceil((100/(100+ this->getDef()))* p.getAtk());
     this->setHP(this->getHp()-damage);

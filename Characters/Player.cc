@@ -4,6 +4,9 @@
 #include "../Enemies/Enemy.h"
 #include "../Items/Gold.h"
 #include "../Items/Potion.h"
+#include "../Exceptions.h"
+
+using namespace std;
 
 int Player::checkHp(int hp) {
     if (maxHealth == -1){
@@ -89,6 +92,8 @@ void Player::newPlayer(){
 void Player::collectGold(std::shared_ptr<Gold> g){
     if (g->getCanCollect()){
         score += g->getChange();
+    }else {
+        throw CantCollect("Can't collect gold");
     }
 }
 

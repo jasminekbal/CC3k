@@ -12,6 +12,8 @@ class Vampire: public Player {
     public:
     Vampire();
     virtual ~Vampire();
+    
+    virtual bool onAttacked(Enemy &e) override;
     virtual bool attack(Dragon &e) override;  //might return a string if we want to go that route
     virtual bool onAttacked(Dragon &e) override;
     virtual bool attack(Dwarf &e) override;  //might return a string if we want to go that route

@@ -17,10 +17,13 @@ Shade::~Shade(){
 
 }
 
+bool Shade::onAttacked(Enemy &e) {
+  return e.attack(*this);
+}
+
+
 bool Shade::baseAtk (Enemy & e){
-  bool myAtk = true;
-  bool goesThrough = e.onAttacked(*this);
-  return myAtk and goesThrough;
+  return e.onAttacked(*this);
 }
 
 bool Shade::baseOnAtk(Enemy & e){

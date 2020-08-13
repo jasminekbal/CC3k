@@ -10,6 +10,7 @@ class Halfling: public Enemy{
     Halfling();
     virtual ~Halfling();
     
+    virtual bool onAttacked(Player &p) override;
     virtual bool attack(Drow &d) override;  // this returns if the attack was succesful
     virtual bool onAttacked(Drow &d) override;
     virtual bool attack(Goblin &g) override;  // this returns if the attack was succesful

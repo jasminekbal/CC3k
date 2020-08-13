@@ -45,6 +45,7 @@ class Player {
     std::shared_ptr<Ground> getLocation(); //called by game so the game knows where the player is
     void setLocation( std::shared_ptr<Ground> g ); //called whenever the player moves to a new tile
 
+    virtual bool onAttacked(Enemy &e) =0;
     virtual bool attack(Dragon &e) = 0;  //might return a string if we want to go that route
     virtual bool onAttacked(Dragon &e)= 0;
     virtual bool attack(Dwarf &e) = 0;  //might return a string if we want to go that route

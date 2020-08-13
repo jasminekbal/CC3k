@@ -10,10 +10,10 @@ WoundAtk::~WoundAtk(){
 }
 
 void WoundAtk::usePotion(std::shared_ptr<Player> p){
-    this->changeVal('a', p->getHp()-5, p);
+    this->changeVal('a', p->getAtk()-5, p);
 } 
 
 void WoundAtk::usePotion( std::shared_ptr<Drow> d){
-     this->changeVal('a', d->getHp()-7, d);
+     this->changeVal('a', d->getAtk()-7, d);
 }
 

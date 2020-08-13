@@ -10,6 +10,7 @@ class Orc: public Enemy{
     Orc();
     virtual ~Orc();
     
+    virtual bool onAttacked(Player &p) override;
     virtual bool attack(Drow &d) override;  // this returns if the attack was succesful
     virtual bool onAttacked(Drow &d) override;
     virtual bool attack(Goblin &g) override;  // this returns if the attack was succesful

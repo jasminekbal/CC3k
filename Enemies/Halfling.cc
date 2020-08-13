@@ -17,7 +17,7 @@ Halfling::~Halfling(){
 }
 
 bool Halfling::onAttacked( Player & p ){
-    p.attack(*this);
+    return p.attack(*this);
 }
 
 // will do later

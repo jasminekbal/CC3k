@@ -15,14 +15,17 @@ Vampire::Vampire(): Player(50, 25, 25, -1){}
 Vampire::~Vampire(){
 }
 
+bool Vampire::onAttacked(Enemy &e) {
+  return e.attack(*this);
+}
+
 bool Vampire::baseAtk (Enemy & e){
-  bool myAtk = true;
   bool goesThrough = e.onAttacked(*this);
 
-  if (myAtk and goesThrough){
+  if (goesThrough){
     this->changeHp(this->getHp()+5);
   }
-  return myAtk and goesThrough;
+  return goesThrough;
 }
 
 bool Vampire::baseOnAtk(Enemy & e){
@@ -40,13 +43,12 @@ bool Vampire::onAttacked(Dragon &e){
 }
 
 bool Vampire::attack(Dwarf &e){
-  bool myAtk = true;
   bool goesThrough = e.onAttacked(*this);
 
-  if (myAtk and goesThrough){
+  if (goesThrough){
     this->changeHp(this->getHp()-5);
   }
-  return myAtk and goesThrough;
+  return goesThrough;
 }
 
 bool Vampire::onAttacked(Dwarf &e){

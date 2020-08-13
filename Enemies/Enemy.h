@@ -30,7 +30,7 @@ class Enemy{
     public:
         Enemy(int hp, int atk, int def, char c);
         virtual ~Enemy();
-
+        virtual bool onAttacked(Player &p) =0;
         virtual bool attack(Drow &d) = 0;  // this returns if the attack was succesful
         virtual bool onAttacked(Drow &d)= 0;
         virtual bool attack(Goblin &g) = 0;  // this returns if the attack was succesful

@@ -17,6 +17,10 @@ Dragon::Dragon():Enemy(150, 30, 25, 'D'){
 Dragon::~Dragon(){
 }
 
+bool Dragon::onAttacked(Player &p){
+    return p.attack(*this);
+}
+
 bool Dragon::attack(Drow &p) {
     bool toAtk = this->randAtk();
     if (toAtk){

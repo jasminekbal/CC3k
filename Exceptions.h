@@ -8,7 +8,7 @@
 class Exceptions{
     std::string message;
     public: 
-    Exceptions(std::string message );
+    Exceptions(std::string message ): message(message){}
     std::string getMessage();
 };
 
@@ -35,6 +35,12 @@ class DragonStillAlive: public Exceptions{ //if you step on a dragon gold
 class NoSpace: public Exceptions{
     public:
     NoSpace( std::string message );
+};
+
+
+class CantCollect: public Exceptions{
+    public:
+    CantCollect(std::string message):Exceptions(message){}
 };
 
 #endif

@@ -18,6 +18,9 @@ Orc::~Orc(){
 
 }
 
+bool Orc::onAttacked(Player &p){
+    return p.attack(*this);
+}
 
 void Orc::setGold(std::shared_ptr<Gold> g){
     gold = g;
