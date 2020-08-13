@@ -3,12 +3,14 @@
 #include "Info.h"
 #include "Tile.h"
 #include "Observer.h"
+#include <memory>
 
 class Player;
 class Enemy;
 class Potion;
 class Gold;
 class TextDisplay;
+class Floor;
 class Ground: public Tile, public Observer{
   private:
 
@@ -37,6 +39,7 @@ class Ground: public Tile, public Observer{
 
   public:
     Ground(int r, int c, State t, int room = -1, std::shared_ptr<Enemy> e = nullptr , std::shared_ptr<Potion> po = nullptr, std::shared_ptr<Gold> g = nullptr, std::shared_ptr<Player> pl = nullptr);
+    virtual ~Ground();
     void empty(); // empty this tile of contents, set type to 1
     bool getIsStair();
 
@@ -47,7 +50,7 @@ class Ground: public Tile, public Observer{
 
     // Observer overrides
     virtual void notify() override;
-    void notify( std::shared_ptr<Ground> whoNotified ) override;
+    virtual void notify( std::shared_ptr<Ground> whoNotified ) override;
 
     void recalculate();
 
@@ -65,6 +68,17 @@ class Ground: public Tile, public Observer{
     // called in Floor
     void movePlayer(int dir) override;
     void moveEnemy() override;
+
+    // getters
+    std::shared_ptr<Enemy> getEnemy(){
+      return enemy;
+    }
+    std::shared_ptr<Gold> getGold(){
+      return gold;
+    }
+    int getChamber(){ return chamber; }
+
+    friend class Floor;
 };
 
 #endif

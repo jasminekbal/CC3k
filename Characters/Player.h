@@ -21,6 +21,7 @@ class Player {
     private:
     char c = '@';
     char type;
+    bool isStair = 0;
     std::shared_ptr<Ground> location;
     int baseAtk, baseDef;
     int checkHp(int hp);
@@ -28,7 +29,7 @@ class Player {
 
     protected:
     int hp, atk, def, score, maxHealth;
-    void changeHp(int newHp);
+    
     void changeAtk(int newA);
     void changeDef(int newD);
     
@@ -36,6 +37,7 @@ class Player {
     Player(int hp, int atk, int def, int maxHealth, char type); //inital constructor
     virtual ~Player();
     
+    void changeHp(int newHp);
     char getChar();
     virtual int getScore() const;
     int getHp();
@@ -43,8 +45,12 @@ class Player {
     int getDef();
     int getBaseAtk();
     int getBaseDef();
+    // check if player is at stairs and needs new floor
+    // MUST change isStair back to 0 using setIsStair() after new floor is created
+    bool getIsStair();
     std::shared_ptr<Ground> getLocation(); //called by game so the game knows where the player is
     void setLocation( std::shared_ptr<Ground> g ); //called whenever the player moves to a new tile
+    void setIsStair(bool is);
 
     virtual bool onAttacked(Enemy &e) =0;
     virtual bool attack(Dragon &e) = 0;  //might return a string if we want to go that route

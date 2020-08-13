@@ -1,8 +1,11 @@
 #include "Ground.h"
-#include "Subject.h"
 #include "Characters/Player.h"
 #include "Enemies/Enemy.h"
+#include "Enemies/Dragon.h"
 #include "Items/Potion.h"
+#include "Items/Gold.h"
+#include "Items/DragonGold.h"
+#include "TextDisplay.h"
 #include "Tile.h"
 #include "Info.h"
 #include "Exceptions.h"
@@ -40,6 +43,31 @@ Ground::Ground(int r, int c, State t, int room, std::shared_ptr<Enemy> e, std::s
         gold = g;
         c='G';
     }
+}
+
+Ground::~Ground(){
+  if( player != nullptr ){
+    player->setLocation( nullptr);
+  }
+  if( enemy!= nullptr ){
+    auto dragon = dynamic_pointer_cast<Dragon>(enemy);
+    if (dragon != nullptr){
+      dragon->setGold( nullptr );
+    }
+  }
+  if( gold!= nullptr){
+    auto dragonGold = dynamic_pointer_cast<DragonGold>(gold);
+    if(dragonGold != nullptr ){
+      dragonGold->setDragon( nullptr);
+    }
+  }
+  player = nullptr;
+  enemy = nullptr;
+  playerNearEnemy = nullptr;
+  potion = nullptr;
+  gold = nullptr;
+  neighbours.clear();
+  td = nullptr;
 }
 
 void Ground::passageWayHelper(Ground & tile){
@@ -104,7 +132,7 @@ void Ground::playerHelper(Ground & tile){
         gold = enemy->onDeath();
         try{
           tile.player->collectGold( gold );
-        } catch(){  
+        } catch(CantCollect e){  
           type = State::Gold;
           c = 'G';
           gold->setCanCollect(1);
@@ -126,14 +154,14 @@ void Ground::playerHelper(Ground & tile){
     type = State::Ground;
     c = '.';
   }
-  else if (tile.type==State::Gold){
+  else if (type==State::Gold){
     (player)->collectGold(gold);
     // delete Gold
     gold = nullptr;
     type = State::Gold;
     c = '.';
   }
-   else if (tile.type==State::DragonGold){
+  else if (type==State::DragonGold){
     try{
       (player)->collectGold(gold);
       // delete Gold
@@ -144,6 +172,12 @@ void Ground::playerHelper(Ground & tile){
     catch (DragonStillAlive e){
       throw InvalidMove{"Cannot collect gold that belongs to a living dragon"};
     }
+  }
+  if (type==State::Stairs){
+    (tile.player)->setIsStair(1);
+  }
+  else{
+    (tile.player)->setIsStair(0);
   }
 }
 
@@ -197,7 +231,7 @@ void Ground::attach(std::shared_ptr<TextDisplay> td){ this->td = td; }
 // notifies observers
 void Ground::notify(){  
   for (auto &ob : neighbours) ob->notify( make_shared<Ground>(*this) );
-  td->notify(make_shared<Ground>(*this));
+  td->notify(make_shared<Tile>(*this));
 }
 
 // called so that this tile knows what its neighbours are up tos
@@ -218,7 +252,7 @@ void Ground::notify(shared_ptr<Ground> whoNotified){ // check if there's a playe
 void Ground::recalculate(){
   playerNearEnemy = nullptr; // reset for now
   // check if there's a player near an enemy
-  if (type == State::Enemy || type == State::DragonGold){
+  if (type == State::Enemy || (type == State::DragonGold && gold->getCanCollect()==0)){
     for (int x=0;x<neighbours.size(); x+=1){
       Info i = neighbours[x]->getInfo();
 

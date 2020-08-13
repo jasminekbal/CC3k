@@ -19,7 +19,7 @@ Merchant::~Merchant(){
 }
 
 bool Merchant:: isHostile(){
-    return hostile;
+    return Merchant::hostile;
 }
 
 void Merchant::setGold(std::shared_ptr<Gold> g){
@@ -139,6 +139,8 @@ bool Merchant::onAttacked(Vampire &p){
 }
 
 void Merchant::makeHostile(){
-      hostile = true;
+      Merchant::hostile = true;
 }
 
+
+bool Merchant::hostile = false;

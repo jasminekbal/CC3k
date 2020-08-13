@@ -23,6 +23,8 @@ Tile::Tile(int r, int c, State t){
     }
 }
 
+Tile::~Tile() {}
+
 char Tile::getChar(){
     return c;
 }

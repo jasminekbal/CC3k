@@ -11,6 +11,7 @@
 using namespace std;
 
 Dragon::Dragon():Enemy(150, 30, 25, 'D'){
+    dG = nullptr;
 }
 
 Dragon::~Dragon(){
@@ -97,6 +98,10 @@ bool Dragon::onAttacked(Vampire &p) {
 
 void Dragon::setGold(std::shared_ptr<DragonGold> g){
     dG = g;
+}
+
+std::shared_ptr<Gold> Dragon::getGold(){
+    return dG;
 }
 
 std::shared_ptr<Gold> Dragon::onDeath(){

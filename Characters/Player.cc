@@ -87,12 +87,19 @@ void Player::setLocation( std::shared_ptr<Ground> tile ){
     location = tile;
 }
 
+bool Player::getIsStair(){
+    return isStair;
+}
+
+void Player::setIsStair(bool is){
+    isStair = is;
+}
+
 void Player::newPlayer(){
     atk = baseAtk;
     def = baseDef;
 }
     
-//will do later
 void Player::collectGold(std::shared_ptr<Gold> g){
     if (g->getCanCollect()){
         score += g->getChange();

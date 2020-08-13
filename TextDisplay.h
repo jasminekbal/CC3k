@@ -11,13 +11,14 @@ class Subject;
 class Ground;
 class TextDisplay: public Observer{
     private:
+    std::string message;
     int rows;
     int cols;
     std::vector<std::vector<char>> display;
 
     public:
-    TextDisplay(int numRows = 15, int numCols = 79);
-    void notify( Tile & whoNotified ) override;  // overload
+    TextDisplay();
+    void notify( std::shared_ptr<Tile> whoNotified ) override;  // overload
     void notify() override;
     friend std::ostream &operator<<(std::ostream &out, const TextDisplay &td);
 };

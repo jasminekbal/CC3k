@@ -8,8 +8,8 @@ class Ground;
 class Observer {
   public:
     // Pass the Subject that called the notify method.
-    virtual void notify( Tile & whoNotified );
-    virtual void notify( std::shared_ptr<Ground> whoNotified );
+    virtual void notify( std::shared_ptr<Tile> whoNotified ){}
+    virtual void notify( std::shared_ptr<Ground> whoNotified ){}
     virtual void notify() = 0;
     virtual ~Observer() = default;
 };

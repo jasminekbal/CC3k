@@ -1,5 +1,4 @@
 #include "Observer.h"
-#include "Subject.h"
 #include "Ground.h"
 #include "TextDisplay.h"
 #include "Info.h"
@@ -9,9 +8,9 @@
 #include <iostream>
 using namespace std;
 
-TextDisplay::TextDisplay(int numRows = 15, int numCols = 79){
-    rows = numRows;
-    cols = numCols;
+TextDisplay::TextDisplay(){
+    rows = 15;
+    cols = 79;
     for (int r=0;r<rows;r+=1){
         vector<char> v;
         for (int c=0;c<cols;c+=1){
@@ -21,9 +20,9 @@ TextDisplay::TextDisplay(int numRows = 15, int numCols = 79){
     }
 }
 
-void TextDisplay::notify( Tile & whoNotified ){
-    Info i = whoNotified.getInfo();
-    display[i.row][i.col] = whoNotified.getChar();
+void TextDisplay::notify( std::shared_ptr<Tile> whoNotified ){
+    Info i = whoNotified->getInfo();
+    display[i.row][i.col] = whoNotified->getChar();
 }
 
 void TextDisplay::notify(){} // huh? what am i supposed to do here

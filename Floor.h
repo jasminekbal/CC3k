@@ -55,14 +55,14 @@ class Floor{
     std::shared_ptr<Ground> getGround( int row, int col, char c, State & t );
     std::shared_ptr<Ground> getDefaultGround( int row, int col, char c );
 
+    void notify(); // calls notify on all the tiles
+
   public:
 
-    //Floor( std::shared_ptr<TextDisplay> t );
     Floor( std::shared_ptr<TextDisplay> td, std::istream & in, std::shared_ptr<Player> = nullptr );
 
     //functions for tick 
-    void recalculate(); // this makes the tiles calculate their booleans according to what pointer is on them
-    void notify(); // calls notify on all the tiles
+    //void recalculate(); // this makes the tiles calculate their booleans according to what pointer is on them
 
     //void print();
     //void clear(); //clears the enemies and potions and gold and stairs // I think we're making a new floor each time

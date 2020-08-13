@@ -8,7 +8,7 @@
 class Exceptions{
     std::string message;
     public: 
-    Exceptions(std::string message ): message(message){}
+    Exceptions(std::string message );
     std::string getMessage();
 };
 
@@ -19,7 +19,7 @@ class BadCommand: public Exceptions{ // in case the player tries to move to a wa
 
 class InvalidMove: public Exceptions{ // in case the player tries to move to a wall, or use a potion that doesn't exist or something
     public:
-    InvalidMove( std::string message ): Exceptions(message){}
+    InvalidMove( std::string message );
 };
 
 class NoFile: public Exceptions{ //if the input file for the floor doesn't exist
@@ -40,7 +40,7 @@ class NoSpace: public Exceptions{
 
 class CantCollect: public Exceptions{
     public:
-    CantCollect(std::string message):Exceptions(message){}
+    CantCollect(std::string message);
 };
 
 #endif
