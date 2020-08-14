@@ -79,11 +79,11 @@ int Player::getBaseDef(){
     return baseDef;
 }
 
-std::shared_ptr<Ground> Player::getLocation(){
+Ground * Player::getLocation(){
     return location;
 }
 
-void Player::setLocation( std::shared_ptr<Ground> tile ){
+void Player::setLocation( Ground *tile ){
     location = tile;
 }
 

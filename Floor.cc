@@ -227,7 +227,7 @@ void Floor::addTile( int row, int col, char c, std::shared_ptr<Player> p ){
         case '@':
             t = State::Player;
             ground = make_shared<Ground>(row, col, t, -1, nullptr, nullptr, nullptr, p);
-            p->setLocation( ground ); //players need a way to set location
+            p->setLocation( ground.get() ); //players need a way to set location
             break;
         case '+':
             t = State::Door;
@@ -296,7 +296,6 @@ Floor::Floor( std::shared_ptr<TextDisplay> td, std::istream & in, std::shared_pt
             addTile( row, col, c, p );
         }
     }
-
     attachObservers( td );
     checkDragonGold();
 }
@@ -414,7 +413,7 @@ void Floor::generate( std::shared_ptr<Player> p ){
 
     auto playerTile = generateLocation( chamIndex, tileIndex, chambers, rng, NUM_CHAMBER ); //adds the player to the board. 
     playerTile->setPlayer( p );
-    p->setLocation( playerTile );
+    p->setLocation( playerTile.get() );
     removeTile( chamIndex, tileIndex, chambers );
     
     auto stairTile = generateLocation( chamIndex, tileIndex, chambers, rng, NUM_CHAMBER, chamIndex ); //adds stairs
@@ -458,17 +457,16 @@ void Floor::generate( std::shared_ptr<Player> p ){
             auto dg = dynamic_pointer_cast< DragonGold> (gold);
             if( dg != nullptr ){
                 try{
-                auto dragonTile = randomDragon( dg, tile, rgg ); //whenever we create a gold we have to create a dragon. 
-                //Technically we should test to see if there's even an available tile for the dragon, in case we spawn a dragon gold
-                //in the middle of a bunch of enemies. If I have time I'll add that, but it's not very likely to happen so I'll just pretend it won't for now
-                //this function remains to be created. Task for tomorrow I think. 
+                auto dragonTile = randomDragon( dg, tile, rgg ); //whenever we create a gold we have to create a dragon.
                 } catch( NoSpace ) {
                     i--;
                     break;
                 }
                 removeDragonTile( chamIndex, chambers, tile );
+                tile->setDragonGold( gold );
+            } else {
+                tile->setGold( gold );
             }
-            tile->setGold( gold );
         } else{
             auto enemy = reg.get();
             tile->setEnemy( enemy );
@@ -477,6 +475,15 @@ void Floor::generate( std::shared_ptr<Player> p ){
     }
 }
 
+
+// call notify() for each tile
+void Floor::notify(){
+  for (auto x : tiles){
+    for (auto y : x){
+      y->notify();
+    }
+  }
+}
 
 Floor::~Floor(){
     for(auto r : tiles ){
@@ -488,27 +495,25 @@ Floor::~Floor(){
     tiles.clear();
 }
 
-// call notify() for each tile
-void Floor::notify(){
-  for (auto x : tiles){
-    for (auto y : x){
-      y->notify();
-    }
-  }
-}
-
 // try to move enemy to a random tile or attack
 // a player tile if there is one near it
 string Floor::moveEnemies(){
-  for (auto x : tiles){
+    message = "";
+    for (auto x : tiles){
     for (auto y : x){
-      string temp = y->moveEnemy();
-      if (temp != ""){  // only 1 message at a time will be returned idc about edge cases right now
-        message = temp;
-      }
+        try{
+            string temp = y->moveEnemy();
+            if (temp != ""){  
+                message += temp + "\n";
+            }
+        }
+        catch(InvalidMove e){
+            // do nothing
+        }
     }
   }
   notify();
+  return message;
 }
 
 

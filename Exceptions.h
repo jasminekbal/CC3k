@@ -22,6 +22,11 @@ class InvalidMove: public Exceptions{ // in case the player tries to move to a w
     InvalidMove( std::string message );
 };
 
+class WallMove: public Exceptions{ // in case the player tries to move to a wall, or use a potion that doesn't exist or something
+    public:
+    WallMove( std::string message );
+};
+
 class NoFile: public Exceptions{ //if the input file for the floor doesn't exist
     public:
     NoFile( std::string message );

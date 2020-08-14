@@ -36,17 +36,17 @@ class Floor{
     //constructor helper functions 
     void checkDragonGold();
     void addTile( int row, int col, char c, std::shared_ptr<Player> p );
-    
-    void attachObservers(std::shared_ptr<TextDisplay> td );
     void addNeighbours( Ground & s, int row, int col );
-    
+    void attachObservers(std::shared_ptr<TextDisplay> td );
   
     //random generation helper functions 
     void getChamber(int & chamIndex, RandomGeneration & rng, int & NUM_CHAMBERS, const int player );
 
-    std::shared_ptr<Ground> generateLocation( int & chamIndex, int & tileIndex, std::vector<std::vector<std::shared_ptr<Ground> > > & chambers, 
+    std::shared_ptr<Ground> generateLocation( int & chamIndex, int & tileIndex, std::vector<std::vector<std::shared_ptr<Ground> > > & chambers,
     RandomGeneration & rng, int & NUM_CHAMBERS, int player = -1 );
+
     void removeTile( int & chamIndex, int & tileIndex, std::vector<std::vector<std::shared_ptr<Ground> > > & chambers );
+    
 
     std::shared_ptr<Ground> randomDragon( std::shared_ptr<DragonGold> dg, std::shared_ptr<Ground> tile, RandomGeneration & rng );
     void removeDragonTile(int & chamIndex, std::vector<std::vector<std::shared_ptr<Ground> > > & chambers, std::shared_ptr<Ground> DragonTile );
@@ -60,15 +60,7 @@ class Floor{
     Floor( std::shared_ptr<TextDisplay> td, std::istream & in, std::shared_ptr<Player> );
     ~Floor();
 
-    //functions for tick 
-    //void recalculate(); // this makes the tiles calculate their booleans according to what pointer is on them
-
-    //void print();
-    //void clear(); //clears the enemies and potions and gold and stairs // I think we're making a new floor each time
-    
     void generate( std::shared_ptr<Player> p ); // randomly generates the enemies and gold and potions. 
-    
-    // void movePlayer(int dir); 
     std::string moveEnemies();
 
 };

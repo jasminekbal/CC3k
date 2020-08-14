@@ -50,13 +50,12 @@ class Ground: public Tile, public Observer{
     virtual void notify() override;
     virtual void notify( std::shared_ptr<Ground> whoNotified ) override;
 
-    void recalculate();
-
     // setters
-    void setPlayer( std::shared_ptr<Player> p){ player = p; }
-    void setEnemy( std::shared_ptr<Enemy> e){ enemy = e; }
-    void setPotion( std::shared_ptr<Potion> p){ potion = p; }
-    void setGold( std::shared_ptr<Gold> g){ gold = g; }
+    void setPlayer( std::shared_ptr<Player> p);
+    void setEnemy( std::shared_ptr<Enemy> e);
+    void setPotion( std::shared_ptr<Potion> p);
+    void setGold( std::shared_ptr<Gold> g);
+    void setDragonGold( std::shared_ptr<Gold> g);
     void setStair( bool b );
 
     //getter
@@ -74,7 +73,7 @@ class Ground: public Tile, public Observer{
     std::shared_ptr<Gold> getGold(){
       return gold;
     }
-    int getChamber(){ return chamber; }
+    int getChamber(){ return chamber;}
 
     virtual void clear() override;
     friend class Floor;

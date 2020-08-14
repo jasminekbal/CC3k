@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Floor.h"
+#include "Exceptions.h"
 #include "TextDisplay.h"
 #include "./Characters/Player.h"
 #include <string>
@@ -7,8 +8,8 @@
 #include <fstream>
 #include <iostream> 
 #include "Ground.h"
-using namespace std;
 
+using namespace std;
 
 Game::Game(shared_ptr<Player> py, std::istream &input, bool hasFile ): p{py}, infile{input}, hasFile{hasFile} {
     //cout << "@ Game constructor" << endl;
@@ -28,22 +29,32 @@ int Game::checkPlayerState(){
     }
 }
 
-void Game::tick(){
+Game::~Game(){
+
+}
+
+int Game::getLevel(){
+    return level;
+}
+
+std::string Game::tick(){
+    std::string msg;
     if( moveEnemies ){
-        f->moveEnemies();
+       msg = f->moveEnemies();
     }
     if (p->getType()== 'T'){
         p->changeHp(p->getHp()+5);
     }
     if( checkPlayerState() == 2){
-        endGame( false );
+        msg = endGame( false );
     }
+    return msg;
 }
 
 void Game::newFloor(){
     //cout << "@Game newFloor: " << hasFile << endl;
     f = std::make_shared<Floor>(td, infile, p);
-    if( hasFile ){
+    if( !hasFile ){
         f->generate(p);
     }
 }
@@ -52,6 +63,9 @@ void Game::setMoveEnemies(){
     moveEnemies = !moveEnemies;
 }
 
+bool Game::getMoveEnemies(){
+    return moveEnemies;
+}
 
 std::string Game::endGame( bool showScore ){
     if (showScore){
@@ -66,14 +80,22 @@ void Game::print(){
 }
 
 std::string Game::moveCharacter( int dir ){
-    string message = (p->getLocation())->movePlayer(dir);
+    string message = "";
+    try{
+        message = (p->getLocation())->movePlayer(dir) + "\n";
+    }
+    catch (WallMove e){
+        message = "You tried to move to a wall, now your face hurts\n";
+        return message;
+    }
+    
     if (checkPlayerState() == 2){
-        message = "You died :(";
+        message = message + "You died :(" + "\n";
     }else if (checkPlayerState()==1){
         if (level < 5){
             level ++ ;
             newFloor();
-            message = "You have reached Floor " + std::to_string(level);
+            message = message + "You have reached Floor " + std::to_string(level) + "\n";
         } else {
             return endGame(true);
         }

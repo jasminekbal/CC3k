@@ -11,6 +11,8 @@ BadCommand::BadCommand( std::string message ): Exceptions(message){}
 
 InvalidMove::InvalidMove( std::string message ): Exceptions(message){}
 
+WallMove::WallMove( std::string message ): Exceptions(message){}
+
 NoFile::NoFile( std::string message ): Exceptions(message) {}
 
 DragonStillAlive::DragonStillAlive( std::string message ): Exceptions(message){}

@@ -13,6 +13,7 @@ class Halfling;
 class Human;
 class Merchant;
 class Orc;
+class Game;
 
 
 //Invariant: hp must be between 0 and maxHealth or if maxHealth is -1 then it has no upper bound
@@ -22,7 +23,7 @@ class Player {
     char c = '@';
     char type;
     bool isStair = 0;
-    std::shared_ptr<Ground> location;
+    Ground * location;
     int baseAtk, baseDef;
     int checkHp(int hp);
     int checkStat(int val);
@@ -32,12 +33,12 @@ class Player {
     
     void changeAtk(int newA);
     void changeDef(int newD);
-    
+    void changeHp(int newHp);
+
     public:
     Player(int hp, int atk, int def, int maxHealth, char type); //inital constructor
     virtual ~Player();
     
-    void changeHp(int newHp);
     char getChar();
     virtual int getScore() const;
     int getHp();
@@ -48,8 +49,8 @@ class Player {
     // check if player is at stairs and needs new floor
     // MUST change isStair back to 0 using setIsStair() after new floor is created
     bool getIsStair();
-    std::shared_ptr<Ground> getLocation(); //called by game so the game knows where the player is
-    void setLocation( std::shared_ptr<Ground> g ); //called whenever the player moves to a new tile
+    Ground * getLocation(); //called by game so the game knows where the player is
+    void setLocation( Ground *g ); //called whenever the player moves to a new tile
     void setIsStair(bool is);
 
     virtual bool onAttacked(Enemy &e) =0;
@@ -73,6 +74,7 @@ class Player {
     void collectGold(std::shared_ptr<Gold> g);
 
     friend class Potion;
+    friend class Game;
 
 };
 

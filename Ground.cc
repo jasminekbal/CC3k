@@ -106,6 +106,7 @@ string Ground::enemyHelper(Ground & tile){
     c = enemy->getChar();
     tile.type = State::Ground;
     tile.c = '.';
+    tile.enemy = nullptr;
     return "";
   }
   else if (type==State::Player){
@@ -133,14 +134,14 @@ string Ground::playerHelper(Ground & tile){
     (tile.player)->setIsStair(0);
   }
   if (type==State::Ground){
+    type = State::Player;
     player = tile.player;
-    player->setLocation(make_shared<Ground>(*this));
+    player->setLocation(this);
     c = '@';
     tile.type = State::Ground;
     tile.c = '.';
     tile.notify();
     notify(); // notify neighbours of movement
-    player->setLocation(make_shared<Ground>(*this));
     return "";
   }
   else if (type==State::Enemy){ // need to be able to exchange enemy w/ its gold if it dies
@@ -186,6 +187,13 @@ string Ground::playerHelper(Ground & tile){
     c = '.';
     return "You collected " + to_string(gold->getChange()) + " coins";
   }
+  else if (type==State::Door){
+    player = tile.player;
+    c = '@';
+    tile.type = State::Ground;
+    tile.c = '.';
+    return "";
+  }
   else if (type==State::DragonGold){
     try{
       (player)->collectGold(gold);
@@ -198,6 +206,8 @@ string Ground::playerHelper(Ground & tile){
       return "Cannot collect gold that belongs to a living dragon";
     }
   }
+  cout << "We shouldn't be here, Ground Player Helper " << endl;
+  throw Exceptions( "We shouldn't be here, Ground Player Helper ");
 }
 
 // moves players and enemies as well as handling all interactions between objects and characters
@@ -217,6 +227,8 @@ string Ground::move(Ground & tile){   // throws invalidMove exception if theres 
   else if (tile.type == State::Passageway){
     return passageWayHelper(tile);
   }
+  cout << "We shouldn't be here, Ground move " << endl;
+  throw Exceptions( "We shouldn't be here, Ground move ");
 } 
 
 // empties tile and makes it a ground tile
@@ -243,53 +255,35 @@ Info Ground::getInfo() const{
 }
 
 // Observer overrides
-void Ground::attach(shared_ptr<Ground> g) { neighbours.emplace_back(g); }
+void Ground::attach(shared_ptr<Ground> g) { neighbours.push_back(g); }
 
 void Ground::attach(std::shared_ptr<TextDisplay> td){ this->td = td; }
 
 // notifies observers
 void Ground::notify(){  
-  for (auto &ob : neighbours) ob->notify( make_shared<Ground>(*this) );
+  for (auto &ob : neighbours) {
+    if( ob != nullptr ){
+      ob->notify( make_shared<Ground>(*this) );
+    }
+  }
   td->notify(make_shared<Tile>(*this));
 }
 
 // called so that this tile knows what its neighbours are up tos
 void Ground::notify(shared_ptr<Ground> whoNotified){ // check if there's a player near an enemy
-  Info i = whoNotified->getInfo();
-  /*
-      if (c == "nw") return 0;
-    else if (c == "no") return 1;
-    else if (c == "ne") return 2;
-    else if (c == "we") return 3;
-    else if (c == "ea") return 4
-    else if (c == "sw") return 5;
-    else if (c == "so") return 6;
-    else if (c == "se") return 7;
-  */
-  if (i.row == row-1 && i.col == col-1) neighbours[0] = whoNotified;       //nw
-  else if (i.row == row-1 && i.col == col) neighbours[1] = whoNotified;    //no
-  else if (i.row == row-1 && i.col == col+1) neighbours[2] = whoNotified;  //ne
-  else if (i.row == row && i.col-1 == col) neighbours[3] = whoNotified;    //we
-  else if (i.row == row && i.col+1 == col) neighbours[4] = whoNotified;    //ea
-  else if (i.row == row+1 && i.col-1 == col) neighbours[5] = whoNotified;  //sw
-  else if (i.row == row+1 && i.col == col) neighbours[6] = whoNotified;    //so
-  else if (i.row == row+1 && i.col+1 == col) neighbours[7] = whoNotified;  //se
-
-  recalculate();
-}
-
-void Ground::recalculate(){
+  if (enemy) type = State::Enemy;   // update enemy state
   playerNearEnemy = nullptr; // reset for now
   // check if there's a player near an enemy
   if (type == State::Enemy || (type == State::DragonGold && gold->getCanCollect()==0)){
     for (int x=0;x<neighbours.size(); x+=1){
-      Info i = neighbours[x]->getInfo();
-
-      if (col == i.col && row == i.row){
-        if (i.state == State::Player){  // found a nearby player
-          playerNearEnemy = neighbours[x];
+      if(neighbours[x] != nullptr ){
+        Info i = neighbours[x]->getInfo();
+        if (col == i.col && row == i.row){
+          if (i.state == State::Player){  // found a nearby player
+            playerNearEnemy = neighbours[x];
+          }
+          return;
         }
-        return;
       }
     }
   }
@@ -297,46 +291,111 @@ void Ground::recalculate(){
 
 // setters
 void Ground::setStair( bool b ){
-  type = State::Stairs;
+  if( b ){
+    type = State::Stairs;
+    c = '\\';
+    td->notify( make_shared<Tile>(*this));
+  } else {
+    type = State::Ground;
+    c = '.';
+    td->notify( make_shared<Tile>(*this));
+  }
 }
 
 // calls move on correct neighbour
 string Ground::movePlayer(int dir){
-  return move(*neighbours[dir]);
+  cout << "Is this a player? " << (type == State::Player) << endl;
+  if (neighbours[dir]){
+    string message = (*neighbours[dir]).move(*this);
+    cout << "Is neighbour a player? " << (neighbours[dir]->type == State::Player) << endl;
+    cout << "Is this a player afterwards? " << (type == State::Player) << endl;
+    return message;
+  }
+  else{
+    throw WallMove{"You hit a wall"};
+  }
 }
 
 // moves enemy if there's an enemy on this tile
 string Ground::moveEnemy(){
-  if (type==State::Enemy){
+  if (type == State::Passageway) throw InvalidMove{"Not an enemy"};
+  else if (type==State::Door) throw InvalidMove{"Not an enemy"};
+  else if (type==State::Enemy){
     // check if there's a player nearby that we need to attack
-    if (playerNearEnemy){
-      // check if enemy type is hostile
-      if (enemy->isHostile()){
-        return move(*playerNearEnemy);
-      }
-      else{ // otherwise choose random direction for enemy to move in
-        return randomMove();
-      }
+    if (playerNearEnemy && enemy->isHostile()){
+      return (*playerNearEnemy).move(*this);
     }
     // otherwise choose random direction for enemy to move in
     else{
+      // check if dragon
+      if (enemy->getChar() == 'D') throw InvalidMove{"Dragon doesn't need to move"};
       return randomMove();
     }
-  } else{
-    return "";
   }
+  //cout << "Not an enemy";
+  throw InvalidMove{"Not an enemy"};
 }
 
 // chooses a random tile that enemy can move to
 string Ground::randomMove(){
-  while(1){
+  int count = 0;
+  // count is there so that enemy does not get stuck in infinite loop
+  while(count < 10 ){
+    string message;
     try{
-      int random = rand() % 4;
-      if (random >= neighbours.size()){
-        throw InvalidMove{"Enemy tried to move to an occupied tile"};
+      int random = rand() % 8;
+      if (neighbours[random] == nullptr ){
+        throw InvalidMove{"Enemy tried to move to a wall"};
       }
-      return (*(neighbours[random])).move(*this);
+      else {
+        //cout << "trying to move" << endl;
+        message =  (*(neighbours[random])).move(*this);
+        //cout << "moved successfully " <<endl;
+        return message;
+        }
     }
-    catch(InvalidMove e){}
+    catch(InvalidMove e){
+      //cout << "I caught " << e.getMessage() << endl;
+    }
+    count+=1;
   }
+  return "";
 }
+
+
+void Ground::setPlayer( std::shared_ptr<Player> p){ 
+  player = p; 
+  c = '@';
+  type = State::Player;
+  notify( make_shared<Ground>( * this ));
+  td->notify( make_shared<Tile>( * this ));
+}
+
+void Ground::setEnemy( std::shared_ptr<Enemy> e){ 
+  enemy = e;
+  c = e->getChar();
+  type = State::Enemy;
+  td->notify( make_shared<Tile>( * this ) );
+}
+
+void Ground::setPotion( std::shared_ptr<Potion> p){ 
+  potion = p; 
+  c = 'P';
+  type = State::Potion;
+  td->notify( make_shared<Tile>( * this ) );
+}
+
+void Ground::setGold( std::shared_ptr<Gold> g){ 
+  gold = g; 
+  c = 'G';
+  type = State::Gold;
+  td->notify( make_shared<Tile>( * this ) );
+}
+
+void Ground::setDragonGold( std::shared_ptr<Gold> g){ 
+  gold = g; 
+  c = 'G';
+  type = State::DragonGold;
+  td->notify( make_shared<Tile>( * this ) );
+}
+

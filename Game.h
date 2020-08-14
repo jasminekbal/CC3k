@@ -24,10 +24,13 @@ class Game{
 
     public:
     Game(std::shared_ptr<Player> py, std::istream & input, bool hasFile );
-    void tick();
+    ~Game();
+    std::string tick();
     void print();
     void newFloor();
     void setMoveEnemies();
+    bool getMoveEnemies();
+    int getLevel();
     std::string endGame( bool showScore );
     std::string moveCharacter( int dir );
     
