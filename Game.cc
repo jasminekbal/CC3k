@@ -52,14 +52,11 @@ std::string Game::tick(){
 }
 
 void Game::newFloor(){
-    delete f;
-    cout << "1. In new floor, Location is null: " << (p->getLocation() ==nullptr) <<endl;
-    f = new Floor(td, infile, p);
-    cout << "2. In new floor, Location is null: " << (p->getLocation() ==nullptr) <<endl;
+    f = make_shared<Floor>(td, infile, p);
     if( !hasFile ){
         f->generate(p);
     }
-    cout << "3. In new floor, Location is null: " << (p->getLocation() ==nullptr) <<endl;
+    f->setPlayerPointer( p );
 }
 
 void Game::setMoveEnemies(){
