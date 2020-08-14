@@ -12,7 +12,7 @@ class Player;
 class Game{
     
     private:
-    std::shared_ptr<Floor> f;
+    Floor *f;
     std::shared_ptr<TextDisplay> td;
     std::shared_ptr<Player> p;
     std::istream & infile;

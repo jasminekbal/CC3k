@@ -26,7 +26,7 @@ bool Goblin::onAttacked(Enemy &e){
 bool Goblin::baseAtk (Enemy & e){
   bool goesThrough = e.onAttacked(*this);
   if (e.getHp()== 0){
-    this->collectGold(std::make_shared<Gold>(5, true));
+    this->collectGold(make_shared<Gold>(5, true));
   }
   return goesThrough;
 }

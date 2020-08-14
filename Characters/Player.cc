@@ -5,6 +5,7 @@
 #include "../Items/Gold.h"
 #include "../Items/Potion.h"
 #include "../Exceptions.h"
+#include <iostream>
 
 using namespace std;
 
@@ -100,8 +101,9 @@ void Player::newPlayer(){
     def = baseDef;
 }
     
-void Player::collectGold(std::shared_ptr<Gold> g){
+void Player::collectGold(shared_ptr<Gold> g){
     if (g->getCanCollect()){
+        cout << "score: " << score<< endl;
         score += g->getChange();
     }else {
         throw CantCollect("Can't collect gold");

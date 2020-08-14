@@ -23,6 +23,7 @@
 #include "Enemies/Merchant.h"
 #include "Enemies/Orc.h"
 #include "Enemies/Enemy.h"
+#include "Exceptions.h"
 #include <iostream>
 #include <string>
 #include <memory>
@@ -83,7 +84,7 @@ int getDirection( string c ){
 }
 
 void printStats(Player &p, std::string msg, std::string race, Game &g){
-    cout<<"Race: "<<race<<" Gold: "<<p.getScore()<<"\t\t\t\t"<<"Floor: "<<g.getLevel()<<endl;
+    cout<<"Race: "<<race<< "\t\t\t"<<" Gold: "<<p.getScore()<<"\t\t\t"<<"Floor: "<<g.getLevel()<<endl;
     cout<<"HP: "<<p.getHp()<<endl;
     cout<<"Atk: "<<p.getAtk()<<endl;
     cout<<"Def: "<<p.getDef()<<endl;
@@ -153,29 +154,25 @@ bool isGameOver(std::string message){
 
 int main( int argc, char * argv[] ) 
 {   
-    std::shared_ptr<Player> p; 
-    std::string name;
-    std::ifstream infile;
-    
-    bool hasFile = false;
-    string fileName = "default.txt";
-    if (argc == 2){
-        hasFile = true;
-        fileName = (argv[1]);
-    }
-    std::string message;
-    
     bool playAgain = true;
-
     while(playAgain){
+        std::shared_ptr<Player> p; 
+        std::string name;
+        std::ifstream infile;
     
-        Game game = beginGame( p, name, hasFile, fileName, infile, message );
+        bool hasFile = false;
+        string fileName = "default.txt";
+        if (argc == 2){
+            hasFile = true;
+            fileName = (argv[1]);
+        }
+        std::string message;
         
-        while (true){
+        Game game = beginGame( p, name, hasFile, fileName, infile, message );
+        std::string cmd;
+        while (cin >> cmd ){
             cout<<"Enter your move: "<<endl;
-            std::string cmd;
-
-            cin>>cmd;
+            
             int dir;
             //get cmd
             if (cmd =="no" || cmd =="so"|| cmd =="ea"||cmd=="we"|| cmd=="ne"||cmd=="nw"||cmd=="se"||cmd=="sw"){

@@ -149,7 +149,7 @@ string Ground::playerHelper(Ground & tile){
       if (!(enemy->getHp())){ // true if enemy died
         gold = enemy->onDeath();
         try{
-          tile.player->collectGold( gold );
+          tile.player->collectGold(gold);
         } catch(CantCollect e){  
           type = State::Gold;
           c = 'G';
@@ -172,20 +172,23 @@ string Ground::playerHelper(Ground & tile){
     } // give message
   }
   else if (type==State::Potion){
+    string message = "You used a " + potion->getType() + " potion";
     potion->usePotion(tile.player);
     // delete Potion
     potion = nullptr;
     type = State::Ground;
     c = '.';
-    return "You used a " + potion->getType() + " potion";
+    return message;
   }
   else if (type==State::Gold){
+    string message = "You collected " + to_string(gold->getChange()) + " coin(s)";
+    cout << message << endl;
     (player)->collectGold(gold);
     // delete Gold
     gold = nullptr;
     type = State::Gold;
     c = '.';
-    return "You collected " + to_string(gold->getChange()) + " coins";
+    return message;
   }
   else if (type==State::Door){
     player = tile.player;
@@ -228,6 +231,7 @@ string Ground::move(Ground & tile){   // throws invalidMove exception if theres 
     return passageWayHelper(tile);
   }
   cout << "We shouldn't be here, Ground move " << endl;
+  cout << "Ground? " << (tile.type == State::Ground) << endl;
   throw Exceptions( "We shouldn't be here, Ground move ");
 } 
 
@@ -304,11 +308,11 @@ void Ground::setStair( bool b ){
 
 // calls move on correct neighbour
 string Ground::movePlayer(int dir){
-  cout << "Is this a player? " << (type == State::Player) << endl;
+  //cout << "Is this a player? " << (type == State::Player) << endl;
   if (neighbours[dir]){
     string message = (*neighbours[dir]).move(*this);
-    cout << "Is neighbour a player? " << (neighbours[dir]->type == State::Player) << endl;
-    cout << "Is this a player afterwards? " << (type == State::Player) << endl;
+    //cout << "Is neighbour a player? " << (neighbours[dir]->type == State::Player) << endl;
+    //cout << "Is this a player afterwards? " << (type == State::Player) << endl;
     return message;
   }
   else{

@@ -29,7 +29,8 @@ class Player {
     int checkStat(int val);
 
     protected:
-    int hp, atk, def, score, maxHealth;
+    int score = 0;
+    int hp, atk, def, maxHealth;
     
     void changeAtk(int newA);
     void changeDef(int newD);
