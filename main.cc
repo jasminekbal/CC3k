@@ -67,20 +67,22 @@ void getPlayer( shared_ptr<Player> & p ){
             break;
         }
     }
-
-
 }
 
 int getDirection( string c ){
-    if (c == "no") return 0;
-    else if (c == "ne") return 1;
-    else if (c == "ea") return 2;
-    else if (c == "se") return 3;
-    else if (c == "so") return 4;
+    if (c == "nw") return 0;
+    else if (c == "no") return 1;
+    else if (c == "ne") return 2;
+    else if (c == "we") return 3;
+    else if (c == "ea") return 4
     else if (c == "sw") return 5;
-    else if (c == "we") return 6;
-    else if (c == "nw") return 7;
+    else if (c == "so") return 6;
+    else if (c == "se") return 7;
+};
 }
+
+//Notes:
+// should game have a print function
 
 int main( int argc, char * argv[] )   // argv[1] 
 {
