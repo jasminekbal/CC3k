@@ -206,7 +206,7 @@ void Floor::checkDragonGold(){
     }
 }
 
-void Floor::addTile( int row, int col, char c, std::shared_ptr<Player> & p ){
+void Floor::addTile( int row, int col, char c, std::shared_ptr<Player> p ){
     std::shared_ptr<Tile> tile = nullptr;
     std::shared_ptr<Ground> ground = nullptr;
     State t;
@@ -227,9 +227,8 @@ void Floor::addTile( int row, int col, char c, std::shared_ptr<Player> & p ){
         case '@':
             t = State::Player;
             ground = make_shared<Ground>(row, col, t, -1, nullptr, nullptr, nullptr, p);
+            player = ground;
             p->setLocation( ground.get() ); //players need a way to set location
-            cout << "setting player location: row " << ground->row << " col " << ground->col << endl;
-            cout << "player location is nullptr  " << (p->getLocation() == nullptr) << endl;
             break;
         case '+':
             t = State::Door;
@@ -286,25 +285,26 @@ void Floor::attachObservers( std::shared_ptr<TextDisplay> td ){
     row = 0;
 }
 
-Floor::Floor( std::shared_ptr<TextDisplay> td, std::istream & in, std::shared_ptr<Player> & p ) {
-    string line;
+
+Floor::Floor( std::shared_ptr<TextDisplay> td, std::istream & in, std::shared_ptr<Player> p ) {
+    string line = "";
     char c;
     for( int row = 0; row < 25; row++ ){
-        cout << "Floor constructor, in for loop location is null " << (p->getLocation() == nullptr ) << endl;
         vector<shared_ptr<Tile> > t;
         tiles.push_back(t);
         getline( in, line );
+        if( line == "" ){
+            getline( in, line );
+        }
         for( int col = 0; col < 79; col++ ){
             c = line[col];
             addTile( row, col, c, p );
         }
     }
-    cout << "Floor constructor player location is null " << (p->getLocation() == nullptr ) << endl;
     attachObservers( td );
     checkDragonGold();
 }
 
-Floor::Floor(){}
 
 void Floor::getChamber(int & chamIndex, RandomGeneration & rng, int & NUM_CHAMBERS, const int player ) { //gets the chamber number between 0 and 4 
     chamIndex = rng.randomInt( NUM_CHAMBERS );
@@ -384,7 +384,7 @@ void Floor::removeDragonTile(int & chamIndex, vector<vector<shared_ptr<Ground> >
     }
 }
 
-void Floor::generate( std::shared_ptr<Player> & p ){
+void Floor::generate( std::shared_ptr<Player> p ){
     //cout << "@ Floor generate" << endl;
     int NUM_CHAMBER = 5; //was going to set these to const but if we want we can add a difficulty modifier that'll change these values 
     int NUM_ENEMIES = 20;
@@ -417,6 +417,7 @@ void Floor::generate( std::shared_ptr<Player> & p ){
     auto playerTile = generateLocation( chamIndex, tileIndex, chambers, rng, NUM_CHAMBER ); //adds the player to the board. 
     playerTile->setPlayer( p );
     p->setLocation( playerTile.get() );
+    player = playerTile;
     removeTile( chamIndex, tileIndex, chambers );
     
     auto stairTile = generateLocation( chamIndex, tileIndex, chambers, rng, NUM_CHAMBER, chamIndex ); //adds stairs
@@ -496,6 +497,7 @@ Floor::~Floor(){
         r.clear();
     }
     tiles.clear();
+    player = nullptr;
 }
 
 // try to move enemy to a random tile or attack
@@ -519,4 +521,8 @@ string Floor::moveEnemies(){
   return message;
 }
 
+
+void Floor::setPlayerPointer(std::shared_ptr<Player> p ){
+    p->setLocation( player.get() );
+}
 
