@@ -25,6 +25,7 @@ class Floor{
     
     //fields
     std::vector<std::vector<std::shared_ptr<Tile> > > tiles;
+    std::shared_ptr<Ground> player;
 
     //typing from input
     std::shared_ptr<Potion> getPotion( char c );
@@ -35,7 +36,7 @@ class Floor{
 
     //constructor helper functions 
     void checkDragonGold();
-    void addTile( int row, int col, char c, std::shared_ptr<Player> & p );
+    void addTile( int row, int col, char c, std::shared_ptr<Player> p );
     void addNeighbours( Ground & s, int row, int col );
     void attachObservers(std::shared_ptr<TextDisplay> td );
   
@@ -56,11 +57,11 @@ class Floor{
     void notify(); // calls notify on all the tiles
 
   public:
-    Floor();
-    Floor( std::shared_ptr<TextDisplay> td, std::istream & in, std::shared_ptr<Player> & p);
-    ~Floor();
 
-    void generate( std::shared_ptr<Player> & p ); // randomly generates the enemies and gold and potions. 
+    Floor( std::shared_ptr<TextDisplay> td, std::istream & in, std::shared_ptr<Player> p );
+    ~Floor();
+    void setPlayerPointer(std::shared_ptr<Player> p );
+    void generate( std::shared_ptr<Player> p ); // randomly generates the enemies and gold and potions. 
     std::string moveEnemies();
 
 };
