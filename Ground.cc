@@ -45,7 +45,9 @@ Ground::Ground(int row, int col, State t, int room, std::shared_ptr<Enemy> e, st
     }
 }
 
-Ground::~Ground(){
+Ground::~Ground(){}
+
+void Ground::clear(){
   if( player != nullptr ){
     player->setLocation( nullptr);
   }

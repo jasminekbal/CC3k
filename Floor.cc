@@ -4,7 +4,6 @@
 #include "RandomGen/RandomEnemy.h"
 #include "RandomGen/RandomPotion.h"
 #include "RandomGen/RandomGold.h"
-#include "Info.h"
 #include "Ground.h"
 #include "Characters/Player.h"
 #include "Enemies/Enemy.h"
@@ -123,6 +122,14 @@ std::shared_ptr<Ground> Floor::getGround(int row, int col, char c, State & t){
         case '.':
             t = State::Ground;
             break;
+        case 'a':
+        case 'b':
+        case 'c':
+        case 'd':
+        case 'e':
+            t = State::Ground;
+            chamber = c - 'a';
+            break;
         case '0':
         case '1':
         case '2':
@@ -199,14 +206,6 @@ void Floor::checkDragonGold(){
     }
 }
 
-
-std::shared_ptr<Ground> Floor::getDefaultGround(int row, int col, char c ){
-    State t = State::Ground;
-    int chamber = c - 'a';
-    c = '.'; 
-    return make_shared<Ground>(row, col, t, chamber );
-}
-
 void Floor::addTile( int row, int col, char c, std::shared_ptr<Player> p ){
     std::shared_ptr<Tile> tile = nullptr;
     std::shared_ptr<Ground> ground = nullptr;
@@ -239,13 +238,10 @@ void Floor::addTile( int row, int col, char c, std::shared_ptr<Player> p ){
             ground = make_shared<Ground>( row, col, t, chamber );
             break;
         default:
-            if( p == nullptr){
-                ground = getDefaultGround(row, col, c );
-            } else {
-                ground = getGround( row, col, c, t );
-            }
+            ground = getGround( row, col, c, t );
             break;
     }
+    //cout << "@ Floor input stream, addTile " << c << endl;
     if( tile != nullptr ){
         tiles[row].push_back( tile );
     }
@@ -256,11 +252,11 @@ void Floor::addTile( int row, int col, char c, std::shared_ptr<Player> p ){
 
 //we can change this implementation if it doesn't work out 
 void Floor::addNeighbours( Ground & currentSubject, int row, int col ) {
-    int i, j;
-    for( i = row - 1 ; i < row + 2; i ++ ){
-        for( j = col - 1 ; j < col + 2; j++ ){
+    for( int i = row - 1 ; i < row + 2; i ++ ){
+        for( int j = col - 1 ; j < col + 2; j++ ){
             if( i == row && j == col){}
             else{
+                //cout << "Tile[i][j]: " << (tiles[i][j])->getChar() << endl;
                 shared_ptr<Ground> neighbour = dynamic_pointer_cast<Ground> ( tiles[i][j] );
                 currentSubject.attach( neighbour );
             }
@@ -273,44 +269,36 @@ void Floor::attachObservers( std::shared_ptr<TextDisplay> td ){
     int col = 0;
     for( auto r : tiles){
         for( auto tile : r ){
-            shared_ptr<Ground> groundTile = dynamic_pointer_cast< Ground >(tile);
+            //cout << "row, col: " << row << " " << col << endl;
+            shared_ptr<Ground> groundTile = dynamic_pointer_cast< Ground >( tile);
             if( groundTile != nullptr ){
                 addNeighbours( * groundTile, row, col );
                 groundTile->attach( td );
-            } else {
-                td->notify( make_shared<Tile>(*tile) );
             }
+            td->notify( tile );
             col++;
         }
+        col = 0;
         row++;
     }
+    row = 0;
 }
 
 Floor::Floor( std::shared_ptr<TextDisplay> td, std::istream & in, std::shared_ptr<Player> p ) {
-
     string line;
     char c;
-    int row;
-    int col;
-
-    for( int i = 0; i < 25; i++ ){
-        row = i;
-        col = 0;
+    for( int row = 0; row < 25; row++ ){
         vector<shared_ptr<Tile> > t;
         tiles.push_back(t);
         getline( in, line );
-        istringstream input{ line };
-
-        while( input >> c ){
+        for( int col = 0; col < 79; col++ ){
+            char c = line[col];
             addTile( row, col, c, p );
-            col++;
         }
+    }
 
-    }
     attachObservers( td );
-    if( p != nullptr ){
-        checkDragonGold();
-    }
+    checkDragonGold();
 }
 
 
@@ -395,6 +383,7 @@ void Floor::removeDragonTile(int & chamIndex, vector<vector<shared_ptr<Ground> >
 }
 
 void Floor::generate( std::shared_ptr<Player> p ){
+    //cout << "@ Floor generate" << endl;
     int NUM_CHAMBER = 5; //was going to set these to const but if we want we can add a difficulty modifier that'll change these values 
     int NUM_ENEMIES = 20;
     int NUM_POTIONS = 10;
@@ -489,7 +478,15 @@ void Floor::generate( std::shared_ptr<Player> p ){
 }
 
 
-
+Floor::~Floor(){
+    for(auto r : tiles ){
+        for( auto tile : r ){
+            tile->clear();
+        }
+        r.clear();
+    }
+    tiles.clear();
+}
 
 // call notify() for each tile
 void Floor::notify(){

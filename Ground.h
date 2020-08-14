@@ -34,7 +34,6 @@ class Ground: public Tile, public Observer{
     std::string playerHelper(Ground & tile);
 
     std::string move(Ground & tile); // move contents of tile to this Tile   // make it error if it doesn't work
-    
 
   public:
     Ground(int r, int c, State t, int room = -1, std::shared_ptr<Enemy> e = nullptr , std::shared_ptr<Potion> po = nullptr, std::shared_ptr<Gold> g = nullptr, std::shared_ptr<Player> pl = nullptr);
@@ -77,6 +76,7 @@ class Ground: public Tile, public Observer{
     }
     int getChamber(){ return chamber; }
 
+    virtual void clear() override;
     friend class Floor;
 };
 

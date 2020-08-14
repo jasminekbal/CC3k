@@ -13,7 +13,7 @@ class Tile{
   //protected so that the ground tiles can access.
   int row;
   int col;
-  
+
   public:
   Tile(int row, int col, State t);
   virtual ~Tile();
@@ -23,7 +23,7 @@ class Tile{
   virtual std::string movePlayer(int dir){}
   char getChar();
   Info getInfo();
-
+  virtual void clear();
   friend class Floor;
 
 };

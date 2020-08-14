@@ -30,13 +30,14 @@
 #include "Tile.h"
 #include "Info.h"
 #include "Ground.h"
+#include "Game.h"
 using namespace std;
 
 
 void getPlayer( shared_ptr<Player> & p ){
     cout << "Please enter a player character. s, d, v, g, t: " << endl;
     char c;
-    bool isCharacter; 
+    bool isCharacter = false; 
     while( !isCharacter ){
         if( cin>> c){
             switch( c ){
@@ -60,9 +61,10 @@ void getPlayer( shared_ptr<Player> & p ){
                     p = make_shared<Troll>();
                     isCharacter = true;
                     break;
+                default: 
+                    cout << "Sorry not a player character. " << endl;
+                    cout << "Please enter a player character. s, d, v, g, t: " << endl;
             }
-            cout << "Sorry not a player character. " << endl;
-            cout << "Please enter a player character. s, d, v, g, t: " << endl;
         } else {
             break;
         }
@@ -74,27 +76,45 @@ int getDirection( string c ){
     else if (c == "no") return 1;
     else if (c == "ne") return 2;
     else if (c == "we") return 3;
-    else if (c == "ea") return 4
+    else if (c == "ea") return 4;
     else if (c == "sw") return 5;
     else if (c == "so") return 6;
     else if (c == "se") return 7;
-};
+}
+
+void printStats(Player &p, std::string msg){
+    /*cout<<message<<endl;
+    if (p->getType())
+    race = 
+    cout<<"Race: "<<""
+    */
 }
 
 //Notes:
 // should game have a print function
 
-int main( int argc, char * argv[] )   // argv[1] 
+int main( int argc, char * argv[] ) 
 {
-    std:: ifstream infile = "Default.txt";
-    if (argc == 1){
-        std::ifstream infile = argv[1];
+    if (p->getType()=='S'){
+
+    } else if(p->getType()=='D'){
+
     }
-    std::shared_ptr<Player> p;
+    std::ifstream infile;
+    infile.open("default.txt");
+    bool hasFile = false;
+    if (argc == 2){
+        infile.open(argv[1]);
+        hasFile = true;
+    }
+    std::shared_ptr<Player> p; 
     getPlayer( p );
     
-    Game game = Game(p, infile );
-    
+    std::string message = "Player has spawned";
+    Game game = Game(p, infile, hasFile );
+    game.print();
+    printStats();
+
 
     return 0;
 }

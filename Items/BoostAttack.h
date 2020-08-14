@@ -5,7 +5,6 @@
 #include "Potion.h"
 
 class Player;
-class Drow;
 
 class BoostAtk: public Potion {
 

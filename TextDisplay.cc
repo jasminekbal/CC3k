@@ -9,7 +9,7 @@
 using namespace std;
 
 TextDisplay::TextDisplay(){
-    rows = 15;
+    rows = 25;
     cols = 79;
     for (int r=0;r<rows;r+=1){
         vector<char> v;
@@ -22,6 +22,7 @@ TextDisplay::TextDisplay(){
 
 void TextDisplay::notify( std::shared_ptr<Tile> whoNotified ){
     Info i = whoNotified->getInfo();
+    //cout << "@ TD notify: " << i.row << " " << i.col << endl;
     display[i.row][i.col] = whoNotified->getChar();
 }
 

@@ -25,6 +25,21 @@ class Floor{
     
     //fields
     std::vector<std::vector<std::shared_ptr<Tile> > > tiles;
+
+    //typing from input
+    std::shared_ptr<Potion> getPotion( char c );
+    std::shared_ptr<Gold> getGold( char c );
+    std::shared_ptr<Enemy> getEnemy( char c );
+    std::shared_ptr<Ground> getGround( int row, int col, char c, State & t );
+    std::shared_ptr<Dragon> getDragon( int row, int col );
+
+    //constructor helper functions 
+    void checkDragonGold();
+    void addTile( int row, int col, char c, std::shared_ptr<Player> p );
+    
+    void attachObservers(std::shared_ptr<TextDisplay> td );
+    void addNeighbours( Ground & s, int row, int col );
+    
   
     //random generation helper functions 
     void getChamber(int & chamIndex, RandomGeneration & rng, int & NUM_CHAMBERS, const int player );
@@ -38,29 +53,12 @@ class Floor{
     //int getRow(int index);
     //int getCol(int index);
 
-   //constructor helper functions 
-    void addTile( int row, int col, char c, std::shared_ptr<Player> p );
-    void addDefaultTile( int row, int col, char c );
-
-    void attachObservers(std::shared_ptr<TextDisplay> td );
-    void addNeighbours( Ground & s, int row, int col );
-    
-    void checkDragonGold();
-    std::shared_ptr<Dragon> getDragon( int row, int col );
-
-    //typing from input
-    std::shared_ptr<Enemy> getEnemy( char c );
-    std::shared_ptr<Potion> getPotion( char c );
-    std::shared_ptr<Gold> getGold( char c );
-
-    std::shared_ptr<Ground> getGround( int row, int col, char c, State & t );
-    std::shared_ptr<Ground> getDefaultGround( int row, int col, char c );
-
     void notify(); // calls notify on all the tiles
 
   public:
 
-    Floor( std::shared_ptr<TextDisplay> td, std::istream & in, std::shared_ptr<Player> = nullptr );
+    Floor( std::shared_ptr<TextDisplay> td, std::istream & in, std::shared_ptr<Player> );
+    ~Floor();
 
     //functions for tick 
     //void recalculate(); // this makes the tiles calculate their booleans according to what pointer is on them

@@ -2,6 +2,8 @@
 #include "Tile.h"
 #include <memory>
 #include <vector>
+#include <iostream>
+using namespace std;
 
 Tile::Tile(int row, int col, State t): row{row}, col{col}, type{t} {
     //  Whitespace = ' ', HorizontalWall = '-', 
@@ -23,6 +25,7 @@ Tile::Tile(int row, int col, State t): row{row}, col{col}, type{t} {
 Tile::~Tile() {}
 
 char Tile::getChar(){
+    //cout << "@ Tile getChar(): " << c << endl;
     return c;
 }
 

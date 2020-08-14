@@ -5,14 +5,15 @@
 #include <string>
 #include <memory>
 #include <fstream>
+#include <iostream> 
 #include "Ground.h"
 using namespace std;
 
 
-Game::Game(shared_ptr<Player> py, std::istream &input){
-    p=py;
+Game::Game(shared_ptr<Player> py, std::istream &input, bool hasFile ): p{py}, infile{input}, hasFile{hasFile} {
+    //cout << "@ Game constructor" << endl;
     td = make_shared<TextDisplay> ();
-    infile = input;
+    moveEnemies = true;
     level = 1;
     newFloor();
 }
@@ -28,7 +29,9 @@ int Game::checkPlayerState(){
 }
 
 void Game::tick(){
-    f->moveEnemies();
+    if( moveEnemies ){
+        f->moveEnemies();
+    }
     if (p->getType()== 'T'){
         p->changeHp(p->getHp()+5);
     }
@@ -38,7 +41,15 @@ void Game::tick(){
 }
 
 void Game::newFloor(){
-    f = std::make_unique<Floor>(td, infile, p);
+    //cout << "@Game newFloor: " << hasFile << endl;
+    f = std::make_shared<Floor>(td, infile, p);
+    if( hasFile ){
+        f->generate(p);
+    }
+}
+
+void Game::setMoveEnemies(){
+    moveEnemies = !moveEnemies;
 }
 
 
@@ -50,6 +61,10 @@ std::string Game::endGame( bool showScore ){
     }
 }
 
+void Game::print(){
+    cout<< * td << endl;
+}
+
 std::string Game::moveCharacter( int dir ){
     string message = (p->getLocation())->movePlayer(dir);
     if (checkPlayerState() == 2){
@@ -57,7 +72,7 @@ std::string Game::moveCharacter( int dir ){
     }else if (checkPlayerState()==1){
         if (level < 5){
             level ++ ;
-            f = newFloor(infile);
+            newFloor();
             message = "You have reached Floor " + std::to_string(level);
         } else {
             return endGame(true);
