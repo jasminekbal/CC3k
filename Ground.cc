@@ -322,6 +322,8 @@ string Ground::moveEnemy(){
     else{
       return randomMove();
     }
+  } else{
+    return "";
   }
 }
 

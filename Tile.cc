@@ -36,3 +36,5 @@ Info Tile::getInfo(){
     i.col = col;
     return i;
 }
+
+void Tile::clear(){}

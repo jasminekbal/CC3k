@@ -94,7 +94,10 @@ void printStats(Player &p, std::string msg){
 // should game have a print function
 
 int main( int argc, char * argv[] ) 
-{
+{   
+    std::shared_ptr<Player> p; 
+    getPlayer( p );
+
     if (p->getType()=='S'){
 
     } else if(p->getType()=='D'){
@@ -107,13 +110,11 @@ int main( int argc, char * argv[] )
         infile.open(argv[1]);
         hasFile = true;
     }
-    std::shared_ptr<Player> p; 
-    getPlayer( p );
     
     std::string message = "Player has spawned";
     Game game = Game(p, infile, hasFile );
     game.print();
-    printStats();
+    printStats( * p, " " );
 
 
     return 0;

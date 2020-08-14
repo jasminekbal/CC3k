@@ -13,9 +13,7 @@ class Potion: public Item{
     std::string type;
 
     public:
-    Potion(int change, std::string type): Item(change, 'P'){
-        type = type;
-    }
+    Potion(int change, std::string type): Item(change, 'P'), type{type}{}
     virtual void usePotion( std::shared_ptr<Player> p) = 0; 
     void changeVal(char c, int val, std::shared_ptr<Player> p ){
         if (c=='a') {

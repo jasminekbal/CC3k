@@ -11,17 +11,17 @@ class Merchant: public Enemy{
    static bool hostile;
    Merchant();
    virtual ~Merchant();
-    virtual bool onAttacked(Player &p);
+    virtual bool onAttacked(Player &p) override;
     virtual bool attack(Drow &d) override;  // this returns if the attack was succesful
-    virtual bool onAttacked(Drow &d);
+    virtual bool onAttacked(Drow &d) override;
     virtual bool attack(Goblin &g) override;  // this returns if the attack was succesful
-    virtual bool onAttacked(Goblin &g);
+    virtual bool onAttacked(Goblin &g) override;
     virtual bool attack(Shade &s) override;  // this returns if the attack was succesful
-    virtual bool onAttacked(Shade &s);
+    virtual bool onAttacked(Shade &s) override;
     virtual bool attack(Troll &t) override;  // this returns if the attack was succesful
-    virtual bool onAttacked(Troll &t);
+    virtual bool onAttacked(Troll &t) override;
     virtual bool attack(Vampire &v) override;  // this returns if the attack was succesful
-    virtual bool onAttacked(Vampire &v);
+    virtual bool onAttacked(Vampire &v) override;
 
     void setGold(std::shared_ptr<Gold> g);
     virtual std::shared_ptr<Gold> onDeath() override;

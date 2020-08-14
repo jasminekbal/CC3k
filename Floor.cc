@@ -292,7 +292,7 @@ Floor::Floor( std::shared_ptr<TextDisplay> td, std::istream & in, std::shared_pt
         tiles.push_back(t);
         getline( in, line );
         for( int col = 0; col < 79; col++ ){
-            char c = line[col];
+            c = line[col];
             addTile( row, col, c, p );
         }
     }
