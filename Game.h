@@ -15,6 +15,9 @@ class Game{
     std::unique_ptr<Floor> f;
     std::shared_ptr<TextDisplay> td;
     std::shared_ptr<Player> p;
+    std::istream infile;
+    
+    int level;
 
     int checkPlayerState(); // 0 for normal, 1 if player got to stairs, 2 if player died
 

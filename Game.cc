@@ -8,16 +8,13 @@
 #include "Ground.h"
 using namespace std;
 
-Game::Game(shared_ptr<Player> py){
-    p=py;
-    td = make_shared<TextDisplay> ();
-    newFloor();
-}
 
 Game::Game(shared_ptr<Player> py, std::istream &input){
     p=py;
     td = make_shared<TextDisplay> ();
-    newFloor(input);
+    infile = input;
+    level = 1;
+    newFloor();
 }
 
 int Game::checkPlayerState(){
@@ -35,18 +32,13 @@ void Game::tick(){
     if (p->getType()== 'T'){
         p->changeHp(p->getHp()+5);
     }
-    if (checkPlayerState()==1){
-        newFloor();
+    if( checkPlayerState() == 2){
+        endGame( false );
     }
 }
 
 void Game::newFloor(){
-    std::ifstream infile{ "default.txt" };
-    f = make_unique<Floor>(td, infile, p); 
-}
-
-void Game::newFloor( std::istream & input ){
-    f = std::make_unique<Floor>(td, input, p);
+    f = std::make_unique<Floor>(td, infile, p);
 }
 
 
@@ -59,6 +51,18 @@ std::string Game::endGame( bool showScore ){
 }
 
 std::string Game::moveCharacter( int dir ){
-    return (p->getLocation())->movePlayer(dir);
+    string message = (p->getLocation())->movePlayer(dir);
+    if (checkPlayerState() == 2){
+        message = "You died :(";
+    }else if (checkPlayerState()==1){
+        if (level < 5){
+            level ++ ;
+            f = newFloor(infile);
+            message = "You have reached Floor " + std::to_string(level);
+        } else {
+            return endGame(true);
+        }
+    }
+    return message;
 }
  

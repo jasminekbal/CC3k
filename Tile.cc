@@ -3,10 +3,7 @@
 #include <memory>
 #include <vector>
 
-Tile::Tile(int r, int c, State t){
-    row = r;
-    col = c;
-    type = t;
+Tile::Tile(int row, int col, State t): row{row}, col{col}, type{t} {
     //  Whitespace = ' ', HorizontalWall = '-', 
     // VerticalWall='|', Door = '+'
     if (type == State::Whitespace){

@@ -13,7 +13,7 @@
 using namespace std;
 
 // Constructor sets type and pointer if there is one
-Ground::Ground(int r, int c, State t, int room, std::shared_ptr<Enemy> e, std::shared_ptr<Potion> po, std::shared_ptr<Gold> g, std::shared_ptr<Player> pl): Tile(r,c,t){
+Ground::Ground(int row, int col, State t, int room, std::shared_ptr<Enemy> e, std::shared_ptr<Potion> po, std::shared_ptr<Gold> g, std::shared_ptr<Player> pl): Tile(row,col,t){
     chamber = room;
     //td = make_shared<TextDisplay>();
 
@@ -22,7 +22,7 @@ Ground::Ground(int r, int c, State t, int room, std::shared_ptr<Enemy> e, std::s
         c='.';
     }
     else if (type == State::Stairs){
-        c='\'';
+        c='\\';
     }
     else if (type == State::Passageway){
         c='#';
@@ -254,14 +254,24 @@ void Ground::notify(){
 // called so that this tile knows what its neighbours are up tos
 void Ground::notify(shared_ptr<Ground> whoNotified){ // check if there's a player near an enemy
   Info i = whoNotified->getInfo();
-  if (i.row == row-1 && i.col == col-1) neighbours[0] = whoNotified;
-  else if (i.row == row-1 && i.col == col) neighbours[1] = whoNotified;
-  else if (i.row == row-1 && i.col == col+1) neighbours[2] = whoNotified;
-  else if (i.row == row && i.col-1 == col) neighbours[3] = whoNotified;
-  else if (i.row == row && i.col+1 == col) neighbours[4] = whoNotified;
-  else if (i.row == row+1 && i.col-1 == col) neighbours[5] = whoNotified;
-  else if (i.row == row+1 && i.col == col) neighbours[6] = whoNotified;
-  else if (i.row == row+1 && i.col+1 == col) neighbours[7] = whoNotified;
+  /*
+      if (c == "nw") return 0;
+    else if (c == "no") return 1;
+    else if (c == "ne") return 2;
+    else if (c == "we") return 3;
+    else if (c == "ea") return 4
+    else if (c == "sw") return 5;
+    else if (c == "so") return 6;
+    else if (c == "se") return 7;
+  */
+  if (i.row == row-1 && i.col == col-1) neighbours[0] = whoNotified;       //nw
+  else if (i.row == row-1 && i.col == col) neighbours[1] = whoNotified;    //no
+  else if (i.row == row-1 && i.col == col+1) neighbours[2] = whoNotified;  //ne
+  else if (i.row == row && i.col-1 == col) neighbours[3] = whoNotified;    //we
+  else if (i.row == row && i.col+1 == col) neighbours[4] = whoNotified;    //ea
+  else if (i.row == row+1 && i.col-1 == col) neighbours[5] = whoNotified;  //sw
+  else if (i.row == row+1 && i.col == col) neighbours[6] = whoNotified;    //so
+  else if (i.row == row+1 && i.col+1 == col) neighbours[7] = whoNotified;  //se
 
   recalculate();
 }

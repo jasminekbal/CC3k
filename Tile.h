@@ -15,7 +15,7 @@ class Tile{
   int col;
   
   public:
-  Tile(int r, int c, State t);
+  Tile(int row, int col, State t);
   virtual ~Tile();
   virtual void notify(){}   // need to override for Ground
   // need this function since Floor calls notify() on each tile in its vector

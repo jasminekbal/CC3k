@@ -1,4 +1,4 @@
-#if 1
+#if 0
 #include "Items/BoostAttack.h"
 #include "Items/BoostDefence.h"
 #include "Items/DragonGold.h"
@@ -27,67 +27,88 @@
 #include <string>
 #include <memory>
 #include "Tile.h"
+#include "Info.h"
+#include "Ground.h"
+
 
 using namespace std;
 
-void print(shared_ptr<Player> p, shared_ptr<Enemy> e){
-    cout<<"Player:" << endl;
-    cout << "attack : " << p->getAtk() << endl;
-    cout << "defence : " << p->getDef() << endl;
-    cout << "health : " << p->getHp() << endl;
-    cout << "gold: " << p->getScore() << endl;
-    cout << endl;
-    cout<<"Enemy:" << endl;
-    cout << "attack : " << e->getAtk() << endl;
-    cout << "defence : " << e->getDef() << endl;
-    cout << "health : " << e->getHp() << endl;
+void print(shared_ptr<Player> p, shared_ptr<Enemy> e, vector<shared_ptr<Tile > > & floor ){
+    for( auto tile : floor ){
+        cout << tile->getChar();
+    }
+    cout <<endl;
+    if( p != nullptr ){
+        cout<<"Player:" << endl;
+        cout << "attack : " << p->getAtk() << endl;
+        cout << "defence : " << p->getDef() << endl;
+        cout << "health : " << p->getHp() << endl;
+        cout << "gold: " << p->getScore() << endl;
+        cout << endl;
+    }
+    if( e != nullptr ){
+        cout<<"Enemy:" << endl;
+        cout << "attack : " << e->getAtk() << endl;
+        cout << "defence : " << e->getDef() << endl;
+        cout << "health : " << e->getHp() << endl;
+    }
 }
 
-void newPlayer( shared_ptr<Player> & p){
-    bool madeCharacter;
+
+
+void movement( shared_ptr<Player> & p, vector<shared_ptr<Tile> > & floor ){
+    shared_ptr<Ground> ground;
     char c;
-    if( cin>> c){
-        switch(c){
-            case 's':
-                p = make_shared<Shade>();
-                madeCharacter = true;
+    int i;
+    while( cin >> c ){
+        switch( c ){
+            case 'A': 
+                if( cin >> i ){
+                    ground =  static_pointer_cast<Ground>( floor[i] );
+                    ground->setPlayer( p );
+                    p->setLocation( ground );
+                }
                 break;
-            case 'd':
-                p = make_shared<Drow>();
-                madeCharacter = true;
-                break;
-            case 'v':
-                p = make_shared<Vampire>();
-                madeCharacter = true;
-                break;
-            case 'g':
-                p = make_shared<Goblin>();
-                madeCharacter = true;
-                break;
-            case 't':
-                p = make_shared<Troll>();
-                madeCharacter = true;
-                break;
+            case 'l':
+                
+            case 'r':
+            
+            case 'p':
+                print( p, nullptr, floor );
         }
     }
-    if( madeCharacter ){
-        cout << "created: " << c << endl;
-    }
 }
+
 
 int main(){
     shared_ptr<Player> p;
     char c = ' ';
-    newPlayer(p);
     shared_ptr<Potion> potion;
     shared_ptr<Gold> gold;
     shared_ptr<Enemy> enemy;
     shared_ptr<Tile> tile;
     shared_ptr<Ground> ground;
+    vector<shared_ptr<Tile> > floor;
+    int row, col = 0;
     int value = 2;
     bool canCollect = true;
     while( cin >> c ){
         switch( c ){
+            case 's':
+                p = make_shared<Shade>();
+                break;
+            case 'd':
+                p = make_shared<Drow>();
+                break;
+            case 'v':
+                p = make_shared<Vampire>();
+                break;
+            case 'g':
+                p = make_shared<Goblin>();
+                break;
+            case 't':
+                p = make_shared<Troll>();
+                break;
             case '0':
                 potion = make_shared<RestoreHP>();
                 cout << "RH" << endl;
@@ -137,7 +158,7 @@ int main(){
                 enemy = make_shared<Halfling>();
                 break;
             case 'p':
-                print(p, enemy);
+                print(p, enemy, floor );
                 break;
             case 'a':
                 if( enemy->onAttacked( * p ) ){
@@ -157,16 +178,18 @@ int main(){
                 break;
             case 'r':
                 cout << rand() << endl;
-            case 'n':
-                newPlayer(p);
-            case 't':
-                tile = make_shared
-            case 'g':
-
+            case '7':
+                tile = make_shared<Tile>(row, col, State::HorizontalWall);
+                floor.push_back( tile );
+                cout << "Tile " << tile->getChar() << endl; 
+                break;
+            case '8':
+                ground = make_shared<Ground>(row, col, State::Ground);
+                floor.push_back( ground );
+                cout << "Ground " << ground->getChar() << endl; 
+                break;
+            case     
         }
-    }
-}
+  }
 
 #endif
-
-
