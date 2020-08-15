@@ -21,87 +21,6 @@ Human::~Human(){
 
 }
 
-bool Human::onAttacked(Player &p){
-    return p.attack(*this);
-}
-
-bool Human::attack(Shade &p){
-    bool toAtk = this->randAtk();
-    if (toAtk){
-        p.onAttacked(*this);
-        return true;
-    } else {
-        return false;
-    }
-}
-
-
-bool Human::attack(Vampire &p){
-    bool toAtk = this->randAtk();
-    if (toAtk){
-        p.onAttacked(*this);
-        return true;
-    } else {
-        return false;
-    }
-    return true;
-}
-
-
-bool Human::attack(Troll &p){
-    bool toAtk = this->randAtk();
-    if (toAtk){
-        p.onAttacked(*this);
-        return true;
-    } else {
-        return false;
-    }
-}
-
-
-bool Human::attack(Drow &p){
-    bool toAtk = this->randAtk();
-    if (toAtk){
-        p.onAttacked(*this);
-        return true;
-    } else {
-        return false;
-    }
-}
-
-
-bool Human::attack(Goblin &p){
-    bool toAtk = this->randAtk();
-    if (toAtk){
-        p.onAttacked(*this);
-        return true;
-    } else {
-        return false;
-    }
-}
-
-
-bool Human::onAttacked(Goblin &p){
-    return baseOnAtk(p);
-}
-
-bool Human::onAttacked(Drow &p){
-    return baseOnAtk(p);
-}
-
-bool Human::onAttacked(Shade &p){
-    return baseOnAtk(p);
-}
-
-bool Human::onAttacked(Troll &p){
-    return baseOnAtk(p);
-}
-
-bool Human::onAttacked(Vampire &p){
-    return baseOnAtk(p);
-} 
-
-
 void Human::setGold(std::shared_ptr<Gold> g){
     gold = g;
 }
@@ -109,3 +28,4 @@ void Human::setGold(std::shared_ptr<Gold> g){
 std::shared_ptr<Gold> Human::onDeath(){
     return gold;
 }
+

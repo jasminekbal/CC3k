@@ -32,6 +32,7 @@
 #include "Info.h"
 #include "Ground.h"
 #include "Game.h"
+
 using namespace std;
 
 
@@ -72,6 +73,167 @@ void getPlayer( shared_ptr<Player> & p ){
     }
 }
 
+void pressAnyKey(){
+    cout << endl << "Press any key to continue" << endl;
+    getchar(); // waits for key press
+}
+
+void checkCorrectInp(std::string check){
+    std::string cmd = "";
+    while (cin>>cmd){
+        if (cmd==check){
+            return;
+        }
+        else{
+            cout << "You have to type " << check << "." <<endl;
+            cout << "What? did you think you had free will?" << endl;
+        }
+    }
+}
+
+void printStats(Player &p, std::string msg, std::string race, Game &g){
+    cout<<"Race: "<<race<< "\t\t\t"<<" Gold: "<<p.getScore()<<"\t\t\t"<<"Floor: "<<g.getLevel()<<endl;
+    cout<<"HP: "<<p.getHp()<<endl;
+    cout<<"Atk: "<<p.getAtk()<<endl;
+    cout<<"Def: "<<p.getDef()<<endl;
+    cout<<"Action: "<<msg<<endl;
+}
+
+void demo(){
+    getchar();
+    std::ifstream infile;
+    std::string message = "";
+
+    cout << endl << "Welcome to cc3k-villain!" << endl << endl;
+    cout << "Unfortunately, you have gotten yourself trapped in a dungeon :(" << endl;
+    cout << "The only way to escape this dungeon is to climb your way to the top using the stairs on each floor." << endl;
+    cout << "But, while you're here, you might as well collect gold by picking it up or killing monsters." << endl;
+
+    pressAnyKey();
+
+    cout << "Right, monsters. Did I forget to mention that?" << endl;
+    cout << "This dungeon is filled with all sorts of enemies including orcs, dragons, elves, and worst of all, humans. *shudder*" << endl;
+
+    pressAnyKey();
+
+    cout << "You can also choose what type of player you will be. Each player and enemy has unique abilities." << endl;
+    cout << "For this tutorial, you'll be a shade." << endl;
+    cout << "Let's get into the tutorial. Don't forget to have fun and kick monster butt!" << endl;
+
+    pressAnyKey();
+
+    infile.open("demo1.txt");
+    std::shared_ptr<Player> p = make_shared<Shade>();
+    Game game = Game(p, infile, 1);
+    game.print();
+
+    cout << endl<<"This is the first floor. Potions are shown as the character 'P'. Gold is shown as 'G'. "
+    << "Each type of enemy is shown as a different character" << endl;
+    cout << "A floor's contents are randomly generated unless you enter a file name as a command line argument." << endl;
+    cout << "You can type the direction you want to move to as 'no', 'ne', 'ea', 'se', etc." << endl;
+    cout << "Let's see what happens when you move North East (ne):" << endl << endl;
+
+    checkCorrectInp("ne");
+    message = game.moveCharacter(2);
+    game.print();
+    printStats(*p, message, "shade", game);
+    cout << message << endl;
+    game.tick();
+    game.print();
+    printStats(*p, message, "shade", game);
+
+    cout << endl <<"So you stepped on a potion. You can't know what a potion does until you step on it. "
+    << "This particular potion boosts your attack level!" << endl;
+    cout << "You may have noticed that after you move, most of your enemies will move a tile too." << endl;
+    cout << "Be careful not to get too close to them unless you want to fight." << endl << endl;
+
+    cout << endl << "Next, let's try to collect a gold. Move east." << endl << endl;
+    checkCorrectInp("ea");
+    message = game.moveCharacter(4);
+    game.print();
+    printStats(*p, message, "shade", game);
+    cout << message << endl;
+    game.tick();
+    game.print();
+    printStats(*p, message, "shade", game);
+
+    cout << endl << "And east one more time." << endl << endl;
+    checkCorrectInp("ea");
+    message = game.moveCharacter(4);
+    game.print();
+    printStats(*p, message, "shade", game);
+    cout << message << endl;
+    game.tick();
+    game.print();
+    printStats(*p, message, "shade", game);
+
+    cout << "Nice! Your score increased!" << endl;
+    cout << "You can walk between rooms through passageways. Try moving east to the stairs." << endl << endl;
+    for (int x=0;x<15;x+=1){
+        checkCorrectInp("ea");
+        message = game.moveCharacter(4);
+        game.print();
+        printStats(*p, message, "shade", game);
+        cout << message << endl << endl;
+        game.tick();
+        game.print();
+        printStats(*p, message, "shade", game);
+    }
+
+    cout << endl << "You got to the next floor. Now let's try attacking an enemy." << endl << endl;
+    cout << "Try moving west to the orc." << endl << endl;
+    checkCorrectInp("we");
+    message = game.moveCharacter(3);
+    game.print();
+    printStats(*p, message, "shade", game);
+    cout << message << endl << endl;
+    game.tick();
+    game.print();
+    printStats(*p, message, "shade", game);
+
+    cout << "Ouch. The orc tried to attack you because you came close to it." << endl;
+    cout << "You can attack back by typing 'a' and a direction." << endl;
+    cout << "We thought it would be more intuitive to attack by simply typing in the direction you want to attack." << endl;
+    cout << "Try typing 'we' again to attack." << endl << endl;
+    checkCorrectInp("we");
+    message = game.moveCharacter(3);
+    game.print();
+    printStats(*p, message, "shade", game);
+    cout << message << endl << endl;
+    game.tick();
+    game.print();
+    printStats(*p, message, "shade", game);
+
+    getchar();
+    cout << "Fantastic! You really showed him/ her!" << endl;
+    cout << "Now you're ready. Go on and explore the dungeon yourself." << endl << endl;
+
+    pressAnyKey();
+
+    cout << endl << endl << endl;
+}
+
+void getDemo(){
+    cout << "Would you like to go through a short tutorial? (y/n) " << endl;
+    char c;
+    while( true ){
+        if( cin>> c){
+            switch( c ){
+                case 'y':
+                    demo();
+                    return;
+                case 'n':
+                    return;
+                default: 
+                    cout << "Sorry I didn't catch that. " << endl;
+                    cout << "Please enter either the character 'y' or 'n': " << endl;
+            }
+        } else {
+            break;
+        }
+    }
+}
+
 int getDirection( string c ){
     if (c == "nw") return 0;
     else if (c == "no") return 1;
@@ -81,14 +243,6 @@ int getDirection( string c ){
     else if (c == "sw") return 5;
     else if (c == "so") return 6;
     else if (c == "se") return 7;
-}
-
-void printStats(Player &p, std::string msg, std::string race, Game &g){
-    cout<<"Race: "<<race<< "\t\t\t"<<" Gold: "<<p.getScore()<<"\t\t\t"<<"Floor: "<<g.getLevel()<<endl;
-    cout<<"HP: "<<p.getHp()<<endl;
-    cout<<"Atk: "<<p.getAtk()<<endl;
-    cout<<"Def: "<<p.getDef()<<endl;
-    cout<<"Action: "<<msg<<endl;
 }
 
 
@@ -110,11 +264,16 @@ Game beginGame( std::shared_ptr<Player> &p, string & name, bool hasFile, string 
     getPlayer( p );
     getName( *p, name );
     infile.open(fileName);
-    Game game = Game(p, infile, hasFile );
-    message = "Player has spawned";
-    game.print();
-    printStats( * p, message, name, game);
-    return game;
+    try{
+        Game game = Game(p, infile, hasFile );
+        message = "Player has spawned";
+        game.print();
+        printStats( * p, message, name, game);
+        return game;
+    }
+    catch( NoFile & e ){
+        cout << e.getMessage() << endl;
+    }
 }
 
 bool checkCongrats(std::string msg){
@@ -155,6 +314,7 @@ bool isGameOver(std::string message){
 int main( int argc, char * argv[] ) 
 {   
     bool playAgain = true;
+    getDemo();
     while(playAgain){
         std::shared_ptr<Player> p; 
         std::string name;
@@ -167,81 +327,86 @@ int main( int argc, char * argv[] )
             fileName = (argv[1]);
         }
         std::string message;
-        
-        Game game = beginGame( p, name, hasFile, fileName, infile, message );
-        std::string cmd;
-        while (cin >> cmd ){
+        try{
+            Game game = beginGame( p, name, hasFile, fileName, infile, message );
+            std::string cmd;
             cout<<"Enter your move: "<<endl;
-            
-            int dir;
-            //get cmd
-            if (cmd =="no" || cmd =="so"|| cmd =="ea"||cmd=="we"|| cmd=="ne"||cmd=="nw"||cmd=="se"||cmd=="sw"){
-                dir = getDirection(cmd);
-                message = game.moveCharacter(dir);
-                if (message == ""){
-                    message = "Player moved " + cmd;
-                }
-                //game.print();
-                printStats( * p, message, name, game);
-                if (toMoveEnemies(message)){
-                    message = game.tick();
-                    if (message == "" && game.getMoveEnemies()){
-                        message = "Enemies moved";
-                    } else if (message == "" && !game.getMoveEnemies()) {
-                        message = "Enemies did not move";
+            while (cin >> cmd ){
+                
+                int dir;
+                //get cmd
+                if (cmd =="no" || cmd =="so"|| cmd =="ea"||cmd=="we"|| cmd=="ne"||cmd=="nw"||cmd=="se"||cmd=="sw"){
+                    dir = getDirection(cmd);
+                    message = game.moveCharacter(dir);
+                    if (message == ""){
+                        message = "Player moved " + cmd;
+                    }
+                    //game.print();
+                    printStats( * p, message, name, game);
+                    if (toMoveEnemies(message)){
+                        message = game.tick();
+                        if (message == "" && game.getMoveEnemies()){
+                            message = "Enemies moved";
+                        } else if (message == "" && !game.getMoveEnemies()) {
+                            message = "Enemies did not move";
+                        }
+                        game.print();
+                        printStats( * p, message, name, game);
+                    }
+                    if (isGameOver(message)){
+                        break;
+                    }
+                } else if (cmd[0] =='u' ||cmd[0]=='a' ){
+                    cin>>cmd;
+                    dir = getDirection(cmd);
+                    message = game.moveCharacter(dir);
+                    game.print();
+                    printStats( * p, message, name, game);
+                    if (toMoveEnemies(message)){
+                        message = game.tick();
+                        if (message == "" && game.getMoveEnemies()){
+                            message = "Enemies moved";
+                        } else if (message == "" && !game.getMoveEnemies()) {
+                            message = "Enemies did not move";
+                        }
                     }
                     game.print();
                     printStats( * p, message, name, game);
-                }
-                if (isGameOver(message)){
-                    break;
-                }
-            } else if (cmd[0] =='u' ||cmd[0]=='a' ){
-                cin>>cmd;
-                dir = getDirection(cmd);
-                message = game.moveCharacter(dir);
-                game.print();
-                printStats( * p, message, name, game);
-                if (toMoveEnemies(message)){
-                    message = game.tick();
-                    if (message == "" && game.getMoveEnemies()){
-                        message = "Enemies moved";
-                    } else if (message == "" && !game.getMoveEnemies()) {
-                        message = "Enemies did not move";
+                    if (isGameOver(message)){
+                        break;
                     }
-                }
-                game.print();
-                printStats( * p, message, name, game);
-                if (isGameOver(message)){
+                } else if (cmd == "f"){
+                    game.setMoveEnemies();
+                    if (game.getMoveEnemies()) {
+                        message="Enemies will move and attack you!";
+                    } else {
+                        message="Enemies are sleeping and will not move/harm you!";
+                    }
+                    game.print();
+                    printStats( * p, message, name, game);
+                } else if (cmd == "r"){
+                    infile.close();
+                    cout<< "The game has restarted"<<endl;
+                    break;
+                } else if (cmd == "q"){
+                    message = "You Have Admitted defeat!";
+                    game.print();
+                    printStats( * p, message, name, game);
                     break;
                 }
-            } else if (cmd == "f"){
-                game.setMoveEnemies();
-                if (game.getMoveEnemies()) {
-                    message="Enemies will move and attack you!";
-                } else {
-                    message="Enemies are sleeping and will not move/harm you!";
-                }
-                game.print();
-                printStats( * p, message, name, game);
-            } else if (cmd == "r"){
-                infile.close();
-                message = "The game has restarted";
-                break;
-            } else if (cmd == "q"){
-                message = "You Have Admitted defeat!";
-                game.print();
-                printStats( * p, message, name, game);
-                break;
+                cout<<"Enter your move: "<<endl;
+            }
+            cout<<"Would You Like To Play Again?(enter 'y' or 'n')"<<endl;
+            char play;
+            cin>>play;
+            if (play=='y'){
+                playAgain = true;
+            } else {
+                playAgain = false;
             }
         }
-        cout<<"Would You Like To Play Again?(enter 'y' or 'n')"<<endl;
-        char play;
-        cin>>play;
-        if (play=='y'){
-            playAgain = true;
-        } else {
-            playAgain = false;
+        catch(Exceptions e){
+            cout << e.getMessage() << endl;
         }
         
     }

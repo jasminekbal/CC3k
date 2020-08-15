@@ -19,78 +19,7 @@ Goblin::~Goblin(){
 
 }
 
-bool Goblin::onAttacked(Enemy &e){
-  return e.attack(*this);
-}
-
-bool Goblin::baseAtk (Enemy & e){
-  bool goesThrough = e.onAttacked(*this);
-  if (e.getHp()== 0){
-    this->collectGold(make_shared<Gold>(5, true));
-  }
-  return goesThrough;
-}
-
-bool Goblin::baseOnAtk(Enemy & e){
-  double tempDamage = ceil( (100.0/(100.0+(double) getDef()))* (double) e.getAtk());
-  int damage = (int) floor( tempDamage );
-  this->changeHp(this->getHp()-damage);
-  return true;
-}
-
-bool Goblin::attack(Dragon &e){
-  return this->baseAtk(e);
-}
-
-bool Goblin::onAttacked(Dragon &e){
-  return this->baseOnAtk(e);
-}
-
-bool Goblin::attack(Dwarf &e){
-  return this->baseAtk(e);
-}
-
-bool Goblin::onAttacked(Dwarf &e){
-   return this->baseOnAtk(e);
-}
-
-bool Goblin::attack(Elf &e) {
-  return this->baseAtk(e);
-}
-
-bool Goblin::onAttacked(Elf &e){
-   return this->baseOnAtk(e);
-}
-
-bool Goblin::attack(Halfling &e) {
-  return this->baseAtk(e);
-}
-
-bool Goblin::onAttacked(Halfling &e){
-   return this->baseOnAtk(e);
-}
-
-bool Goblin::attack(Human &e){
-  return this->baseAtk(e);
-}
-
-bool Goblin::onAttacked(Human &e){
-   return this->baseOnAtk(e);
-}
-
-bool Goblin::attack(Merchant &e) {
-  return this->baseAtk(e);
-}
-
-bool Goblin::onAttacked(Merchant &e){
-  return this->baseOnAtk(e);
-}
-
-bool Goblin::attack(Orc &e) {
-  return this->baseAtk(e);
-}
-
-bool Goblin::onAttacked(Orc &e){
+bool Goblin::onAttackedOrc(Enemy & e) {
   double tempDamage = ceil( (100.0/(100.0+(double) getDef()))* (double) e.getAtk());
   int damage = (int) floor( tempDamage );
   int altered = damage + damage/2;
@@ -98,4 +27,22 @@ bool Goblin::onAttacked(Orc &e){
   return true;
 }
 
+bool Goblin::attack(Enemy * e) {
+  bool goesThrough = e->onAttacked(*this);
+  if (e->getHp()== 0){
+    this->collectGold(make_shared<Gold>(5, true));
+  }
+  return goesThrough;
+}
+
+bool Goblin::onAttacked( Enemy & e ){
+  if( e.getChar() == 'O'){
+    return onAttackedOrc( e );
+  } else {
+    double tempDamage = ceil( (100.0/(100.0+(double) getDef()))* (double) e.getAtk());
+    int damage = (int) floor( tempDamage );
+    this->changeHp(this->getHp()-damage);
+    return true;
+  }
+}
 

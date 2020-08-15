@@ -167,7 +167,10 @@ std::shared_ptr<Ground> Floor::getGround(int row, int col, char c, State & t){
             enemy = getEnemy( c );
             break;
         default:
-            throw NoFile( "not a permitted character");
+        {
+            string message = "not a permitted character"  + c;
+            throw NoFile( message );
+        }
     }
     return make_shared<Ground>( row, col, t, chamber, enemy, potion, gold );
 }

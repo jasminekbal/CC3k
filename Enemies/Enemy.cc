@@ -67,18 +67,24 @@ bool Enemy::randAtk( ){
     }
 }
 
-bool Enemy::onAttacked(Player &p){
-    return this->baseOnAtk(p);
-}
-
-bool Enemy::baseOnAtk(Player & p){
-    double tempDamage = ceil( (100.0/(100.0+(double) getDef()))* (double) p.getAtk());
-    int damage = (int) floor( tempDamage );
-    hp = checkHp(hp - damage);
+bool Enemy::isHostile(){
     return true;
 }
 
-bool Enemy::isHostile(){
+bool Enemy::attack(Player * p){
+    bool toAtk = this->randAtk();
+    if (toAtk){
+        p->onAttacked(* this);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool Enemy::onAttacked(Player & p){
+    double tempDamage = ceil( (100.0/(100.0+(double) getDef()))* (double) p.getAtk());
+    int damage = (int) floor( tempDamage );
+    hp = checkHp(hp - damage);
     return true;
 }
 

@@ -15,84 +15,14 @@ Vampire::Vampire(): Player(50, 25, 25, -1, 'V'){}
 Vampire::~Vampire(){
 }
 
-bool Vampire::onAttacked(Enemy &e) {
-  return e.attack(*this);
-}
-
-bool Vampire::baseAtk (Enemy & e){
-  bool goesThrough = e.onAttacked(*this);
-
+bool Vampire::attack(Enemy * e) {
+  bool goesThrough = e->onAttacked(*this);
   if (goesThrough){
-    this->changeHp(this->getHp()+5);
+    if (e->getChar()=='W'){
+      this->changeHp(this->getHp()-5);
+    }else {
+      this->changeHp(this->getHp()+5);
+    }
   }
   return goesThrough;
 }
-
-bool Vampire::baseOnAtk(Enemy & e){
-  double tempDamage = ceil( (100.0/(100.0+(double) getDef()))* (double) e.getAtk());
-  int damage = (int) floor( tempDamage );
-  this->changeHp(this->getHp()-damage);
-  return true;
-}
-
-bool Vampire::attack(Dragon &e){
-  return this->baseAtk(e);
-}
-
-bool Vampire::onAttacked(Dragon &e){
-  return this->baseOnAtk(e);
-}
-
-bool Vampire::attack(Dwarf &e){
-  bool goesThrough = e.onAttacked(*this);
-
-  if (goesThrough){
-    this->changeHp(this->getHp()-5);
-  }
-  return goesThrough;
-}
-
-bool Vampire::onAttacked(Dwarf &e){
-   return this->baseOnAtk(e);
-}
-
-bool Vampire::attack(Elf &e) {
-  return this->baseAtk(e);
-}
-
-bool Vampire::onAttacked(Elf &e){
-   return this->baseOnAtk(e);
-}
-
-bool Vampire::attack(Halfling &e) {
-  return this->baseAtk(e);
-}
-
-bool Vampire::onAttacked(Halfling &e){
-   return this->baseOnAtk(e);
-}
-
-bool Vampire::attack(Human &e){
-  return this->baseAtk(e);
-}
-
-bool Vampire::onAttacked(Human &e){
-   return this->baseOnAtk(e);
-}
-
-bool Vampire::attack(Merchant &e) {
-  return this->baseAtk(e);
-}
-
-bool Vampire::onAttacked(Merchant &e){
-  return this->baseOnAtk(e);
-}
-
-bool Vampire::attack(Orc &e) {
-  return this->baseAtk(e);
-}
-
-bool Vampire::onAttacked(Orc &e){
-  return this->baseOnAtk(e);
-}
-

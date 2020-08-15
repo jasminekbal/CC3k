@@ -101,6 +101,7 @@ string Ground::doorHelper(Ground & tile){
       tile.c = '+';
       return "";
     }
+      break;
     case State::Passageway:
     {
       player = tile.player;
@@ -109,15 +110,20 @@ string Ground::doorHelper(Ground & tile){
       tile.c = '+';
       return "";
     }
+      break;
     case State::Enemy:
       message = onAttack( tile );
       break;
     case State::Gold:
-    case State::DragonGold:
       message = collectGold( tile );
       break;
+    case State::DragonGold:
+      message = collectGold( tile );
+      tile.type = State::Door;
+      tile.c = '+';
+      break;
     case State::Potion:
-      usePotion( tile );
+      message = usePotion( tile );
       break;
     default:
       throw Exceptions( "We shouldn't be here, doorHelper ");
@@ -138,12 +144,21 @@ string Ground::enemyHelper(Ground & tile){
       throw InvalidMove( "Enemy tried to walk into one another" );
     }
   }
-  else if (type==State::Player){
-    if (player->onAttacked(*(tile.enemy))){  // true if attack landed
-      // tile remains enemy type
-      return "You have been attacked by an enemy!";
+  else if ( type==State::Player || type == State::DragonGold ){
+    if( player != nullptr ){
+      if( !(tile.enemy->getHasAttacked()) ){
+        tile.enemy->setHasAttacked( true );
+        if ( (tile.enemy)->attack( player.get() ) ){  // true if attack landed
+          // tile remains enemy type
+          return "You have been attacked by an enemy!";
+        } else {
+          return "An enemy tried to attack you but they failed!";
+        }
+      } else {
+        return "";
+      }
     } else {
-      return "An enemy tried to attack you but they failed!";
+      throw InvalidMove{"Enemy tried to move to an occupied tile"};
     }
   }
   else{
@@ -153,21 +168,24 @@ string Ground::enemyHelper(Ground & tile){
 
 
 string Ground::onAttack( Ground & tile ){
-  if (enemy->onAttacked(*(tile.player))){ // true if attack went through
+  if ( (tile.player)->attack( enemy.get() ) ){ // true if attack went through
     if (!(enemy->getHp())){ // true if enemy died
       gold = enemy->onDeath();
       if( gold != nullptr ){
         try{
           tile.player->collectGold(gold);
+          type = State::Ground;
+          c = '.';
         } catch(CantCollect e){  
           type = State::Gold;
           c = 'G';
           gold->setCanCollect(1);
         }
+      } else {
+        type = State::Ground;
+        c = '.';
       }
       enemy = nullptr;
-      type = State::Ground;
-      c = '.';
       return "You killed your enemy!";
     } else{
       // if player attacks enemy and enemy survives,
@@ -181,6 +199,7 @@ string Ground::onAttack( Ground & tile ){
       return "You attacked but you missed :(";
   } // give message
 }
+
 
 string Ground::usePotion( Ground & tile ){
   string message = "You used a " + potion->getType() + " potion";
@@ -206,10 +225,16 @@ string Ground::collectGold( Ground & tile ){
     return message + secondMessage;
   }
   catch (CantCollect e){
+    player = tile.player;
+    c = '@';
+    player->setLocation( this );
+    tile.player = nullptr;
     return "cannot collect gold that belongs to a living dragon";
   } catch (DragonStillAlive e) {
     player = tile.player;
-    
+    c = '@';
+    player->setLocation( this );
+    tile.player = nullptr;
     return e.getMessage();
   }
 }
@@ -234,6 +259,7 @@ string Ground::playerHelper(Ground & tile){
       player->setLocation( this );
       tile.type = State::Ground;
       tile.c = '.';
+      tile.player = nullptr;
       return "";
     }
     case State::Door:
@@ -243,17 +269,22 @@ string Ground::playerHelper(Ground & tile){
       c = '@';
       tile.c = '.';
       tile.type = State::Ground;
+      tile.player = nullptr;
       return "";
     }
     case State::Enemy:
       message = onAttack( tile );
       break;
     case State::Gold:
-    case State::DragonGold:
       message = collectGold( tile );
       break;
+    case State::DragonGold:
+      message = collectGold( tile );
+      tile.c = '.';
+      tile.type = State::Ground;
+      break;
     case State::Potion:
-      usePotion( tile );
+      message = usePotion( tile );
       break;
     default:
       throw Exceptions( "We shouldn't be here, groundPlayerHelper");
@@ -265,6 +296,45 @@ string Ground::playerHelper(Ground & tile){
 // TODO: move needs a way to update or return the user's message from attack, usepotion, getgold, etc.
 // TODO: errortrap still required!!!
 string Ground::move(Ground & tile){   // throws invalidMove exception if theres an error
+  string message;
+  switch( tile.type ){
+    case State::DragonGold:
+    {
+      message = playerHelper( tile );
+      if( tile.gold->getCanCollect() ){
+        player->collectGold( tile.gold );
+        c = '@';
+        type = State::Player;
+        player->setLocation( this );
+      } else {
+        tile.type = State::DragonGold;
+        tile.c = 'G';
+        if( tile.player == nullptr ){ //if the character successfully moves
+          c = '@';
+        } else { //if the character doesn't leave the tile
+          tile.c = '@';
+          c = enemy->getChar();
+        }
+      }
+    }
+      break;
+    case State::Player:
+      message = playerHelper(tile);
+      break;
+    case State::Enemy:
+      message = enemyHelper(tile);
+      break;
+    case State::Door:
+      message = doorHelper(tile);
+      break;
+    case State::Passageway:
+      message = passageWayHelper( tile );
+      break;
+    default: 
+      throw Exceptions( "We shouldn't be here, Ground move ");
+  }
+  return message;
+  /*
   if (tile.type == State::Player){
     return playerHelper(tile);
   }
@@ -273,12 +343,13 @@ string Ground::move(Ground & tile){   // throws invalidMove exception if theres 
   }
   // second if statement changes the tile that is being moved away from
   if (tile.type == State::Door){
-    return doorHelper(tile);
+    return 
   }
   else if (tile.type == State::Passageway){
     return passageWayHelper(tile);
   }
   throw Exceptions( "We shouldn't be here, Ground move ");
+  */
 } 
 
 // empties tile and makes it a ground tile
@@ -321,14 +392,16 @@ void Ground::notify(){
 
 // called so that this tile knows what its neighbours are up tos
 void Ground::notify(shared_ptr<Ground> whoNotified){ // check if there's a player near an enemy
-  if (enemy) type = State::Enemy;   // update enemy state
+  if (enemy) {
+    type = State::Enemy;   // update enemy state
+    enemy->setHasAttacked( false );
+  }
   playerNearEnemy = nullptr; // reset for now
   // check if there's a player near an enemy
   if (type == State::Enemy || (type == State::DragonGold && gold->getCanCollect()==0)){
     for (int x=0;x<neighbours.size(); x+=1){
       if(neighbours[x] != nullptr ){
-        Info i = neighbours[x]->getInfo();
-        if (i.state == State::Player){  // found a nearby player
+        if( neighbours[x]->player != nullptr ){ // found a nearby player
           playerNearEnemy = neighbours[x];
           return;
         }
@@ -371,9 +444,12 @@ string Ground::moveEnemy(){
   else if( type == State::DragonGold ){
     if( playerNearEnemy && gold->getCanCollect() == 0 ){
       auto dragonGold = static_pointer_cast<DragonGold>( gold );
-      if (dragonGold->attack(*(playerNearEnemy->player))) return "You were attacked by a dragon for trying to take its gold!!!";
-      else return "A dragon tried to attack you for being too close to its gold, but it missed. What a loser.";
-    }
+      if( !( dragonGold->getHasAttacked() ) ){
+        dragonGold->setHasAttacked( true );
+        if (dragonGold->attack( (playerNearEnemy->player).get() )) return "You were attacked by a dragon for trying to take its gold!!!";
+        else return "A dragon tried to attack you for being too close to its gold, but it missed. What a loser.";
+      } 
+    } 
   }
   else if (type==State::Enemy){
     // check if there's a player nearby that we need to attack

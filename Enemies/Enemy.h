@@ -29,24 +29,12 @@ class Enemy{
 
     public:
         Enemy(int hp, int atk, int def, char c);
-        virtual ~Enemy();
+        virtual ~Enemy() =0;
         
         bool baseOnAtk(Player & p);
 
-        virtual bool attack(Drow &d) = 0;  // this returns if the attack was succesful
-        virtual bool attack(Goblin &g) = 0;  // this returns if the attack was succesful
-        virtual bool attack(Shade &s) = 0;  // this returns if the attack was succesful
-        virtual bool attack(Troll &t) = 0;  // this returns if the attack was succesful
-        virtual bool attack(Vampire &v) = 0;  // this returns if the attack was succesful
-        
-        
-        virtual bool onAttacked(Player &p);
-
-        virtual bool onAttacked(Shade &g)= 0;
-        virtual bool onAttacked(Drow &d)= 0;
-        virtual bool onAttacked(Goblin &g)= 0;        
-        virtual bool onAttacked(Troll &t)= 0;
-        virtual bool onAttacked(Vampire &v)= 0; 
+        virtual bool attack(Player * p);
+        virtual bool onAttacked(Player & p);
 
         virtual std::shared_ptr<Gold> onDeath() = 0;
 
@@ -56,6 +44,9 @@ class Enemy{
         char getChar() const; //to see how to display
         virtual bool isHostile();
         virtual void makeHostile();
+
+        virtual void setHasAttacked( bool b ){}
+        virtual bool getHasAttacked() {return false;}
 };
 
 #endif

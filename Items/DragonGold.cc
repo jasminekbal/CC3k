@@ -15,11 +15,18 @@ void DragonGold::setDragon(std::shared_ptr<Dragon> d) {
     dragon = d;
 }
 
-bool DragonGold::attack(Player &p){
+bool DragonGold::attack(Player * p){
     if (rand() % 2 == 1){
-        p.onAttacked(*dragon);
+        p->onAttacked(*dragon);
         return true;
     }
     return false;
+}
+void DragonGold::setHasAttacked( bool b ){
+    dragon->setHasAttacked( b );
+}
+
+bool DragonGold::getHasAttacked(){
+    return dragon->getHasAttacked();
 }
 

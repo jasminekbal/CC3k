@@ -6,11 +6,12 @@
 #include "../Items/Potion.h"
 #include "../Exceptions.h"
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
 int Player::checkHp(int h) {
-    if (maxHealth == -1){
+    if (maxHealth == -1 && h>=0){
         return h;
     } else if( h <= maxHealth && h >=0 ) {
         return h;
@@ -103,14 +104,21 @@ void Player::newPlayer(){
     
 void Player::collectGold(shared_ptr<Gold> g){
     if (g->getCanCollect()){
-        //cout << "Hello" << endl;
-        //score ++;
-        //cout << "score: " << score << endl;
-        //cout << "getting change: " << g->getChange() << endl;
         score += g->getChange();
     }else {
         throw CantCollect("Can't collect gold");
     }
 }
 
+
+bool Player::onAttacked(Enemy & e){
+    double tempDamage = ceil( (100.0/(100.0+(double) e.getDef()))* (double) e.getAtk());
+    int damage = (int) floor( tempDamage );
+    this->changeHp(this->getHp()-damage);
+    return true;
+}
+
+bool Player::attack(Enemy * e){
+    return e->onAttacked( * this );
+}
 

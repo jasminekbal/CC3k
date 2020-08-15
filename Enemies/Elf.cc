@@ -16,96 +16,29 @@ Elf::Elf():Enemy(140, 30, 10, 'E'){
 
 Elf::~Elf(){}
 
-
-bool Elf::attack(Drow &d){
-    bool toAtk = this->randAtk();
-    if (toAtk){
-        d.onAttacked(*this);
-        return true;
+bool Elf::attack(Player * p){
+    if (p->getType()=='D'){
+        bool toAtk = this->randAtk();
+        if (toAtk){
+            p->onAttacked(*this);
+            return true;
+        } else {
+            return false;
+        }
     } else {
-        return false;
+        bool firstAtk = this->randAtk();
+        if (firstAtk){
+            p->onAttacked(*this);
+        }
+        bool secondAtk = this->randAtk();
+        if (secondAtk){
+            p->onAttacked(*this);
+        }
+
+        return firstAtk || secondAtk;
     }
+    
 }
-
-bool Elf::onAttacked(Player &p){
-    return p.attack(*this);
-}
-
-bool Elf::onAttacked(Drow &p){
-    baseOnAtk(p);
-    return true;
-}
-
-bool Elf::attack(Goblin &p) {
-    bool firstAtk = this->randAtk();
-    if (firstAtk){
-        p.onAttacked(*this);
-    }
-    bool secondAtk = this->randAtk();
-    if (secondAtk){
-        p.onAttacked(*this);
-    }
-
-    return firstAtk || secondAtk;
-}
-
-
-bool Elf::onAttacked(Goblin &p){
-    return baseOnAtk(p);
-}
-bool Elf::attack(Shade &p) {
-    bool firstAtk = this->randAtk();
-    if (firstAtk){
-        p.onAttacked(*this);
-    }
-    bool secondAtk = this->randAtk();
-    if (secondAtk){
-        p.onAttacked(*this);
-    }
-
-    return firstAtk || secondAtk;
-}
-
-bool Elf::onAttacked(Shade &p) {
-    return baseOnAtk(p);
-}
-
-bool Elf::attack(Troll &p) {
-    bool firstAtk = this->randAtk();
-    if (firstAtk){
-        p.onAttacked(*this);
-    }
-    bool secondAtk = this->randAtk();
-    if (secondAtk){
-        p.onAttacked(*this);
-    }
-
-    return firstAtk || secondAtk;
-}
-
-
-bool Elf::onAttacked(Troll &p) {
-    return baseOnAtk(p);
-}
-
-
-bool Elf::attack(Vampire &p) {
-    bool firstAtk = this->randAtk();
-    if (firstAtk){
-        p.onAttacked(*this);
-    }
-    bool secondAtk = this->randAtk();
-    if (secondAtk){
-        p.onAttacked(*this);
-    }
-
-    return firstAtk || secondAtk;
-}
-
-bool Elf::onAttacked(Vampire &p) {
-    return baseOnAtk(p);
-}
-
 
 void Elf::setGold(std::shared_ptr<Gold> g){
     gold = g;

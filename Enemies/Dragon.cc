@@ -12,80 +12,11 @@ using namespace std;
 
 Dragon::Dragon():Enemy(150, 30, 25, 'D'){
     dG = nullptr;
+    hasAttacked = false;
 }
 
 Dragon::~Dragon(){
 }
-
-bool Dragon::onAttacked(Player &p){
-    return p.attack(*this);
-}
-
-bool Dragon::attack(Drow &p) {
-    bool toAtk = this->randAtk();
-    if (toAtk){
-        p.onAttacked(*this);
-        return true;
-    } else {
-        return false;
-    }
-}  
-
-bool Dragon::onAttacked(Drow &p){
-    return baseOnAtk(p);
-}
-
-bool Dragon::attack(Goblin &p) {
-    bool toAtk = this->randAtk();
-    if (toAtk){
-        p.onAttacked(*this);
-        return true;
-    } else {
-        return false;
-    }
-}
-bool Dragon::onAttacked(Goblin &p){
-   return baseOnAtk(p);
-}
-
-bool Dragon::attack(Shade &p) {
-    bool toAtk = this->randAtk();
-    if (toAtk){
-        p.onAttacked(*this);
-        return true;
-    } else {
-        return false;
-    }
-}
-bool Dragon::onAttacked(Shade &p) {
-    return baseOnAtk(p);
-}
-bool Dragon::attack(Troll &p) {
-    bool toAtk = this->randAtk();
-    if (toAtk){
-        p.onAttacked(*this);
-        return true;
-    } else {
-        return false;
-    }
-}
-bool Dragon::onAttacked(Troll &p) {
-    return baseOnAtk(p);
-}
-bool Dragon::attack(Vampire &p) {
-    bool toAtk = this->randAtk();
-    if (toAtk){
-        p.onAttacked(*this);
-        return true;
-    } else {
-        return false;
-    }
-}
-
-bool Dragon::onAttacked(Vampire &p) {
-    return baseOnAtk(p);
-}
-
 
 void Dragon::setGold(std::shared_ptr<DragonGold> g){
     dG = g;
@@ -100,5 +31,14 @@ std::shared_ptr<Gold> Dragon::onDeath(){
     dG->setDragon(nullptr);
     dG = nullptr;
     return nullptr;
+}
+
+
+void Dragon::setHasAttacked( bool b ){
+    hasAttacked = b;
+}
+
+bool Dragon::getHasAttacked(){
+    return hasAttacked;
 }
 
