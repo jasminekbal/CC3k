@@ -94,11 +94,40 @@ string Ground::doorHelper(Ground & tile){
     type = State::Player;
   }
   else if (type==State::Passageway){
+    tile.c = '+';
+    player = tile.player;
+    player->setLocation( this );
+    c = '@';
   }
-  tile.c = '+';
-  player = tile.player;
-  player->setLocation( this );
-  c = '@';
+  else if (type==State::Enemy){ // need to be able to exchange enemy w/ its gold if it dies
+    if (enemy->onAttacked(*(tile.player))){ // true if attack went through
+      if (!(enemy->getHp())){ // true if enemy died
+        gold = enemy->onDeath();
+        if( gold != nullptr ){
+          try{
+            tile.player->collectGold(gold);
+          } catch(CantCollect e){  
+            type = State::Gold;
+            c = 'G';
+            gold->setCanCollect(1);
+          }
+        }
+        enemy = nullptr;
+        return "You killed your enemy!";
+      }
+      else{
+        // if player attacks enemy and enemy survives,
+        // enemy will become hostile
+        enemy->makeHostile();
+        return "You hit your enemy!";
+      }
+    }
+    else{
+      // enemy will become hostile
+      enemy->makeHostile();
+      return "You attacked but you missed :(";
+    } // give message
+  }
   return "";
 }
 
