@@ -90,16 +90,31 @@ string Ground::passageWayHelper(Ground & tile){
 }
 
 string Ground::doorHelper(Ground & tile){
-  if (type==State::Ground){
-    type = State::Player;
+  string message;
+  switch( type ){
+    case State::Ground: 
+    {
+      type = State::Player;
+      player = tile.player;
+      player->setLocation( this );
+      c = '@';
+      tile.c = '+';
+      return "";
+    }
+    case State::Passageway:
+      message = onAttacked( tile );
+      break;
+    case State::Gold:
+    case State::DragonGold:
+      message = collectGold( tile );
+      break;
+    case State::Potion:
+      usePotion( tile );
+      break;
+    default:
+      throw Exceptions( "We shouldn't be here, doorHelper ");
   }
-  else if (type==State::Passageway){
-  }
-  tile.c = '+';
-  player = tile.player;
-  player->setLocation( this );
-  c = '@';
-  return "";
+  return message;
 }
 
 string Ground::enemyHelper(Ground & tile){
@@ -128,6 +143,67 @@ string Ground::enemyHelper(Ground & tile){
   }
 }
 
+
+string Ground::onAttack( Ground & tile ){
+  if (enemy->onAttacked(*(tile.player))){ // true if attack went through
+    if (!(enemy->getHp())){ // true if enemy died
+      gold = enemy->onDeath();
+      if( gold != nullptr ){
+        try{
+          tile.player->collectGold(gold);
+        } catch(CantCollect e){  
+          type = State::Gold;
+          c = 'G';
+          gold->setCanCollect(1);
+        }
+      }
+      enemy = nullptr;
+      type = State::Ground;
+      c = '.';
+      return "You killed your enemy!";
+    } else{
+      // if player attacks enemy and enemy survives,
+      // enemy will become hostile
+      enemy->makeHostile();
+      return "You hit your enemy!";
+    }
+  } else{
+      // enemy will become hostile
+      enemy->makeHostile();
+      return "You attacked but you missed :(";
+  } // give message
+}
+
+string Ground::usePotion(Ground & tile ){
+  string message = "You used a " + potion->getType() + " potion";
+  potion->usePotion(tile.player);
+  // delete Potion
+  potion = nullptr;
+  type = State::Ground;
+  c = '.';
+  string secondMessage = move( tile );
+  return message + secondMessage;
+}
+
+string Ground::collectGold( Ground & tile ){
+  try{
+    tile.player->collectGold(gold);
+    string s = (gold->getChange() > 1) ? "s" : "";
+    string message = "You collected " + to_string(gold->getChange()) + " coin" + s ; //correct grammar for bonus marks? 
+    // delete Gold
+    gold = nullptr;
+    type = State::Ground;
+    c = '.';
+    string secondMessage = move( tile );
+    return message + secondMessage;
+  }
+  catch (CantCollect e){
+    return "cannot collect gold that belongs to a living dragon";
+  } catch (DragonStillAlive e) {
+    return e.getMessage();
+  }
+}
+
 // handles movement of player
 // changes player location for successful move
 string Ground::playerHelper(Ground & tile){
@@ -138,88 +214,40 @@ string Ground::playerHelper(Ground & tile){
   else{
     (tile.player)->setIsStair(0);
   }
-  if (type==State::Ground){
-    type = State::Player;
-    player = tile.player;
-    player->setLocation(this);
-    c = '@';
-    tile.type = State::Ground;
-    tile.player = nullptr;
-    tile.c = '.';
-    return "";
-  }
-  else if (type==State::Enemy){ // need to be able to exchange enemy w/ its gold if it dies
-    if (enemy->onAttacked(*(tile.player))){ // true if attack went through
-      if (!(enemy->getHp())){ // true if enemy died
-        gold = enemy->onDeath();
-        if( gold != nullptr ){
-          try{
-            tile.player->collectGold(gold);
-          } catch(CantCollect e){  
-            type = State::Gold;
-            c = 'G';
-            gold->setCanCollect(1);
-          }
-        }
-        enemy = nullptr;
-        return "You killed your enemy!";
+  string message;
+  switch( type ){
+    case State::Ground: 
+    {
+      type = State::Player;
+      player = tile.player;
+      player->setLocation( this );
+      c = '@';
+      tile.c = '+';
+      return "";
+    }
+    case State::Door:
+      {
+        player = tile.player;
+        c = '@';
+        player->setLocation( this );
+        tile.type = State::Ground;
+        tile.c = '.';
+        return "";
       }
-      else{
-        // if player attacks enemy and enemy survives,
-        // enemy will become hostile
-        enemy->makeHostile();
-        return "You hit your enemy!";
-      }
-    }
-    else{
-      // enemy will become hostile
-      enemy->makeHostile();
-      return "You attacked but you missed :(";
-    } // give message
+    case State::Passageway:
+      message = onAttacked( tile );
+      break;
+    case State::Gold:
+    case State::DragonGold:
+      message = collectGold( tile );
+      break;
+    case State::Potion:
+      usePotion( tile );
+      break;
+    default:
+      throw Exceptions( "We shouldn't be here, groundPlayerHelper");
   }
-  else if (type==State::Potion){
-    string message = "You used a " + potion->getType() + " potion";
-    potion->usePotion(tile.player);
-    // delete Potion
-    potion = nullptr;
-    type = State::Ground;
-    c = '.';
-    return message;
-  }
-  else if (type==State::Gold){
-    string s = (gold->getChange() > 1) ? "s" : "";
-    string message = "You collected " + to_string(gold->getChange()) + " coin" + s ; //correct grammar for bonus marks? 
-    cout << message << endl;
-    tile.player->collectGold(gold);
-    // delete Gold
-    gold = nullptr;
-    type = State::Ground;
-    c = '.';
-    return message;
-  }
-  else if (type==State::Door){
-    player = tile.player;
-    c = '@';
-    player->setLocation( this );
-    tile.type = State::Ground;
-    tile.c = '.';
-    return "";
-  }
-  else if (type==State::DragonGold){
-    try{
-      (player)->collectGold(gold);
-      // delete Gold
-      gold = nullptr;
-      type = State::Gold;
-      c = '.';
-    }
-    catch (CantCollect e){
-      return "cannot collect gold that belongs to a living dragon";
-    } catch (DragonStillAlive e) {
-      return e.getMessage();
-    }
-  }
-  throw Exceptions( "We shouldn't be here, Ground Player Helper ");
+  return message;
 }
 
 // moves players and enemies as well as handling all interactions between objects and characters

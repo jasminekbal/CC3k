@@ -98,6 +98,7 @@ std::shared_ptr<Gold> Dragon::getGold(){
 std::shared_ptr<Gold> Dragon::onDeath(){
     dG->setCanCollect(true);
     dG->setDragon(nullptr);
+    dG = nullptr;
     return nullptr;
 }
 
