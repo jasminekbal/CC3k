@@ -43,6 +43,10 @@ Ground::Ground(int row, int col, State t, int room, std::shared_ptr<Enemy> e, st
         gold = g;
         c='G';
     }
+    else if (type == State::DragonGold){
+        gold = g;
+        c='G';
+    }
 }
 
 Ground::~Ground(){}
@@ -99,20 +103,23 @@ string Ground::doorHelper(Ground & tile){
 }
 
 string Ground::enemyHelper(Ground & tile){
-  if (type==State::Ground){
-    enemy = tile.enemy;
-    c = enemy->getChar();
-    tile.type = State::Ground;
-    tile.c = '.';
-    tile.enemy = nullptr;
-    return "";
+  if (type==State::Ground || type == State::Enemy ){
+    if( enemy == nullptr ) {
+      enemy = tile.enemy;
+      c = enemy->getChar();
+      tile.type = State::Ground;
+      tile.c = '.';
+      tile.enemy = nullptr;
+      return "";
+    } else {
+      throw InvalidMove( "Enemy tried to walk into one another" );
+    }
   }
   else if (type==State::Player){
     if (player->onAttacked(*(tile.enemy))){  // true if attack landed
       // tile remains enemy type
       return "You have been attacked by an enemy!";
-    }
-    else{
+    } else {
       return "An enemy tried to attack you but they failed!";
     }
   }
@@ -139,8 +146,6 @@ string Ground::playerHelper(Ground & tile){
     tile.type = State::Ground;
     tile.player = nullptr;
     tile.c = '.';
-    tile.notify();
-    notify(); // notify neighbours of movement
     return "";
   }
   else if (type==State::Enemy){ // need to be able to exchange enemy w/ its gold if it dies
@@ -188,7 +193,7 @@ string Ground::playerHelper(Ground & tile){
     tile.player->collectGold(gold);
     // delete Gold
     gold = nullptr;
-    type = State::Gold;
+    type = State::Ground;
     c = '.';
     return message;
   }
@@ -198,9 +203,6 @@ string Ground::playerHelper(Ground & tile){
     player->setLocation( this );
     tile.type = State::Ground;
     tile.c = '.';
-    cout << "row " << row << "col " << col << endl;
-    tile.notify();
-    notify();
     return "";
   }
   else if (type==State::DragonGold){
@@ -211,11 +213,12 @@ string Ground::playerHelper(Ground & tile){
       type = State::Gold;
       c = '.';
     }
-    catch (DragonStillAlive e){
+    catch (CantCollect e){
       return "cannot collect gold that belongs to a living dragon";
+    } catch (DragonStillAlive e) {
+      return e.getMessage();
     }
   }
-  cout << "We shouldn't be here, Ground Player Helper " << endl;
   throw Exceptions( "We shouldn't be here, Ground Player Helper ");
 }
 
@@ -236,8 +239,6 @@ string Ground::move(Ground & tile){   // throws invalidMove exception if theres 
   else if (tile.type == State::Passageway){
     return passageWayHelper(tile);
   }
-  cout << "We shouldn't be here, Ground move " << endl;
-  cout << "Ground? " << (tile.type == State::Ground) << endl;
   throw Exceptions( "We shouldn't be here, Ground move ");
 } 
 
@@ -270,7 +271,7 @@ void Ground::attach(shared_ptr<Ground> g) { neighbours.push_back(g); }
 void Ground::attach(std::shared_ptr<TextDisplay> td){ this->td = td; }
 
 // notifies observers
-void Ground::notify(){  
+void Ground::notify(){ 
   for (auto &ob : neighbours) {
     if( ob != nullptr ){
       ob->notify( make_shared<Ground>(*this) );
@@ -288,10 +289,8 @@ void Ground::notify(shared_ptr<Ground> whoNotified){ // check if there's a playe
     for (int x=0;x<neighbours.size(); x+=1){
       if(neighbours[x] != nullptr ){
         Info i = neighbours[x]->getInfo();
-        if (col == i.col && row == i.row){
-          if (i.state == State::Player){  // found a nearby player
-            playerNearEnemy = neighbours[x];
-          }
+        if (i.state == State::Player){  // found a nearby player
+          playerNearEnemy = neighbours[x];
           return;
         }
       }
@@ -314,14 +313,10 @@ void Ground::setStair( bool b ){
 
 // calls move on correct neighbour
 string Ground::movePlayer(int dir){
-  //cout << "Is this a player? " << (type == State::Player) << endl;
-  //cout << "Is this a door? " << (type == State::Door) << endl;
   if (neighbours[dir]){
-    //cout << "Is neighbour a door? " << (neighbours[dir]->type == State::Door) << endl;
-    //cout << "Is neighbour a passageway? " << (neighbours[dir]->type == State::Passageway) << endl;
-    //cout << "Is neighbour a ground? " << (neighbours[dir]->type == State::Ground) << endl;
     string message = (*neighbours[dir]).move(*this);
-    //cout << "Is this a ground afterwards? " << (type == State::Ground) << endl;
+    notify(); // notify neighbours of movement
+    (*neighbours[dir]).notify();
     return message;
   }
   else{
@@ -333,6 +328,14 @@ string Ground::movePlayer(int dir){
 string Ground::moveEnemy(){
   if (type == State::Passageway) throw InvalidMove{"Not an enemy"};
   else if (type==State::Door) throw InvalidMove{"Not an enemy"};
+  // dragon attacks when someone's near its gold and it's alive
+  else if( type == State::DragonGold ){
+    if( playerNearEnemy && gold->getCanCollect() == 0 ){
+      auto dragonGold = static_pointer_cast<DragonGold>( gold );
+      dragonGold->attack(*(playerNearEnemy->player));
+      return "You were attacked by a dragon for trying to take its gold!!!";
+    }
+  }
   else if (type==State::Enemy){
     // check if there's a player nearby that we need to attack
     if (playerNearEnemy && enemy->isHostile()){
@@ -344,7 +347,7 @@ string Ground::moveEnemy(){
       if (enemy->getChar() == 'D') throw InvalidMove{"Dragon doesn't need to move"};
       return randomMove();
     }
-  }
+  } 
   //cout << "Not an enemy";
   throw InvalidMove{"Not an enemy"};
 }
@@ -360,12 +363,15 @@ string Ground::randomMove(){
       if (neighbours[random] == nullptr ){
         throw InvalidMove{"Enemy tried to move to a wall"};
       }
+      else if(!(enemy->isHostile()) && (neighbours[random]->getInfo()).state==State::Player) {
+        throw InvalidMove{"Enemy accidentally tried to attack a player"};
+      }
       else {
         //cout << "trying to move" << endl;
         message =  (*(neighbours[random])).move(*this);
         //cout << "moved successfully " <<endl;
         return message;
-        }
+      }
     }
     catch(InvalidMove e){
       //cout << "I caught " << e.getMessage() << endl;
@@ -380,8 +386,7 @@ void Ground::setPlayer( std::shared_ptr<Player> p){
   player = p; 
   c = '@';
   type = State::Player;
-  notify( make_shared<Ground>( * this ));
-  td->notify( make_shared<Tile>( * this ));
+  notify();
 }
 
 void Ground::setEnemy( std::shared_ptr<Enemy> e){ 

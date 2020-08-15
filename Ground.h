@@ -2,6 +2,7 @@
 #define GROUND_H
 #include "Info.h"
 #include "Tile.h"
+#include <iostream>
 #include "Observer.h"
 #include <memory>
 

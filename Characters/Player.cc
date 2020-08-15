@@ -103,10 +103,10 @@ void Player::newPlayer(){
     
 void Player::collectGold(shared_ptr<Gold> g){
     if (g->getCanCollect()){
-        cout << "Hello" << endl;
-        score ++;
-        cout << "score: " << score << endl;
-        cout << "getting change: " << g->getChange() << endl;
+        //cout << "Hello" << endl;
+        //score ++;
+        //cout << "score: " << score << endl;
+        //cout << "getting change: " << g->getChange() << endl;
         score += g->getChange();
     }else {
         throw CantCollect("Can't collect gold");

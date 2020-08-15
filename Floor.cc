@@ -187,7 +187,7 @@ std::shared_ptr<Dragon> Floor::getDragon( int row, int col ){
                     auto gold = dragon->getGold();
                     if( gold == nullptr ){
                         return dragon;
-                    }
+                    } 
                 }
             }
         }
@@ -199,8 +199,8 @@ void Floor::checkDragonGold(){
     for( auto r: tiles ){
         for( auto tile: r ){
             if( tile->type == State::DragonGold ){ //if it is a gold 
-                auto ground = static_pointer_cast< Ground >( tile ); 
-                auto dragonGold = static_pointer_cast< DragonGold > ( ground->getGold() ); //if it is a dragonGold
+                auto ground = dynamic_pointer_cast< Ground >( tile ); 
+                auto dragonGold = dynamic_pointer_cast< DragonGold > ( ground->getGold() ); //if it is a dragonGold
                 int row = ground->row;
                 int col = ground->col;
                 auto dragon = getDragon( row, col );
