@@ -208,6 +208,8 @@ string Ground::collectGold( Ground & tile ){
   catch (CantCollect e){
     return "cannot collect gold that belongs to a living dragon";
   } catch (DragonStillAlive e) {
+    player = tile.player;
+    
     return e.getMessage();
   }
 }
@@ -235,14 +237,14 @@ string Ground::playerHelper(Ground & tile){
       return "";
     }
     case State::Door:
-      {
+    {
       player = tile.player;
       player->setLocation( this );
       c = '@';
       tile.c = '.';
       tile.type = State::Ground;
       return "";
-      }
+    }
     case State::Enemy:
       message = onAttack( tile );
       break;
@@ -369,8 +371,8 @@ string Ground::moveEnemy(){
   else if( type == State::DragonGold ){
     if( playerNearEnemy && gold->getCanCollect() == 0 ){
       auto dragonGold = static_pointer_cast<DragonGold>( gold );
-      dragonGold->attack(*(playerNearEnemy->player));
-      return "You were attacked by a dragon for trying to take its gold!!!";
+      if (dragonGold->attack(*(playerNearEnemy->player))) return "You were attacked by a dragon for trying to take its gold!!!";
+      else return "A dragon tried to attack you for being too close to its gold, but it missed. What a loser.";
     }
   }
   else if (type==State::Enemy){

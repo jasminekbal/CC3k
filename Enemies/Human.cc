@@ -13,7 +13,7 @@ using namespace std;
 
 
 Human::Human() : Enemy(140, 20, 20, 'H'){
-    auto newG = std::make_shared<Gold>(4, true);
+    auto newG = std::make_shared<Gold>(4, false);
     this->setGold(newG);
 }
 

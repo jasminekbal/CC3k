@@ -1,4 +1,5 @@
 #include "DragonGold.h"
+#include "../Exceptions.h"
 #include "../Enemies/Dragon.h"
 #include "../Characters/Player.h"
 
@@ -14,7 +15,11 @@ void DragonGold::setDragon(std::shared_ptr<Dragon> d) {
     dragon = d;
 }
 
-void DragonGold::attack(Player &p){
-    p.onAttacked(*dragon);
+bool DragonGold::attack(Player &p){
+    if (rand() % 2 == 1){
+        p.onAttacked(*dragon);
+        return true;
+    }
+    return false;
 }
 

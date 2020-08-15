@@ -14,7 +14,7 @@ class DragonGold: public Gold{
     DragonGold();
     ~DragonGold();
     void setDragon(std::shared_ptr<Dragon> d);
-    void attack(Player &p);
+    bool attack(Player &p);
 };
 
 #endif
