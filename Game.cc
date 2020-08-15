@@ -82,9 +82,7 @@ void Game::print(){
 std::string Game::moveCharacter( int dir ){
     string message = "";
     try{
-        cout << "getting location" << endl;
         p->getLocation();
-        cout << "got location " << (p->getLocation() == nullptr) << endl;
         message = (p->getLocation())->movePlayer(dir) + "\n";
     }
     catch (WallMove e){

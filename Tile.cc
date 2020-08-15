@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace std;
 
-Tile::Tile(int row, int col, State t): row{row}, col{col}, type{t} {
+Tile::Tile(int row, int col, State t): type{t}, row{row}, col{col}  {
     //  Whitespace = ' ', HorizontalWall = '-', 
     // VerticalWall='|', Door = '+'
     if (type == State::Whitespace){

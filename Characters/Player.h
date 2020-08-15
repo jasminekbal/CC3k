@@ -29,8 +29,7 @@ class Player {
     int checkStat(int val);
 
     protected:
-    int score = 0;
-    int hp, atk, def, maxHealth;
+    int score, hp, atk, def, maxHealth;
     
     void changeAtk(int newA);
     void changeDef(int newD);
@@ -71,7 +70,7 @@ class Player {
     virtual bool onAttacked(Orc &e)= 0;
     void newPlayer(); //called when there is a new floor
     char getType();
-    
+
     void collectGold(std::shared_ptr<Gold> g);
 
     friend class Potion;

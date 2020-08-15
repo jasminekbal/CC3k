@@ -6,6 +6,7 @@
 #include "../Items/RestoreHealth.h"
 #include "../Items/WoundAttack.h"
 #include "../Items/WoundDefence.h"
+#include "../Exceptions.h"
 
 using namespace std;
 
@@ -31,6 +32,8 @@ std::shared_ptr<Potion> RandomPotion::get(){
     }
     if( type < rh + ba + bd + ph + wa + wd ){
         return make_shared<WoundDef>();
+    } else {
+        throw Exceptions( "Not a valid int " );
     }
 }
 

@@ -94,18 +94,25 @@ std::shared_ptr<Enemy> Floor::getEnemy( char c ){
     switch( c ){
         case 'H':
             enemy = make_shared<Human>();
+            break;
         case 'W':
             enemy = make_shared<Dwarf>();
+            break;
         case 'E':
             enemy = make_shared<Elf>();
+            break;
         case 'O':
             enemy = make_shared<Orc>();
+            break;
         case 'M':
             enemy = make_shared<Merchant>();
+            break;
         case 'D':
             enemy = make_shared<Dragon>();
+            break;
         case 'L':
             enemy = make_shared<Halfling>();
+            break;
     }
     return enemy;
 }
@@ -173,6 +180,7 @@ std::shared_ptr<Dragon> Floor::getDragon( int row, int col ){
             else
             {
                 auto neighbour = tiles[i][j];
+                //cout << "row " << i << " col " << j << neighbour->c << endl;
                 if( neighbour->getChar() == 'D' ){
                     auto ground = static_pointer_cast<Ground>( neighbour );
                     auto dragon  = static_pointer_cast<Dragon>( ground->getEnemy() );

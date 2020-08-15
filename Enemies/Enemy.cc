@@ -35,7 +35,7 @@ void Enemy::setDef(int def){
     def = checkStat(def);
 }
 
-Enemy::Enemy(int hp, int atk, int def, char c): hp(hp), atk(atk), def(def), c(c){
+Enemy::Enemy(int hp, int atk, int def, char c): c(c), hp(hp), atk(atk), def(def){
 }
 
 Enemy::~Enemy(){

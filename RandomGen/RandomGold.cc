@@ -4,6 +4,7 @@
 #include "../Items/Gold.h"
 #include "../Items/DragonGold.h"
 #include "../Enemies/Dragon.h"
+#include "../Exceptions.h"
 
 using namespace std;
 
@@ -20,6 +21,8 @@ std::shared_ptr<Gold> RandomGold::get(){
     } 
     if( type < small + dragon + normal  ){
         return make_shared<Gold>(2, true);
+    } else {
+        throw Exceptions( "Not a valid int " );
     }
 }
 

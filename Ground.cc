@@ -148,12 +148,14 @@ string Ground::playerHelper(Ground & tile){
     if (enemy->onAttacked(*(tile.player))){ // true if attack went through
       if (!(enemy->getHp())){ // true if enemy died
         gold = enemy->onDeath();
-        try{
-          tile.player->collectGold(gold);
-        } catch(CantCollect e){  
-          type = State::Gold;
-          c = 'G';
-          gold->setCanCollect(1);
+        if( gold != nullptr ){
+          try{
+            tile.player->collectGold(gold);
+          } catch(CantCollect e){  
+            type = State::Gold;
+            c = 'G';
+            gold->setCanCollect(1);
+          }
         }
         enemy = nullptr;
         return "You killed your enemy!";
@@ -183,7 +185,7 @@ string Ground::playerHelper(Ground & tile){
   else if (type==State::Gold){
     string message = "You collected " + to_string(gold->getChange()) + " coin(s)";
     cout << message << endl;
-    (player)->collectGold(gold);
+    tile.player->collectGold(gold);
     // delete Gold
     gold = nullptr;
     type = State::Gold;

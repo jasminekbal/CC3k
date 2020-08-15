@@ -7,6 +7,7 @@
 #include "../Enemies/Human.h"
 #include "../Enemies/Merchant.h"
 #include "../Enemies/Orc.h"
+#include "../Exceptions.h"
 
 using namespace std;
 
@@ -30,8 +31,10 @@ std::shared_ptr<Enemy> RandomEnemy::get(){
     if( type < m + o + e + w + h ){
         return make_shared<Merchant>();
     }
-    if( type < l + o + e + w + h ){
+    if( type < l + m + o + e + w + h ){
         return make_shared<Halfling>();
+    } else {
+        throw Exceptions( "Not a valid int " );
     }
 }
 

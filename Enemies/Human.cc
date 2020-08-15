@@ -22,7 +22,7 @@ Human::~Human(){
 }
 
 bool Human::onAttacked(Player &p){
-    p.attack(*this);
+    return p.attack(*this);
 }
 
 bool Human::attack(Shade &p){
