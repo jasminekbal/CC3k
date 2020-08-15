@@ -102,7 +102,15 @@ string Ground::doorHelper(Ground & tile){
       return "";
     }
     case State::Passageway:
-      message = onAttacked( tile );
+    {
+      player = tile.player;
+      player->setLocation( this );
+      c = '@';
+      tile.c = '+';
+      return "";
+    }
+    case State::Enemy:
+      message = onAttack( tile );
       break;
     case State::Gold:
     case State::DragonGold:
@@ -174,7 +182,7 @@ string Ground::onAttack( Ground & tile ){
   } // give message
 }
 
-string Ground::usePotion(Ground & tile ){
+string Ground::usePotion( Ground & tile ){
   string message = "You used a " + potion->getType() + " potion";
   potion->usePotion(tile.player);
   // delete Potion
@@ -220,22 +228,23 @@ string Ground::playerHelper(Ground & tile){
     {
       type = State::Player;
       player = tile.player;
-      player->setLocation( this );
       c = '@';
-      tile.c = '+';
+      player->setLocation( this );
+      tile.type = State::Ground;
+      tile.c = '.';
       return "";
     }
     case State::Door:
       {
-        player = tile.player;
-        c = '@';
-        player->setLocation( this );
-        tile.type = State::Ground;
-        tile.c = '.';
-        return "";
+      player = tile.player;
+      player->setLocation( this );
+      c = '@';
+      tile.c = '.';
+      tile.type = State::Ground;
+      return "";
       }
-    case State::Passageway:
-      message = onAttacked( tile );
+    case State::Enemy:
+      message = onAttack( tile );
       break;
     case State::Gold:
     case State::DragonGold:

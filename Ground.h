@@ -29,6 +29,9 @@ class Ground: public Tile, public Observer{
     std::string randomMove();
 
     // helper functions for move
+    std::string onAttack( Ground & tile );
+    std::string usePotion( Ground & tile );
+    std::string collectGold( Ground & tile );
     std::string passageWayHelper(Ground & tile);
     std::string doorHelper(Ground & tile);
     std::string enemyHelper(Ground & tile);
