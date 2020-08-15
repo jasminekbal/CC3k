@@ -181,7 +181,7 @@ int main( int argc, char * argv[] )
                 if (message == ""){
                     message = "Player moved " + cmd;
                 }
-                game.print();
+                //game.print();
                 printStats( * p, message, name, game);
                 if (toMoveEnemies(message)){
                     message = game.tick();

@@ -75,28 +75,26 @@ void Ground::clear(){
 string Ground::passageWayHelper(Ground & tile){
   if (type==State::Ground){
     type = State::Player;
-    player = tile.player;
-    c = '@';
   }
   else if (type==State::Door){
-    player = tile.player;
-    c = '@';
   }
   tile.c = '#';
+  c = '@';
+  player = tile.player;
+  player->setLocation( this );
   return "";
 }
 
 string Ground::doorHelper(Ground & tile){
   if (type==State::Ground){
     type = State::Player;
-    player = tile.player;
-    c = '@';
   }
   else if (type==State::Passageway){
-    player = tile.player;
-    c = '@';
   }
   tile.c = '+';
+  player = tile.player;
+  player->setLocation( this );
+  c = '@';
   return "";
 }
 
@@ -139,6 +137,7 @@ string Ground::playerHelper(Ground & tile){
     player->setLocation(this);
     c = '@';
     tile.type = State::Ground;
+    tile.player = nullptr;
     tile.c = '.';
     tile.notify();
     notify(); // notify neighbours of movement
@@ -183,7 +182,8 @@ string Ground::playerHelper(Ground & tile){
     return message;
   }
   else if (type==State::Gold){
-    string message = "You collected " + to_string(gold->getChange()) + " coin(s)";
+    string s = (gold->getChange() > 1) ? "s" : "";
+    string message = "You collected " + to_string(gold->getChange()) + " coin" + s ; //correct grammar for bonus marks? 
     cout << message << endl;
     tile.player->collectGold(gold);
     // delete Gold
@@ -195,8 +195,12 @@ string Ground::playerHelper(Ground & tile){
   else if (type==State::Door){
     player = tile.player;
     c = '@';
+    player->setLocation( this );
     tile.type = State::Ground;
     tile.c = '.';
+    cout << "row " << row << "col " << col << endl;
+    tile.notify();
+    notify();
     return "";
   }
   else if (type==State::DragonGold){
@@ -208,7 +212,7 @@ string Ground::playerHelper(Ground & tile){
       c = '.';
     }
     catch (DragonStillAlive e){
-      return "Cannot collect gold that belongs to a living dragon";
+      return "cannot collect gold that belongs to a living dragon";
     }
   }
   cout << "We shouldn't be here, Ground Player Helper " << endl;
@@ -311,10 +315,13 @@ void Ground::setStair( bool b ){
 // calls move on correct neighbour
 string Ground::movePlayer(int dir){
   //cout << "Is this a player? " << (type == State::Player) << endl;
+  //cout << "Is this a door? " << (type == State::Door) << endl;
   if (neighbours[dir]){
+    //cout << "Is neighbour a door? " << (neighbours[dir]->type == State::Door) << endl;
+    //cout << "Is neighbour a passageway? " << (neighbours[dir]->type == State::Passageway) << endl;
+    //cout << "Is neighbour a ground? " << (neighbours[dir]->type == State::Ground) << endl;
     string message = (*neighbours[dir]).move(*this);
-    //cout << "Is neighbour a player? " << (neighbours[dir]->type == State::Player) << endl;
-    //cout << "Is this a player afterwards? " << (type == State::Player) << endl;
+    //cout << "Is this a ground afterwards? " << (type == State::Ground) << endl;
     return message;
   }
   else{
