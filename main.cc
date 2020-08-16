@@ -317,7 +317,7 @@ int getDifficulty(){
     while (cin >> inp){
         try{
             int dif = stoi(inp);
-            if (0 <= dif && dif <= 10) return dif;
+            if (0 <= dif && dif <= 3) return dif;
             else cout << endl << "Please enter an integer between 0 and 3 inclusive:" << endl << endl;
         }
         catch(std::invalid_argument const &e){
