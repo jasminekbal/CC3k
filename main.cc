@@ -313,15 +313,15 @@ bool toMoveEnemies(std::string message){
 
 int getDifficulty(){
     std::string inp;
-    cout << "What difficulty would you like to play at? Enter a number between 0 and 10 where 0 is the default (and also the easiest):" << endl;
+    cout << "What difficulty would you like to play at? Enter a number between 0 and 3 where 0 is the default (and also the easiest):" << endl;
     while (cin >> inp){
         try{
             int dif = stoi(inp);
             if (0 <= dif && dif <= 10) return dif;
-            else cout << endl << "Please enter an integer between 0 and 10 inclusive:" << endl << endl;
+            else cout << endl << "Please enter an integer between 0 and 3 inclusive:" << endl << endl;
         }
         catch(std::invalid_argument const &e){
-            cout << endl << "Please enter an integer between 0 and 10 inclusive:" << endl << endl;
+            cout << endl << "Please enter an integer between 0 and 3 inclusive:" << endl << endl;
         }
     }
     cout << endl << endl;

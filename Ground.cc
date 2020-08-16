@@ -304,10 +304,10 @@ string Ground::move(Ground & tile){   // throws invalidMove exception if theres 
     {
       message = playerHelper( tile );
       if( tile.gold->getCanCollect() ){
-        player->collectGold( tile.gold );
-        c = '@';
-        type = State::Player;
-        player->setLocation( this );
+        tile.player->collectGold( tile.gold );
+        tile.gold = nullptr;
+        tile.type = State::Player;
+        tile.c = '@';
       } else {
         tile.type = State::DragonGold;
         tile.c = 'G';
