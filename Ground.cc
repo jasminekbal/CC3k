@@ -99,6 +99,7 @@ string Ground::doorHelper(Ground & tile){
       player->setLocation( this );
       c = '@';
       tile.c = '+';
+      tile.player = nullptr;
       return "";
     }
       break;
@@ -108,6 +109,7 @@ string Ground::doorHelper(Ground & tile){
       player->setLocation( this );
       c = '@';
       tile.c = '+';
+      tile.player = nullptr;
       return "";
     }
       break;
@@ -311,7 +313,7 @@ string Ground::move(Ground & tile){   // throws invalidMove exception if theres 
         tile.c = 'G';
         if( tile.player == nullptr ){ //if the character successfully moves
           c = '@';
-        } else { //if the character doesn't leave the tile
+        } else { //if the character doesn't leave the tile, it attacked an enemy
           tile.c = '@';
           c = enemy->getChar();
         }
@@ -334,22 +336,6 @@ string Ground::move(Ground & tile){   // throws invalidMove exception if theres 
       throw Exceptions( "We shouldn't be here, Ground move ");
   }
   return message;
-  /*
-  if (tile.type == State::Player){
-    return playerHelper(tile);
-  }
-  else if (tile.type == State::Enemy){
-    return enemyHelper(tile);
-  }
-  // second if statement changes the tile that is being moved away from
-  if (tile.type == State::Door){
-    return 
-  }
-  else if (tile.type == State::Passageway){
-    return passageWayHelper(tile);
-  }
-  throw Exceptions( "We shouldn't be here, Ground move ");
-  */
 } 
 
 // empties tile and makes it a ground tile
@@ -406,7 +392,7 @@ void Ground::notify(shared_ptr<Ground> whoNotified){ // check if there's a playe
           return;
         }
       }
-    }
+    } 
   }
 }
 

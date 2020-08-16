@@ -395,12 +395,12 @@ void Floor::removeDragonTile(int & chamIndex, vector<vector<shared_ptr<Ground> >
     }
 }
 
-void Floor::generate( std::shared_ptr<Player> p ){
+void Floor::generate( std::shared_ptr<Player> p, int DIFFICULTY, int NUM_CHANGE ){
     //cout << "@ Floor generate" << endl;
     int NUM_CHAMBER = 5; //was going to set these to const but if we want we can add a difficulty modifier that'll change these values 
-    int NUM_ENEMIES = 20;
-    int NUM_POTIONS = 10;
-    int NUM_GOLD = 10;
+    int NUM_ENEMIES = 20 + 2*NUM_CHANGE;
+    int NUM_POTIONS = 10 + NUM_CHANGE;
+     int NUM_GOLD = 10 + NUM_CHANGE;
     int chamIndex, tileIndex;
     vector<vector<shared_ptr<Ground> > > chambers;
 
@@ -436,28 +436,28 @@ void Floor::generate( std::shared_ptr<Player> p ){
     removeTile( chamIndex, tileIndex, chambers );
 
     int toSpawn = NUM_POTIONS + NUM_GOLD + NUM_ENEMIES; // for the for-loop. was too lazy to write three for loops so used cases instead
-    NUM_GOLD += NUM_POTIONS;
+    NUM_GOLD += NUM_POTIONS; //setting all the probabilities 
     NUM_ENEMIES += NUM_GOLD;
 
-    int RH = 1;  //setting all the probabilities 
-    int BA = 1; 
-    int BD = 1; 
-    int PH = 1; 
-    int WA = 1; 
-    int WD = 1; 
+    int RH = 1 + DIFFICULTY;  
+    int BA = 1 + DIFFICULTY; 
+    int BD = 1 + DIFFICULTY; 
+    int PH = 1 + 2*DIFFICULTY; 
+    int WA = 1 + 2*DIFFICULTY; 
+    int WD = 1 + 2*DIFFICULTY;
     RandomPotion rpg = RandomPotion( RH, BA, BD, PH, WA, WD);
     rpg.setSeed();
-    int small = 2; 
-    int dragon = 1; 
-    int normal = 5; 
+    int small = 2 + 2*DIFFICULTY; 
+    int dragon = 1 + 2*DIFFICULTY;
+    int normal = 5 + DIFFICULTY; ; 
     RandomGold rgg = RandomGold( small, dragon, normal );
     rgg.setSeed();
-    int H = 4; 
-    int W = 3; 
-    int E = 5; 
-    int O = 2; 
-    int M = 2; 
-    int L = 2; 
+    int H = 4 + DIFFICULTY; 
+    int W = 3 + DIFFICULTY; 
+    int E = 5 + DIFFICULTY; 
+    int O = 2 + 2*DIFFICULTY; 
+    int M = 2 + DIFFICULTY; 
+    int L = 2 + 2*DIFFICULTY; 
     RandomEnemy reg = RandomEnemy( H, W, E, O, M, L);
     reg.setSeed();
 
@@ -467,7 +467,7 @@ void Floor::generate( std::shared_ptr<Player> p ){
         if( i < NUM_POTIONS ){
             auto potion = rpg.get();
             tile->setPotion( potion );
-        } else if( i <  NUM_GOLD){
+        }else if( i <  NUM_GOLD){
             auto gold = rgg.get();
             auto dg = dynamic_pointer_cast< DragonGold> (gold);
             if( dg != nullptr ){
@@ -482,7 +482,7 @@ void Floor::generate( std::shared_ptr<Player> p ){
             } else {
                 tile->setGold( gold );
             }
-        } else{
+        }else if( i < toSpawn ){
             auto enemy = reg.get();
             tile->setEnemy( enemy );
         }

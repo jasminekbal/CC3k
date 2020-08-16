@@ -260,12 +260,13 @@ void getName( Player &p, string & name ){
     }
 }
 
-Game beginGame( std::shared_ptr<Player> &p, string & name, bool hasFile, string & fileName, ifstream & infile, string & message ){
+Game beginGame( std::shared_ptr<Player> &p, string & name, bool hasFile, string & fileName, ifstream & infile, string & message, int difficulty ){
     getPlayer( p );
+    if( p == nullptr ) throw NoFile( "No input player ");
     getName( *p, name );
     infile.open(fileName);
     try{
-        Game game = Game(p, infile, hasFile );
+        Game game = Game( p, infile, hasFile, difficulty );
         message = "Player has spawned";
         game.print();
         printStats( * p, message, name, game);
@@ -286,6 +287,15 @@ bool checkCongrats(std::string msg){
     return true;
 }
 
+bool isGameOver(std::string message){
+    if( checkCongrats(message) ){
+        return true;
+    } else if (message == "Oh no... GAME OVER!") {
+        return true;
+    }
+    return false;
+}
+
 bool toMoveEnemies(std::string message){
     if (message == "You have reached Floor 2" || 
     message == "You have reached Floor 3"|| message == "You have reached Floor 4"||
@@ -295,40 +305,50 @@ bool toMoveEnemies(std::string message){
         return false;
     } else if (message == "Oh no... GAME OVER!"){
         return false;
-    } else  if (checkCongrats(message)){
+    } else  if (isGameOver(message)){
         return false;
     }
     return true;
 }
 
-bool isGameOver(std::string message){
-    if(checkCongrats(message)){
-        return true;
-    } else if (message == "Oh no... GAME OVER!") {
-        return true;
+int getDifficulty(){
+    std::string inp;
+    cout << "What difficulty would you like to play at? Enter a number between 0 and 10 where 0 is the default (and also the easiest):" << endl;
+    while (cin >> inp){
+        try{
+            int dif = stoi(inp);
+            if (0 <= dif && dif <= 10) return dif;
+            else cout << endl << "Please enter an integer between 0 and 10 inclusive:" << endl << endl;
+        }
+        catch(std::invalid_argument const &e){
+            cout << endl << "Please enter an integer between 0 and 10 inclusive:" << endl << endl;
+        }
     }
-    return false;
+    cout << endl << endl;
 }
-
 
 int main( int argc, char * argv[] ) 
 {   
     bool playAgain = true;
     getDemo();
     while(playAgain){
-        std::shared_ptr<Player> p; 
+        std::shared_ptr<Player> p = nullptr; 
         std::string name;
         std::ifstream infile;
     
         bool hasFile = false;
         string fileName = "default.txt";
+        int difficulty = 0;
         if (argc == 2){
             hasFile = true;
             fileName = (argv[1]);
         }
+        else{
+            difficulty = getDifficulty();
+        }
         std::string message;
         try{
-            Game game = beginGame( p, name, hasFile, fileName, infile, message );
+            Game game = beginGame( p, name, hasFile, fileName, infile, message, difficulty );
             std::string cmd;
             cout<<"Enter your move: "<<endl;
             while (cin >> cmd ){
@@ -341,7 +361,7 @@ int main( int argc, char * argv[] )
                     if (message == ""){
                         message = "Player moved " + cmd;
                     }
-                    //game.print();
+                    
                     printStats( * p, message, name, game);
                     if (toMoveEnemies(message)){
                         message = game.tick();

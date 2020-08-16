@@ -60,8 +60,8 @@ class Floor{
 
     Floor( std::shared_ptr<TextDisplay> td, std::istream & in, std::shared_ptr<Player> p );
     ~Floor();
-    void setPlayerPointer(std::shared_ptr<Player> p );
-    void generate( std::shared_ptr<Player> p ); // randomly generates the enemies and gold and potions. 
+    void setPlayerPointer(std::shared_ptr<Player> p);
+    void generate( std::shared_ptr<Player> p, int DIFFICULTY = 0, int NUM_CHANGE = 0 ); // randomly generates the enemies and gold and potions. 
     std::string moveEnemies();
 
 };

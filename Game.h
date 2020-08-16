@@ -19,11 +19,12 @@ class Game{
     bool hasFile;
     bool moveEnemies;
     int level;
+    int difficulty;
 
     int checkPlayerState(); // 0 for normal, 1 if player got to stairs, 2 if player died
 
     public:
-    Game(std::shared_ptr<Player> py, std::istream & input, bool hasFile );
+    Game(std::shared_ptr<Player> py, std::istream & input, bool hasFile, int difficulty = 0 );
     ~Game();
     std::string tick();
     void print();

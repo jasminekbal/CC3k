@@ -11,7 +11,7 @@
 
 using namespace std;
 
-Game::Game(shared_ptr<Player> py, std::istream &input, bool hasFile ): p{py}, infile{input}, hasFile{hasFile} {
+Game::Game(shared_ptr<Player> py, std::istream &input, bool hasFile, int difficulty ): p{py}, infile{input}, hasFile{hasFile}, difficulty{difficulty} {
     //cout << "@ Game constructor" << endl;
     td = make_shared<TextDisplay> ();
     moveEnemies = true;
@@ -52,9 +52,9 @@ std::string Game::tick(){
 }
 
 void Game::newFloor(){
-    f = make_shared<Floor>(td, infile, p);
+    f = make_shared<Floor>(td, infile, p );
     if( !hasFile ){
-        f->generate(p);
+        f->generate(p, difficulty*level, 5*difficulty*level );
     }
     f->setPlayerPointer( p );
 }
@@ -68,8 +68,11 @@ bool Game::getMoveEnemies(){
 }
 
 std::string Game::endGame( bool showScore ){
-    if (showScore){
-        return "CONGRATS! Your Score is "+ std::to_string(p->getScore())+"!";
+    if (showScore){ 
+        //cout  << "Hi endGame " << endl;
+        std::string message = "CONGRATS! Your Score is "+ std::to_string(p->getScore())+"!\n";
+        message = message + "(👍≖‿‿≖)👍 👍(≖‿‿≖👍)";
+        return message;
     } else {
         return "Oh no... GAME OVER!";
     }
