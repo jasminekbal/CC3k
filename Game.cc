@@ -99,7 +99,7 @@ std::string Game::moveCharacter( int dir ){
         if (level < 5){
             level ++ ;
             newFloor();
-            message = message + "You have reached Floor " + std::to_string(level) + "\n";
+            message = "You have reached Floor " + std::to_string(level);
         } else {
             return endGame(true);
         }

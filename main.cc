@@ -327,6 +327,15 @@ int getDifficulty(){
     cout << endl << endl;
 }
 
+bool nextFloor(std::string message){
+     if (message == "You have reached Floor 2" || 
+    message == "You have reached Floor 3"|| message == "You have reached Floor 4"||
+    message == "You have reached Floor 5"){
+        return true;
+    }
+    return false;
+}
+
 int main( int argc, char * argv[] ) 
 {   
     bool playAgain = true;
@@ -373,6 +382,10 @@ int main( int argc, char * argv[] )
                         game.print();
                         printStats( * p, message, name, game);
                     }
+                    if (nextFloor(message)){
+                        game.print();
+                        printStats( * p, message, name, game);
+                    }
                     if (isGameOver(message)){
                         break;
                     }
@@ -382,6 +395,9 @@ int main( int argc, char * argv[] )
                     message = game.moveCharacter(dir);
                     game.print();
                     printStats( * p, message, name, game);
+                    if (nextFloor(message) || isGameOver(message)){
+                        break;
+                    }
                     if (toMoveEnemies(message)){
                         message = game.tick();
                         if (message == "" && game.getMoveEnemies()){
