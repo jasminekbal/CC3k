@@ -168,7 +168,8 @@ std::shared_ptr<Ground> Floor::getGround(int row, int col, char c, State & t){
             break;
         default:
         {
-            string message = "not a permitted character"  + c;
+            cout << c << endl;
+            string message = "not a permitted character" ;
             throw NoFile( message );
         }
     }

@@ -40,8 +40,7 @@ void getPlayer( shared_ptr<Player> & p ){
     cout << "Please enter a player character. s, d, v, g, t: " << endl;
     char c;
     bool isCharacter = false; 
-    while( !isCharacter ){
-        if( cin>> c){
+    while( !isCharacter && cin>> c ){
             switch( c ){
                 case 's':
                     p = make_shared<Shade>();
@@ -66,9 +65,6 @@ void getPlayer( shared_ptr<Player> & p ){
                 default: 
                     cout << "Sorry not a player character. " << endl;
                     cout << "Please enter a player character. s, d, v, g, t: " << endl;
-            }
-        } else {
-            break;
         }
     }
 }
