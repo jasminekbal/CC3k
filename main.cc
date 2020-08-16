@@ -40,7 +40,7 @@ void getPlayer( shared_ptr<Player> & p ){
     cout << "Please enter a player character. s, d, v, g, t: " << endl;
     char c;
     bool isCharacter = false; 
-    while( !isCharacter && cin>> c ){
+    while( !isCharacter && cin>> c && !( cin.fail() ) && ! (cin.eof() ) ){
             switch( c ){
                 case 's':
                     p = make_shared<Shade>();
@@ -427,6 +427,9 @@ int main( int argc, char * argv[] )
                     break;
                 }
                 cout<<"Enter your move: "<<endl;
+            } 
+            if( cin.fail() || cin.eof() ){
+                break;
             }
             cout<<"Would You Like To Play Again?(enter 'y' or 'n')"<<endl;
             char play;
@@ -439,6 +442,7 @@ int main( int argc, char * argv[] )
         }
         catch(Exceptions e){
             cout << e.getMessage() << endl;
+            break;
         }
         
     }
