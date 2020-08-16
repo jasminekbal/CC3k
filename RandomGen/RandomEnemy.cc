@@ -16,6 +16,7 @@ RandomEnemy::RandomEnemy( int h, int w, int e, int o, int m, int l )
 
 std::shared_ptr<Enemy> RandomEnemy::get(){
     int type = randomInt( l + m + o + e + w + h );
+    //count++;
     if( type < h){
         return make_shared<Human>();
     }

@@ -339,6 +339,7 @@ std::shared_ptr<Ground> Floor::generateLocation( int & chamIndex, int & tileInde
         NUM_CHAMBERS--;
         getChamber( chamIndex, rng, NUM_CHAMBERS, player );
         NUM_TILES = chambers[chamIndex].size(); 
+        if( NUM_CHAMBERS == 0 ) return nullptr;
     }
 
     tileIndex = rng.randomInt( NUM_TILES );
@@ -463,7 +464,7 @@ void Floor::generate( std::shared_ptr<Player> p, int DIFFICULTY, int NUM_CHANGE 
 
     for( int i = 0; i < toSpawn; i++ ){
         auto tile = generateLocation( chamIndex, tileIndex, chambers, rng, NUM_CHAMBER );
-        
+        if( tile == nullptr ) return;
         if( i < NUM_POTIONS ){
             auto potion = rpg.get();
             tile->setPotion( potion );
@@ -488,6 +489,7 @@ void Floor::generate( std::shared_ptr<Player> p, int DIFFICULTY, int NUM_CHANGE 
         }
         removeTile( chamIndex, tileIndex, chambers );
     }
+    //cout << reg.getCount() << endl;
 }
 
 

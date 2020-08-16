@@ -59,7 +59,7 @@
 |            #                 #############                |bbbbbbbbbbbbbbb| |
 |            #                 #     |-----+------|         |bbbbbbbbbbbbbbb| |
 |            #                 #     |cccccccccccc|         |bbbbbbbbbbbbbbb| |
-|            ###################     |cccc@a\ccccc|   ######+bbbbbbbbbbbbbbb| |
+|            ###################     |cccccccccccc|   ######+bbbbbbbbbbbbbbb| |
 |            #                 #     |cccccccccccc|   #     |bbbbbbbbbbbbbbb| |
 |            #                 #     |-----+------|   #     |--------+------| |
 |  |---------+-----------|     #           #          #              #        |
